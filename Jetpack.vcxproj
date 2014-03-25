@@ -75,16 +75,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="impressionistDoc.cpp" />
-    <ClCompile Include="impressionistUI.cpp" />
+    <ClCompile Include="jetpackDoc.cpp" />
+    <ClCompile Include="jetpackUI.cpp" />
     <ClCompile Include="jetpack_main.cpp" />
     <ClCompile Include="paintView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="impressionistDoc.h" />
-    <ClInclude Include="impressionistUI.h" />
+    <ClInclude Include="jetpackDoc.h" />
+    <ClInclude Include="jetpackUI.h" />
     <ClInclude Include="jetpack_main.h" />
     <ClInclude Include="paintView.h" />
+    <ClInclude Include="Simple OpenGL Image Library\src\SOIL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

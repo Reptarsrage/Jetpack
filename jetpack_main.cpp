@@ -11,19 +11,19 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Shared_Image.H>
 
-#include "impressionistUI.h"
-#include "impressionistDoc.h"
+#include "jetpackUI.h"
+#include "jetpackDoc.h"
 
-ImpressionistUI *impUI;
-ImpressionistDoc *impDoc;
+JetpackUI *impUI;
+JetpackDoc *impDoc;
 
 int main(int	argc, 
 		 char**	argv) 
 {
-	impDoc = new ImpressionistDoc();
+	impDoc = new JetpackDoc();
 
 	// Create the UI
-	impUI = new ImpressionistUI();
+	impUI = new JetpackUI();
 
 	// Set the impDoc which is used as the bridge between UI and brushes
 	impUI->setDocument(impDoc);

@@ -15,30 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="impressionistDoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="impressionistUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="jetpack_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="paintView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="jetpackUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jetpackDoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="impressionistDoc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="impressionistUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="jetpack_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="paintView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simple OpenGL Image Library\src\SOIL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jetpackUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jetpackDoc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,8 +5,8 @@
 //
 
 #include "jetpack_main.h"
-#include "impressionistDoc.h"
-#include "impressionistUI.h"
+#include "JetpackDoc.h"
+#include "JetpackUI.h"
 #include "paintView.h"
 
 
@@ -45,7 +45,7 @@ PaintView::PaintView(int			x,
 	m_nWindowHeight	= h;
 	m_control_y = 0;
 	m_control_x = 0;
-	hold_left = hold_right = hold_up = hold_down = false;
+	hold_left = background_drawn = hold_right = hold_up = hold_down = false;
 }
 
 
@@ -97,23 +97,32 @@ void PaintView::draw()
 	drawWidth = min( m_nWindowWidth, m_pDoc->m_nPaintWidth );
 	drawHeight = min( m_nWindowHeight, m_pDoc->m_nPaintHeight );
 
-	int startrow = m_pDoc->m_nPaintHeight - (drawHeight);
-	if ( startrow < 0 ) startrow = 0;
-
-	m_pPaintBitstart = m_pDoc->m_ucPainting + 
-		3 * ((m_pDoc->m_nPaintWidth * startrow));
+	m_pPaintBitstart = m_pDoc->m_ucPainting;
 
 	m_nDrawWidth	= drawWidth;
 	m_nDrawHeight	= drawHeight;
 
-	m_nStartRow		= startrow;
-	m_nEndRow		= startrow + drawHeight;
-	m_nStartCol		= 0;
-	m_nEndCol		= m_nStartCol + drawWidth;
-
-	if (!isAnEvent) 
-	{
-		//RestoreContent();
+	// Draw Backgorund
+	if (!background_drawn){
+		for (int i = 0; i < 16; i++){
+			for (int j = 0; j < 26; j++){
+				glPushMatrix();
+					if ((i + j) % 2 == 0)
+						glColor3f(.0f,.0f,.2f);
+					else
+						glColor3f(.7f,.7f,.7f);
+					glTranslatef(j*(m_nDrawWidth / 26.0), i*(m_nDrawHeight / 16.0), .0f);
+					glBegin(GL_QUADS);
+						glVertex2f(0,0);
+						glVertex2f(m_nDrawWidth / 26.0,0);
+						glVertex2f(m_nDrawWidth / 26.0,m_nDrawHeight / 16.0);
+						glVertex2f(0,m_nDrawHeight / 16.0);
+					glEnd();
+				glPopMatrix();
+			}
+		}
+		background_drawn = true;
+		SaveCurrentBackContent();
 	}
 
 	if (isAnEvent) 
@@ -192,7 +201,7 @@ void PaintView::draw()
 			glVertex2d( 20, 0);
 		glEnd();
 	glPopMatrix();
-	SaveCurrentBackContent();
+	
 	glFlush();
 
 	#ifndef MESA

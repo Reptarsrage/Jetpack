@@ -17,7 +17,7 @@
 #endif
 #include <stdlib.h>
 
-class ImpressionistDoc;
+class JetpackDoc;
 
 class PaintView : public Fl_Gl_Window
 {
@@ -34,24 +34,22 @@ public:
 	void SaveCurrentBackContent();
 	void RestoreContent();
 
-	ImpressionistDoc *m_pDoc;
+	JetpackDoc *m_pDoc;
 
 private:
 	GLvoid* m_pPaintBitstart;
 	int		m_nDrawWidth,
 			m_nDrawHeight,
-			m_nStartRow, 
-			m_nEndRow,
-			m_nStartCol, 
-			m_nEndCol,
 			m_nWindowWidth, 
 			m_nWindowHeight,
 			m_control_x,
 			m_control_y;
+	
 	bool	hold_left,
 			hold_right,
 			hold_up,
-			hold_down;
+			hold_down,
+			background_drawn;
 
 };
 
