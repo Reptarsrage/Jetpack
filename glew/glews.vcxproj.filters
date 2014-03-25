@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{f35ab61c-c509-4a80-8e6d-66f65244c1cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\include">
+      <UniqueIdentifier>{c3b13b79-76ce-4a55-bc87-8aa29b0a8ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\gl">
+      <UniqueIdentifier>{641d58bf-fa76-4eed-8f9c-fe7a9b7aa99b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\glew.c">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\gl\glew.h">
+      <Filter>Header Files\include\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl\wglew.h">
+      <Filter>Header Files\include\gl</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

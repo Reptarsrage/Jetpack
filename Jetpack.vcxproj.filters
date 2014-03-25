@@ -35,14 +35,19 @@
     <ClInclude Include="paintView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Simple OpenGL Image Library\src\SOIL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="jetpackUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="jetpackDoc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Jetpack.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
