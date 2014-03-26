@@ -8,6 +8,7 @@
 #define JetpackDoc_h
 
 #include "jetpack_main.h"
+#include "Sprites.h"
 
 class JetpackUI;
 
@@ -19,7 +20,7 @@ public:
 	void	setUI(JetpackUI* ui);		// Assign the UI to use
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
-	
+
 
 // Attributes
 public:
@@ -34,6 +35,7 @@ public:
 	unsigned char*	m_ucPainting;						
 
 	JetpackUI*	m_pUI;
+	Sprites *sprites;
 };
 
 extern void MessageBox(char *message);

@@ -7,7 +7,7 @@
 #include "JetpackDoc.h"
 #include "JetpackUI.h"
 
-#define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
+#define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } if ((sprites)!=NULL) {delete sprites; sprites=NULL; } }
 
 JetpackDoc::JetpackDoc() 
 {
@@ -15,6 +15,7 @@ JetpackDoc::JetpackDoc()
 	m_nWidth		= -1;
 	m_ucImage		= NULL;
 	m_ucPainting	= NULL;
+	sprites = new Sprites();
 }
 
 //---------------------------------------------------------
@@ -27,12 +28,14 @@ void JetpackDoc::setUI(JetpackUI* ui)
 	m_nPaintHeight = m_nHeight = DEFAULT_HEIGHT - DEFAULT_MARGIN;
 	
 	// allocate space for draw view
-	m_ucPainting		= new unsigned char [m_nWidth* m_nHeight*3];
-	memset(m_ucPainting, 0, m_nWidth* m_nHeight*3);
+	m_ucPainting		= new unsigned char [m_nWidth* m_nHeight*4];
+	memset(m_ucPainting, 0, m_nWidth* m_nHeight*4);
 
 	// refresh paint view as well
 	m_pUI->m_paintView->resizeWindow(m_nWidth, m_nHeight);	
 	m_pUI->m_paintView->refresh();
+
+
 }
 
 //----------------------------------------------------------------

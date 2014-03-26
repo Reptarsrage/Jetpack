@@ -1,15 +1,7 @@
 #ifndef JETPACK_H
 #define JETPACK_H
-#include <stdio.h>
 
-#include <FL/Fl.H>
-#include <FL/gl.h>
-
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
+#include <stdio.h>	//printf
 
 #pragma warning (disable : 4244)
 

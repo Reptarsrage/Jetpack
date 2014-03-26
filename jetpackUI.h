@@ -9,13 +9,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_File_Chooser.H>		// FLTK file chooser
 #include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Color_Chooser.H>
 
 #include "jetpack_main.h"
 #include "paintView.h"
@@ -32,7 +26,7 @@ public:
 	// The FLTK widgets
 	Fl_Window*			m_mainWindow;
 	Fl_Menu_Bar*		m_menubar;
-								
+
 	PaintView*			m_paintView;
 
 	// Member functions
@@ -60,4 +54,3 @@ private:
 };
 
 #endif
-

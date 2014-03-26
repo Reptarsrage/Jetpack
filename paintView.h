@@ -7,15 +7,14 @@
 #ifndef PAINTVIEW_H
 #define PAINTVIEW_H
 
-#include <FL/Fl.H>
 #include <FL/Fl_Gl_Window.H>
-#include <FL/gl.h>
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 #include <stdlib.h>
+
+#ifdef __APPLE__
+#include "OpenGL/glew.h"
+#else
+#include "GL/glew.h"
+#endif
 
 class JetpackDoc;
 
@@ -27,7 +26,7 @@ public:
 	int handle(int event);
 
 	void refresh();
-	
+
 	void resizeWindow(int width, int height);
 
 	void SaveCurrentContent();
@@ -37,6 +36,9 @@ public:
 	JetpackDoc *m_pDoc;
 
 private:
+	int InitScene();
+	void glEnable2D();
+	void glDisable2D();
 	GLvoid* m_pPaintBitstart;
 	int		m_nDrawWidth,
 			m_nDrawHeight,
@@ -44,7 +46,7 @@ private:
 			m_nWindowHeight,
 			m_control_x,
 			m_control_y;
-	
+
 	bool	hold_left,
 			hold_right,
 			hold_up,
@@ -54,4 +56,3 @@ private:
 };
 
 #endif
-

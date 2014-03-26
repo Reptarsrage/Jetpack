@@ -83,17 +83,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enums.cpp" />
     <ClCompile Include="jetpackDoc.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
     <ClCompile Include="jetpack_main.cpp" />
     <ClCompile Include="paintView.cpp" />
+    <ClCompile Include="Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="jetpackDoc.h" />
     <ClInclude Include="jetpackUI.h" />
     <ClInclude Include="jetpack_main.h" />
     <ClInclude Include="paintView.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Sprites.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Jetpack.rc" />

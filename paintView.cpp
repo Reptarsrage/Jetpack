@@ -8,23 +8,8 @@
 #include "JetpackDoc.h"
 #include "JetpackUI.h"
 #include "paintView.h"
-
-
-#define LEFT_MOUSE_DOWN		1
-#define LEFT_MOUSE_DRAG		2
-#define LEFT_MOUSE_UP		3
-#define RIGHT_MOUSE_DOWN	4
-#define RIGHT_MOUSE_DRAG	5
-#define RIGHT_MOUSE_UP		6
-#define ARROW_UP_PRESS		7
-#define ARROW_UP_RELEASE	8
-#define ARROW_LEFT_PRESS	9
-#define ARROW_LEFT_RELEASE	10
-#define ARROW_RIGHT_PRESS	11
-#define ARROW_RIGHT_RELEASE	12
-#define ARROW_DOWN_PRESS	13
-#define ARROW_DOWN_RELEASE	14
-
+#include "Sprites.h"
+#include "Enums.h"
 
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
@@ -51,84 +36,26 @@ PaintView::PaintView(int			x,
 
 void PaintView::draw()
 {
-	#ifndef MESA
-	// To avoid flicker on some machines.
-	glDrawBuffer(GL_BACK);
-	#endif // !MESA
 
 	if(!valid())
 	{
-
-		glClearColor(0.7f, 0.7f, 0.7f, 1.0);
-
-		// We're only using 2-D, so turn off depth 
-		glDisable( GL_DEPTH_TEST );
-
-		ortho();
-
-		int	cx	= m_nWindowWidth = w();
-		int	cy	= m_nWindowHeight = h();
-
-		// Tell openGL to read from the front buffer when capturing
-		// out paint strokes 
-		glReadBuffer( GL_FRONT );
-
-		glViewport( 0, 0, cx, cy );
-
-		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
-		gluOrtho2D( 0, cx, 0, cy );
-
-		glMatrixMode( GL_MODELVIEW );
-		glLoadIdentity();
-
-		// This translation is needed to make the image pixels line up with
-		// the screen's pixels.  For details, visit:
-		// http://www.opengl.org/resources/faq/technical/transformations.htm#tran0030
-		glTranslatef( 0.375, 0.375, 0.0 );
-
-		glClear( GL_COLOR_BUFFER_BIT );
+		InitScene();
 	}
 
 	m_nWindowWidth	= w();
 	m_nWindowHeight	= h();
 
 	int drawWidth, drawHeight;
-	drawWidth = min( m_nWindowWidth, m_pDoc->m_nPaintWidth );
-	drawHeight = min( m_nWindowHeight, m_pDoc->m_nPaintHeight );
+	drawWidth = m_pDoc->m_nPaintWidth;
+	drawHeight = m_pDoc->m_nPaintHeight;
 
 	m_pPaintBitstart = m_pDoc->m_ucPainting;
 
 	m_nDrawWidth	= drawWidth;
 	m_nDrawHeight	= drawHeight;
 
-	// Draw Backgorund
-	if (!background_drawn){
-		for (int i = 0; i < 16; i++){
-			for (int j = 0; j < 26; j++){
-				glPushMatrix();
-					if ((i + j) % 2 == 0)
-						glColor3f(.0f,.0f,.2f);
-					else
-						glColor3f(.7f,.7f,.7f);
-					glTranslatef(j*(m_nDrawWidth / 26.0), i*(m_nDrawHeight / 16.0), .0f);
-					glBegin(GL_QUADS);
-						glVertex2f(0,0);
-						glVertex2f(m_nDrawWidth / 26.0,0);
-						glVertex2f(m_nDrawWidth / 26.0,m_nDrawHeight / 16.0);
-						glVertex2f(0,m_nDrawHeight / 16.0);
-					glEnd();
-				glPopMatrix();
-			}
-		}
-		background_drawn = true;
-		SaveCurrentBackContent();
-	}
-
 	if (isAnEvent) 
 	{
-		RestoreContent();
-		// Clear it after processing.
 		isAnEvent	= 0;	
 
 		// This is the event handler
@@ -190,24 +117,63 @@ void PaintView::draw()
 		m_control_x -= 5;
 	if (hold_right)
 		m_control_x += 5;
-
-	glPushMatrix();
-		glTranslatef(m_control_x, m_control_y, 0);
-		glBegin( GL_QUADS );
-			glColor3f(0,1,0);	
-			glVertex2d( 0, 0);
-			glVertex2d( 0, 20);
-			glVertex2d( 20, 20);
-			glVertex2d( 20, 0);
-		glEnd();
-	glPopMatrix();
 	
-	glFlush();
+	// Draw Scene
 
-	#ifndef MESA
-	// To avoid flicker on some machines.
-	glDrawBuffer(GL_BACK);
-	#endif // !MESA
+	glEnable2D();
+
+	// Make the sprite 2 times bigger (optional)
+	glScalef( 2.0f, 2.0f, 0.0f );
+	
+	// clear screen and initialize things
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
+	glLoadIdentity();
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glColor3f(1,1,1);
+
+	float h = m_nDrawHeight / 16.0;
+	float w = m_nDrawWidth / 26.0;
+	
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 26; j++){
+			glPushMatrix();
+				glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite((26*i + j) % SPRITE_COUNT - 1));
+				glTranslatef(j*w, i*h, 0);
+				glRotatef(180, 0,0, 1);
+				glBegin(GL_QUADS);
+					glTexCoord2i( 0, h );                           
+					 glVertex2i( 0, 0 );
+					 glTexCoord2i( w,h );     
+					 glVertex2i( w, 0 );
+					 glTexCoord2i( w, 0 );    
+					 glVertex2i( w,h );
+					 glTexCoord2i( 0, 0 );          
+					 glVertex2i( 0, h );
+				 glEnd();
+			glPopMatrix();
+		}
+	}
+
+	glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite(SPRITE_FRONT));
+	glPushMatrix();
+		glTranslatef(m_control_x, -m_control_y, 0);
+		glRotatef(180, 0, 0, 1);	
+			glBegin(GL_QUADS);
+				glTexCoord2i( 0, h );                           
+				glVertex2i( 0, 0 );
+				glTexCoord2i( w,h );     
+				glVertex2i( w, 0 );
+				glTexCoord2i( w, 0 );    
+				glVertex2i( w,h );
+				glTexCoord2i( 0, 0 );          
+				glVertex2i( 0, h );
+			glEnd();
+	glPopMatrix();
+
+	glDisable2D();
+
+	glFlush();
 }
 
 
@@ -298,55 +264,59 @@ void PaintView::resizeWindow(int width, int height)
 	resize(x(), y(), width, height);
 }
 
-void PaintView::SaveCurrentContent()
+void PaintView::glEnable2D()
 {
-	// Tell OpenGL to read pixels from the front buffer
-	glReadBuffer(GL_FRONT);
 
-	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-	
-	glReadPixels( 0, 
-				  m_nWindowHeight - m_nDrawHeight, 
-				  m_nDrawWidth, 
-				  m_nDrawHeight, 
-				  GL_RGB, 
-				  GL_UNSIGNED_BYTE, 
-				  m_pPaintBitstart );
+    GLint iViewport[4];
+
+    // Get a copy of the viewport
+    glGetIntegerv( GL_VIEWPORT, iViewport );
+
+    // Save a copy of the projection matrix so that we can restore it 
+    // when it's time to do 3D rendering again.
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Set up the orthographic projection
+    glOrtho( iViewport[0], iViewport[0]+iViewport[2],
+                        iViewport[1]+iViewport[3], iViewport[1], -1, 1 );
+
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Make sure depth testing and lighting are disabled for 2D rendering until
+    // we are finished rendering in 2D
+    glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_LIGHTING_BIT );
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_LIGHTING );
+
 }
 
-void PaintView::SaveCurrentBackContent()
+void PaintView::glDisable2D()
 {
-	glReadBuffer(GL_BACK);
-
-	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-	
-	glReadPixels( 0, 
-				  m_nWindowHeight - m_nDrawHeight, 
-				  m_nDrawWidth, 
-				  m_nDrawHeight, 
-				  GL_RGB, 
-				  GL_UNSIGNED_BYTE, 
-				  m_pPaintBitstart );
-
-	glReadBuffer(GL_FRONT);
+    glPopAttrib();
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+    glPopMatrix();
 }
 
-void PaintView::RestoreContent()
+int PaintView::InitScene()
+
 {
-	glDrawBuffer(GL_BACK);
+        // Disable lighting
+        glDisable( GL_LIGHTING );
 
-	glClear( GL_COLOR_BUFFER_BIT );
+        // Disable dithering
+        glDisable( GL_DITHER );
 
-	glRasterPos2i( 0, m_nWindowHeight - m_nDrawHeight );
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-	glDrawPixels( m_nDrawWidth, 
-				  m_nDrawHeight, 
-				  GL_RGB, 
-				  GL_UNSIGNED_BYTE, 
-				  m_pPaintBitstart);
+        // Disable blending (for now)
+        glDisable( GL_BLEND );
 
-//	glDrawBuffer(GL_FRONT);
+        // Disable depth testing
+        glDisable( GL_DEPTH_TEST );
+		m_pDoc->sprites->Load("Resources/");
+		return 1;
 }
