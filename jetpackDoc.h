@@ -16,11 +16,11 @@ class JetpackDoc
 {
 public:
 	JetpackDoc();
-
 	void	setUI(JetpackUI* ui);		// Assign the UI to use
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
-
+	void	startAnimating();
+	void	stopAnimating();
 
 // Attributes
 public:
@@ -36,6 +36,7 @@ public:
 
 	JetpackUI*	m_pUI;
 	Sprites *sprites;
+	bool animating;
 };
 
 extern void MessageBox(char *message);

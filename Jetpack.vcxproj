@@ -60,7 +60,7 @@
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>glew\;SOIL\projects\VC9\Debug;C:\Program Files\fltk-1.1.10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SOIL.lib;opengl32.lib;glu32.lib;wsock32.lib;comctl32.lib;fltkz.lib;fltkpng.lib;fltkjpeg.lib;fltkgl.lib;fltkimages.lib;fltk.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

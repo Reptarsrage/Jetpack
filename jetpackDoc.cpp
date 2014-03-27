@@ -16,6 +16,7 @@ JetpackDoc::JetpackDoc()
 	m_ucImage		= NULL;
 	m_ucPainting	= NULL;
 	sprites = new Sprites();
+	animating = false;
 }
 
 //---------------------------------------------------------
@@ -34,8 +35,23 @@ void JetpackDoc::setUI(JetpackUI* ui)
 	// refresh paint view as well
 	m_pUI->m_paintView->resizeWindow(m_nWidth, m_nHeight);	
 	m_pUI->m_paintView->refresh();
+}
 
+void callback(void* o) {
+		((JetpackDoc *)o)->m_pUI->m_paintView->flush();
+		Fl::repeat_timeout(1.0 / 30.0, callback, o);
+    }
 
+void JetpackDoc::startAnimating() {
+	printf("ANIMATING\n");
+	animating = true;
+	Fl::add_timeout(1.0 / 30.0, callback, this);
+}
+
+void JetpackDoc::stopAnimating() {
+	printf("STOPPING\n");
+	Fl::remove_timeout(callback, this);
+	animating = false;
 }
 
 //----------------------------------------------------------------

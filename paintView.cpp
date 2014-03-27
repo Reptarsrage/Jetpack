@@ -28,8 +28,8 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-	m_control_y = 0;
-	m_control_x = 0;
+	m_control_y = -20;
+	m_control_x = 20;
 	hold_left = background_drawn = hold_right = hold_up = hold_down = false;
 }
 
@@ -62,19 +62,14 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			glBegin( GL_POINTS );
-				glVertex2d( Fl::event_x(), m_nWindowHeight - Fl::event_y());
-			glEnd();
+			m_pDoc->startAnimating();
 			break;
 		case LEFT_MOUSE_DRAG:
-			glBegin( GL_POINTS );
-				glColor3f(1.0, 0.0, 0.0);
-				glVertex2d( Fl::event_x(), m_nWindowHeight - Fl::event_y() );
-			glEnd();
 			break;
 		case LEFT_MOUSE_UP:
 			break;
 		case RIGHT_MOUSE_DOWN:
+			m_pDoc->stopAnimating();
 			break;
 		case RIGHT_MOUSE_DRAG:
 			break;
@@ -109,15 +104,28 @@ void PaintView::draw()
 			break;
 		}
 	}
-	if (hold_up)
-		m_control_y += 5;
-	if (hold_down)
-		m_control_y -= 5;
-	if (hold_left)
-		m_control_x -= 5;
-	if (hold_right)
-		m_control_x += 5;
 	
+	if (hold_left && !Fl::event_key(FL_Left))
+		hold_left = false;
+	else if (hold_left)
+		m_control_x -= 5;
+
+	if (hold_right && !Fl::event_key(FL_Right))
+		hold_left = false;
+	else if (hold_right)
+		m_control_x += 5;
+
+	if (hold_up && !Fl::event_key(FL_Up))
+		hold_up = false;
+	else if (hold_up)
+		m_control_y += 5;
+
+	if (hold_down && !Fl::event_key(FL_Down))
+		hold_down = false;
+	else if (hold_down)
+		m_control_y -= 5;
+	
+
 	// Draw Scene
 
 	glEnable2D();
@@ -173,7 +181,7 @@ void PaintView::draw()
 
 	glDisable2D();
 
-	glFlush();
+	//glFlush();
 }
 
 
@@ -185,14 +193,26 @@ int PaintView::handle(int event)
 	case FL_SHORTCUT:
 	case FL_KEYBOARD:
 		key = Fl::event_key();
-		if (key == FL_Left)
+		if (key == FL_Left){
 			eventToDo = ARROW_LEFT_PRESS;
-		else if (key == FL_Right)
+			hold_left = true;
+			hold_right = false;
+		} else if (key == FL_Right){
 			eventToDo = ARROW_RIGHT_PRESS;
-		else if (key == FL_Up)
+			hold_right= true;
+			hold_left = false;
+		} else if (key == FL_Up){
 			eventToDo = ARROW_UP_PRESS;
-		else if (key == FL_Down)
+			hold_up = true;
+			hold_down = false;
+		} else if (key == FL_Down){
 			eventToDo = ARROW_DOWN_PRESS;
+			hold_down = true;
+			hold_up = false;
+		} else if (key == 'a')
+			m_pDoc->startAnimating();
+		else if (key == 's')
+			m_pDoc->stopAnimating();
 		else
 			break;
 		isAnEvent=1;
@@ -200,15 +220,27 @@ int PaintView::handle(int event)
 		break;
 	case FL_KEYUP:
 		key = Fl::event_key();
-		if (key == FL_Left)
+		if (key == FL_Left) {
+			hold_left = false;
 			eventToDo = ARROW_LEFT_RELEASE;
-		else if (key == FL_Right)
+			if (Fl::event_key(FL_Right))
+				hold_right = true;
+		} else if (key == FL_Right){
 			eventToDo = ARROW_RIGHT_RELEASE;
-		else if (key == FL_Up)
+			hold_right = false;
+			if (Fl::event_key(FL_Left))
+				hold_left = true;
+		} else if (key == FL_Up){
 			eventToDo = ARROW_UP_RELEASE;
-		else if (key == FL_Down)
+			hold_up = false;
+			if (Fl::event_key(FL_Down))
+				hold_down = true;
+		} else if (key == FL_Down){
 			eventToDo = ARROW_DOWN_RELEASE;
-		else
+			hold_down = false;
+			if (Fl::event_key(FL_Up))
+				hold_up = true;
+		} else
 			break;
 		isAnEvent=1;
 		redraw();
@@ -216,35 +248,9 @@ int PaintView::handle(int event)
 	case FL_ENTER:
 	    redraw();
 		break;
-	case FL_PUSH:
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_DOWN;
-		else
-			eventToDo=LEFT_MOUSE_DOWN;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_DRAG:
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_DRAG;
-		else
-			eventToDo=LEFT_MOUSE_DRAG;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_RELEASE:
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_UP;
-		else
-			eventToDo=LEFT_MOUSE_UP;
-		isAnEvent=1;
-		redraw();
-		break;
 	case FL_MOVE:
-		break;
 	case FL_FOCUS:
 	case FL_UNFOCUS:
-		return 1;
 		break;
 	default:
 		return 0;
