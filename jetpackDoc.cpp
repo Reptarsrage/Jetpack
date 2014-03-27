@@ -1,13 +1,11 @@
-// It basically maintain the Image for answering the color query from the brush.
-// It also acts as the bridge between brushes and UI (including views)
-
-
 #include <FL/fl_ask.H>
 #include <algorithm>
 #include "JetpackDoc.h"
 #include "JetpackUI.h"
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } if ((sprites)!=NULL) {delete sprites; sprites=NULL; } }
+const int FRAME_RATE = 100; //push it to the limit??
+
 
 JetpackDoc::JetpackDoc() 
 {
@@ -35,17 +33,18 @@ void JetpackDoc::setUI(JetpackUI* ui)
 	// refresh paint view as well
 	m_pUI->m_paintView->resizeWindow(m_nWidth, m_nHeight);	
 	m_pUI->m_paintView->refresh();
+	startAnimating();
 }
 
 void callback(void* o) {
-		((JetpackDoc *)o)->m_pUI->m_paintView->flush();
-		Fl::repeat_timeout(1.0 / 30.0, callback, o);
+		((JetpackDoc *)o)->m_pUI->m_paintView->refresh();
+		Fl::repeat_timeout(1.0 / FRAME_RATE, callback, o);
     }
 
 void JetpackDoc::startAnimating() {
 	printf("ANIMATING\n");
 	animating = true;
-	Fl::add_timeout(1.0 / 30.0, callback, this);
+	Fl::add_timeout(1.0 / FRAME_RATE, callback, this);
 }
 
 void JetpackDoc::stopAnimating() {

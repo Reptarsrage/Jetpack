@@ -1,9 +1,3 @@
-//
-// paintview.cpp
-//
-// The code maintaining the painting view of the input images
-//
-
 #include "jetpack_main.h"
 #include "JetpackDoc.h"
 #include "JetpackUI.h"
@@ -11,13 +5,14 @@
 #include "Sprites.h"
 #include "Enums.h"
 
-#ifndef WIN32
-#define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
-#define max(a, b)	( ( (a)>(b) ) ? (a) : (b) )
-#endif
-
-static int		eventToDo;
-static int		isAnEvent=0;
+static int eventToDo;
+static int isAnEvent=0;
+const int NUM_ROWS = 26;
+const int NUM_COLS = 16;
+const float MAX_VELOCITY = 0.12;
+const float FORCE_GRAVITY = 0.012;
+const float JETPACK_THRUST = 0.024;
+const float JUMP_RESTITUTION = 0.4;
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -26,36 +21,39 @@ PaintView::PaintView(int			x,
 					 const char*	l)
 						: Fl_Gl_Window(x,y,w,h,l)
 {
+	// Dimensions
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-	m_control_y = -20;
-	m_control_x = 20;
+	row_w = w / (NUM_ROWS * 1.0f);
+	col_h = h / (NUM_COLS * 1.0f);
+	bounds_right = m_nDrawWidth - row_w;
+	bounds_left = row_w;
+	bounds_top = m_nDrawHeight - col_h;
+	bounds_bottom = col_h;
+	
+	// Hero
+	pos_y = 50.0;
+	pos_x = 50.0;
+	velocity_x = 0.0;
+	velocity_y = 0.0;
+	velocity_jump = 0.0;
+	force_x = 0.0;
+	force_y = 0.0,
+	mass = 1.0;
+
+	// Controls
 	hold_left = background_drawn = hold_right = hold_up = hold_down = false;
+
+	// consts
+	max_velocity = col_h * MAX_VELOCITY;
+	jump_restitution = col_h * JUMP_RESTITUTION;
+	force_gravity = col_h * FORCE_GRAVITY;
+	jetpack_thrust = col_h * JETPACK_THRUST;
 }
 
 
-void PaintView::draw()
-{
-
-	if(!valid())
-	{
-		InitScene();
-	}
-
-	m_nWindowWidth	= w();
-	m_nWindowHeight	= h();
-
-	int drawWidth, drawHeight;
-	drawWidth = m_pDoc->m_nPaintWidth;
-	drawHeight = m_pDoc->m_nPaintHeight;
-
-	m_pPaintBitstart = m_pDoc->m_ucPainting;
-
-	m_nDrawWidth	= drawWidth;
-	m_nDrawHeight	= drawHeight;
-
-	if (isAnEvent) 
-	{
+void PaintView::handleEventKeys() {
+	if (isAnEvent) {
 		isAnEvent	= 0;	
 
 		// This is the event handler
@@ -99,35 +97,152 @@ void PaintView::draw()
 		case ARROW_RIGHT_RELEASE:
 			hold_right = false;
 			break;
+		case SPACEBAR_PRESS:
+			velocity_jump = jump_restitution;
+			break;
 		default:
 			printf("Unknown event!!\n");		
 			break;
 		}
 	}
-	
-	if (hold_left && !Fl::event_key(FL_Left))
-		hold_left = false;
-	else if (hold_left)
-		m_control_x -= 5;
+}
 
-	if (hold_right && !Fl::event_key(FL_Right))
-		hold_left = false;
-	else if (hold_right)
-		m_control_x += 5;
+void PaintView::drawBackGround() {
+	for (int i = 0; i < NUM_COLS; i++) {
+		for (int j = 0; j < NUM_ROWS; j++){
+			glPushMatrix();
+				glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite((26*i + j) % SPRITE_COUNT - 1));
+				glTranslatef(j*row_w, i*col_h, 0);
+				glRotatef(180, 0,0, 1);
+				glBegin(GL_QUADS);
+					glTexCoord2i( 0, col_h );                           
+					 glVertex2i( 0, 0 );
+					 glTexCoord2i( row_w, col_h );     
+					 glVertex2i( row_w, 0 );
+					 glTexCoord2i( row_w, 0 );    
+					 glVertex2i( row_w, col_h );
+					 glTexCoord2i( 0, 0 );          
+					 glVertex2i( 0, col_h );
+				 glEnd();
+			glPopMatrix();
+		}
+	}
+}
 
-	if (hold_up && !Fl::event_key(FL_Up))
+void PaintView::drawMovingThings() {
+	glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite(SPRITE_FRONT));
+	glPushMatrix();
+		glTranslatef(pos_x, pos_y, 0);
+		glRotatef(180, 0, 0, 1);	
+			glBegin(GL_QUADS);
+				glTexCoord2i( 0, col_h );                           
+				glVertex2i( 0, 0 );
+				glTexCoord2i( row_w, col_h );     
+				glVertex2i( row_w, 0 );
+				glTexCoord2i( row_w, 0 );    
+				glVertex2i( row_w, col_h );
+				glTexCoord2i( 0, 0 );          
+				glVertex2i( 0, col_h );
+			glEnd();
+	glPopMatrix();
+}
+
+float PaintView::checkBoundsX(float delta) {
+	if (pos_x + delta > bounds_right)
+		return bounds_right - pos_x;
+	if (pos_x + delta  < bounds_left)
+		return pos_x - bounds_left;
+	return delta;
+}
+
+float PaintView::checkBoundsY(float delta) {
+	if (pos_y + delta > bounds_top)
+		return bounds_top - pos_y;
+	if (pos_y + delta  < bounds_bottom)
+		return pos_y - bounds_bottom;
+	return delta;
+}
+
+void PaintView::moveThings() {
+	// move in x-dir
+	if (hold_left && !Fl::event_key(FL_Left)) {
+		hold_left = false;
+	} else if (hold_left){
+		velocity_x = - max_velocity;
+	} else if (hold_right && !Fl::event_key(FL_Right)) {
+		hold_left = false;
+	} else if (hold_right) {
+		velocity_x = max_velocity;
+	} else
+		velocity_x = 0;
+
+	// move in y-dir
+	if (hold_up && !Fl::event_key(FL_Up)) {
 		hold_up = false;
-	else if (hold_up)
-		m_control_y += 5;
+	} else if (hold_up) {
+		force_y = - jetpack_thrust;
+	} else
+		force_y = 0.0;
 
-	if (hold_down && !Fl::event_key(FL_Down))
-		hold_down = false;
-	else if (hold_down)
-		m_control_y -= 5;
+	// apply forces
+	velocity_jump -=  force_gravity * mass;
+	velocity_y += (force_y + force_gravity) * mass;
+	velocity_x += force_x * mass;
 	
+	// Check limits
+	if (velocity_jump < 0.0)
+		velocity_jump = 0.0;
+	
+	if (velocity_x > max_velocity) 
+		velocity_x = max_velocity;
+	else if (-velocity_x > max_velocity)
+		velocity_x = - max_velocity;
+	
+	if (velocity_y > max_velocity) 
+		velocity_y = max_velocity;
+	else if (-velocity_y > max_velocity)
+		velocity_y = - max_velocity;
 
+	// set positions
+	pos_x += checkBoundsX(velocity_x);
+	pos_y += checkBoundsY(velocity_y - velocity_jump);
+}
+
+void PaintView::draw()
+{
+
+	if(!valid())
+	{
+		InitScene();
+		printf("INITIALIZED\n");
+		// get/set bounds
+		m_nWindowWidth	= w();
+		m_nWindowHeight	= h();
+		int drawWidth, drawHeight;
+		drawWidth = m_pDoc->m_nPaintWidth;
+		drawHeight = m_pDoc->m_nPaintHeight;
+		m_pPaintBitstart = m_pDoc->m_ucPainting;
+		m_nDrawWidth = drawWidth;
+		m_nDrawHeight = drawHeight;
+		row_w = m_nDrawWidth / (NUM_ROWS * 1.0f);
+		col_h = m_nDrawHeight / (NUM_COLS * 1.0f);
+		bounds_right = m_nDrawWidth - row_w;
+		bounds_left = row_w;
+		bounds_top = m_nDrawHeight - col_h;
+		bounds_bottom = col_h;
+		max_velocity = col_h * MAX_VELOCITY;
+		jump_restitution = col_h * JUMP_RESTITUTION;
+		force_gravity = col_h * FORCE_GRAVITY;
+		jetpack_thrust = col_h * JETPACK_THRUST;
+	}
+
+	// handle any events (keys)
+	handleEventKeys();
+	
+	// move things
+	moveThings();
+	
 	// Draw Scene
-
 	glEnable2D();
 
 	// Make the sprite 2 times bigger (optional)
@@ -139,49 +254,14 @@ void PaintView::draw()
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glColor3f(1,1,1);
-
-	float h = m_nDrawHeight / 16.0;
-	float w = m_nDrawWidth / 26.0;
 	
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 26; j++){
-			glPushMatrix();
-				glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite((26*i + j) % SPRITE_COUNT - 1));
-				glTranslatef(j*w, i*h, 0);
-				glRotatef(180, 0,0, 1);
-				glBegin(GL_QUADS);
-					glTexCoord2i( 0, h );                           
-					 glVertex2i( 0, 0 );
-					 glTexCoord2i( w,h );     
-					 glVertex2i( w, 0 );
-					 glTexCoord2i( w, 0 );    
-					 glVertex2i( w,h );
-					 glTexCoord2i( 0, 0 );          
-					 glVertex2i( 0, h );
-				 glEnd();
-			glPopMatrix();
-		}
-	}
-
-	glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite(SPRITE_FRONT));
-	glPushMatrix();
-		glTranslatef(m_control_x, -m_control_y, 0);
-		glRotatef(180, 0, 0, 1);	
-			glBegin(GL_QUADS);
-				glTexCoord2i( 0, h );                           
-				glVertex2i( 0, 0 );
-				glTexCoord2i( w,h );     
-				glVertex2i( w, 0 );
-				glTexCoord2i( w, 0 );    
-				glVertex2i( w,h );
-				glTexCoord2i( 0, 0 );          
-				glVertex2i( 0, h );
-			glEnd();
-	glPopMatrix();
+	// draw background
+	drawBackGround();
+	
+	// draw everything else
+	drawMovingThings();
 
 	glDisable2D();
-
-	//glFlush();
 }
 
 
@@ -213,7 +293,9 @@ int PaintView::handle(int event)
 			m_pDoc->startAnimating();
 		else if (key == 's')
 			m_pDoc->stopAnimating();
-		else
+		else if (key == ' ') {
+			eventToDo = SPACEBAR_PRESS;
+		} else
 			break;
 		isAnEvent=1;
 		redraw();

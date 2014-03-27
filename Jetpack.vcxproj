@@ -49,7 +49,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)\SOIL\src;$(ProjectDir)\glew\include;C:\Program Files\fltk-1.1.10\zlib;C:\Program Files\fltk-1.1.10\png;C:\Program Files\fltk-1.1.10\jpeg;C:\Program Files\fltk-1.1.10;$(ProjectDir)\file dialog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <StringPooling>true</StringPooling>
