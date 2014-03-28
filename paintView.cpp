@@ -114,7 +114,8 @@ void PaintView::loadLevel() {
 	assert(stat_things);
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
-			stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_pDoc->sprites));
+			if ( i % 5 == 0 && j != 0 && j != NUM_COLS - 1 && j != NUM_COLS - 2)
+				stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_pDoc->sprites));
 		}	
 	}
 }
@@ -174,28 +175,42 @@ void PaintView::moveThings() {
 		hero->velocity_y = - max_velocity;
 
 	// set positions
-	hero->move(checkBoundsX(hero->velocity_x),
-			   checkBoundsY(hero->velocity_y - hero->velocity_jump));
+	advancePosition(hero, hero->velocity_x, hero->velocity_y - hero->velocity_jump);
 }
 
-float PaintView::checkBoundsX(float delta) const{
-	assert(hero);
-	const Rectangle hero_bounds = hero->Bounds();
-	if (hero_bounds.position_x + delta > bounds->right())
-		return bounds->right() - hero_bounds.position_x;
-	if (hero_bounds.position_x + delta  < bounds->left())
-		return hero_bounds.position_x - bounds->left();
-	return delta;
-}
+void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y) const {
+	assert(thing);
+	
+	// check world bounds
+	const Rectangle thing_bounds = thing->Bounds();
+	const Rectangle new_thing_bounds_y = Rectangle(thing_bounds.position_x,
+		thing_bounds.position_y + delta_y, thing_bounds.width, thing_bounds.height);
+	const Rectangle new_thing_bounds_x = Rectangle(thing_bounds.position_x + delta_x,
+		thing_bounds.position_y, thing_bounds.width, thing_bounds.height);
 
-float PaintView::checkBoundsY(float delta) const{
-	assert(hero);
-	const Rectangle hero_bounds = hero->Bounds();
-	if (hero_bounds.position_y + delta > bounds->top())
-		return bounds->top() - hero_bounds.position_y;
-	if (hero_bounds.position_y + delta  < bounds->bottom())
-		return hero_bounds.position_y - bounds->bottom();
-	return delta;
+	// in the x direction
+	if (new_thing_bounds_x.position_x > bounds->right())
+		delta_x = 0; //bounds->right() - thing_bounds.position_x;
+	if (new_thing_bounds_x.position_x  < bounds->left())
+		delta_x = 0; //thing_bounds.position_x - bounds->left();
+
+	// and in the y direction
+	if (new_thing_bounds_y.position_y > bounds->top())
+		delta_y = 0; //bounds->top() - thing_bounds.position_y;
+	if (new_thing_bounds_y.position_y < bounds->bottom())
+		delta_y = 0; //thing_bounds.position_y - bounds->bottom();
+
+	// check solid objects in x and y directions
+	for (StationaryThing *s : *stat_things){
+		if (s->Overlaps(new_thing_bounds_x)) {
+			delta_x = 0;
+		}
+		if (s->Overlaps(new_thing_bounds_y)) {
+			delta_y = 0;
+		}
+	}
+
+	thing->move(delta_x, delta_y);
 }
 
 void PaintView::draw()

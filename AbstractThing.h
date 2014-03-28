@@ -23,6 +23,9 @@ public:
 	/* Returns true if this thing's bounds conflict with the other thing's bounds. */
 	bool Overlaps(const AbstractThing *other) const { return bounds->Overlaps(other->Bounds()); }
 	
+	/* Returns true if this thing's bounds conflict with the rectangle. */
+	bool Overlaps(const Rectangle other) const { return bounds->Overlaps(other); }
+
 	/* Sets the bounds for this thing. */
 	void SetBounds(float x, float y, float width, float height) 
 		{ if (bounds) delete bounds; bounds = new Rectangle(x, y, width, height); }

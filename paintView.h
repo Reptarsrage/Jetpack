@@ -55,11 +55,9 @@ private:
 	/* Helper function to move all moving things (by telling them to move) */
 	void moveThings();
 	
-	/* Helper function to make sure hero's position stays valid in the x-direction */
-	float checkBoundsX(float delta) const;
+	/* Helper function to advance the position of a moving thing. Does bounds checking! */
+	void advancePosition(MovingThing *thing, float delta_x, float delta_y) const;
 	
-	/* Helper function to make sure hero's position stays valid  n the y-direction */
-	float checkBoundsY(float delta) const;
 	
 	/* Helper function to load in all things to be drawn */
 	void loadLevel();

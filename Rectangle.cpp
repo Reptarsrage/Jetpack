@@ -25,15 +25,8 @@ Rectangle::Rectangle(float x, float y, float w, float h){
 
 bool Rectangle::Overlaps(const Rectangle other) const{
 	
-	bool other_inside_this =  (other.left() >= left()) && 
-							  (other.right() <= right()) && 
-							  (other.top() <= top()) &&
-							  (other.bottom() >= bottom());
-	bool this_inside_other =  (left() >= other.left()) && 
-							  (right() <= other.right()) && 
-							  (top() <= other.top()) &&
-							  (bottom() >= other.bottom());
-	return this_inside_other || other_inside_this;
+	return (left() <= other.right() && right() >= other.left() &&
+			 bottom() <= other.top() && top() >= other.bottom());
 
 }
 
