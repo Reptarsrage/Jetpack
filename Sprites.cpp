@@ -1,5 +1,11 @@
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+ * Abstract thing
+*/
 
 #include "Sprites.h"
+#include "jetpack_main.h"
 #include "Enums.h"
 
 Sprites::Sprites() {
@@ -15,7 +21,9 @@ GLuint Sprites::getSprite(int code) const {
 	return linktex[code];	
 }
 
-int Sprites::Load(char * directory) {
+int Sprites::Load(const char * directory) {
+	assert(directory);
+	
 	if (loaded)
 		return 1;
 	for (int i = 0; i < SPRITE_COUNT; i++){
@@ -28,6 +36,8 @@ int Sprites::Load(char * directory) {
 }
 
 void Sprites::loadSprite(const char *image_name, int index) {
+	assert(image_name);
+	
 	// Enable the texture rectangle extension
 	glEnable( GL_TEXTURE_RECTANGLE_NV );
 
@@ -45,8 +55,9 @@ void Sprites::loadSprite(const char *image_name, int index) {
 
 	// load texture image
 	int width, height;
-	unsigned char* image =
-	SOIL_load_image(image_name, &width, &height, 0, SOIL_LOAD_RGBA);
+	unsigned char* image = NULL;
+	image = SOIL_load_image(image_name, &width, &height, 0, SOIL_LOAD_RGBA);
+	assert(image);
 
 	// Write the 32-bit RGBA texture buffer to video memory
 	glTexImage2D(GL_TEXTURE_RECTANGLE_NV, 0, GL_RGBA, width, height, 0, GL_RGBA,

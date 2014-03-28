@@ -1,18 +1,24 @@
-#include "jetpack_main.h"
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+*/
+
 #include "JetpackDoc.h"
 #include "JetpackUI.h"
 #include "paintView.h"
 #include "Sprites.h"
 #include "Enums.h"
+#include "MovingThing.h"
+#include "StationaryThing.h"
 
 static int eventToDo;
 static int isAnEvent=0;
-const int NUM_ROWS = 26;
-const int NUM_COLS = 16;
-const float MAX_VELOCITY = 0.12;
-const float FORCE_GRAVITY = 0.012;
-const float JETPACK_THRUST = 0.024;
-const float JUMP_RESTITUTION = 0.4;
+const int NUM_ROWS = 16;
+const int NUM_COLS = 26;
+const float MAX_VELOCITY = 0.12f;
+const float FORCE_GRAVITY = 0.012f;
+const float JETPACK_THRUST = 0.024f;
+const float JUMP_RESTITUTION = 0.4f;
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -24,33 +30,30 @@ PaintView::PaintView(int			x,
 	// Dimensions
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-	row_w = w / (NUM_ROWS * 1.0f);
-	col_h = h / (NUM_COLS * 1.0f);
-	bounds_right = m_nDrawWidth - row_w;
-	bounds_left = row_w;
-	bounds_top = m_nDrawHeight - col_h;
-	bounds_bottom = col_h;
-	
-	// Hero
-	pos_y = 50.0;
-	pos_x = 50.0;
-	velocity_x = 0.0;
-	velocity_y = 0.0;
-	velocity_jump = 0.0;
-	force_x = 0.0;
-	force_y = 0.0,
-	mass = 1.0;
+	row_w = w / (NUM_COLS * 1.0f);
+	col_h = h / (NUM_ROWS * 1.0f);
+	bounds = new Rectangle(0, 0, w, h);
+	m_nDrawWidth = w;
+	m_nDrawHeight = h;
 
 	// Controls
-	hold_left = background_drawn = hold_right = hold_up = hold_down = false;
+	hold_left = level_loaded = hold_right = hold_up = hold_down = false;
 
 	// consts
 	max_velocity = col_h * MAX_VELOCITY;
 	jump_restitution = col_h * JUMP_RESTITUTION;
 	force_gravity = col_h * FORCE_GRAVITY;
 	jetpack_thrust = col_h * JETPACK_THRUST;
+
+	// hero/env
+	stat_things = NULL;
+	hero = NULL;
 }
 
+PaintView::~PaintView() {
+	delete hero;
+	stat_things->clear();
+}
 
 void PaintView::handleEventKeys() {
 	if (isAnEvent) {
@@ -98,7 +101,7 @@ void PaintView::handleEventKeys() {
 			hold_right = false;
 			break;
 		case SPACEBAR_PRESS:
-			velocity_jump = jump_restitution;
+			hero->Jump(jump_restitution);
 			break;
 		default:
 			printf("Unknown event!!\n");		
@@ -107,133 +110,133 @@ void PaintView::handleEventKeys() {
 	}
 }
 
+void PaintView::loadLevel() {
+	assert(stat_things);
+	for (int i = 0; i < NUM_ROWS; i++) {
+		for (int j = 0; j < NUM_COLS; j++) {
+			stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_pDoc->sprites));
+		}	
+	}
+}
+
 void PaintView::drawBackGround() {
-	for (int i = 0; i < NUM_COLS; i++) {
-		for (int j = 0; j < NUM_ROWS; j++){
-			glPushMatrix();
-				glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite((26*i + j) % SPRITE_COUNT - 1));
-				glTranslatef(j*row_w, i*col_h, 0);
-				glRotatef(180, 0,0, 1);
-				glBegin(GL_QUADS);
-					glTexCoord2i( 0, col_h );                           
-					 glVertex2i( 0, 0 );
-					 glTexCoord2i( row_w, col_h );     
-					 glVertex2i( row_w, 0 );
-					 glTexCoord2i( row_w, 0 );    
-					 glVertex2i( row_w, col_h );
-					 glTexCoord2i( 0, 0 );          
-					 glVertex2i( 0, col_h );
-				 glEnd();
-			glPopMatrix();
-		}
+	assert(stat_things);
+	for (StationaryThing *s : *stat_things) {
+		s->draw();
 	}
 }
 
 void PaintView::drawMovingThings() {
-	glBindTexture(GL_TEXTURE_RECTANGLE_NV, m_pDoc->sprites->getSprite(SPRITE_FRONT));
-	glPushMatrix();
-		glTranslatef(pos_x, pos_y, 0);
-		glRotatef(180, 0, 0, 1);	
-			glBegin(GL_QUADS);
-				glTexCoord2i( 0, col_h );                           
-				glVertex2i( 0, 0 );
-				glTexCoord2i( row_w, col_h );     
-				glVertex2i( row_w, 0 );
-				glTexCoord2i( row_w, 0 );    
-				glVertex2i( row_w, col_h );
-				glTexCoord2i( 0, 0 );          
-				glVertex2i( 0, col_h );
-			glEnd();
-	glPopMatrix();
-}
-
-float PaintView::checkBoundsX(float delta) {
-	if (pos_x + delta > bounds_right)
-		return bounds_right - pos_x;
-	if (pos_x + delta  < bounds_left)
-		return pos_x - bounds_left;
-	return delta;
-}
-
-float PaintView::checkBoundsY(float delta) {
-	if (pos_y + delta > bounds_top)
-		return bounds_top - pos_y;
-	if (pos_y + delta  < bounds_bottom)
-		return pos_y - bounds_bottom;
-	return delta;
+	assert(hero);
+	hero->draw();
 }
 
 void PaintView::moveThings() {
+	assert(hero);
+	
 	// move in x-dir
 	if (hold_left && !Fl::event_key(FL_Left)) {
 		hold_left = false;
 	} else if (hold_left){
-		velocity_x = - max_velocity;
+		hero->velocity_x = - max_velocity;
 	} else if (hold_right && !Fl::event_key(FL_Right)) {
 		hold_left = false;
 	} else if (hold_right) {
-		velocity_x = max_velocity;
+		hero->velocity_x = max_velocity;
 	} else
-		velocity_x = 0;
+		hero->velocity_x = 0;
 
 	// move in y-dir
 	if (hold_up && !Fl::event_key(FL_Up)) {
 		hold_up = false;
 	} else if (hold_up) {
-		force_y = - jetpack_thrust;
+		hero->force_y = - jetpack_thrust;
 	} else
-		force_y = 0.0;
+		hero->force_y = 0.0;
 
 	// apply forces
-	velocity_jump -=  force_gravity * mass;
-	velocity_y += (force_y + force_gravity) * mass;
-	velocity_x += force_x * mass;
+	hero->velocity_jump -=  force_gravity * hero->mass;
+	hero->velocity_y += (hero->force_y + force_gravity) * hero->mass;
+	hero->velocity_x += hero->force_x * hero->mass;
 	
 	// Check limits
-	if (velocity_jump < 0.0)
-		velocity_jump = 0.0;
+	if (hero->velocity_jump < 0.0)
+		hero->velocity_jump = 0.0;
 	
-	if (velocity_x > max_velocity) 
-		velocity_x = max_velocity;
-	else if (-velocity_x > max_velocity)
-		velocity_x = - max_velocity;
+	if (hero->velocity_x > max_velocity) 
+		hero->velocity_x = max_velocity;
+	else if (-hero->velocity_x > max_velocity)
+		hero->velocity_x = - max_velocity;
 	
-	if (velocity_y > max_velocity) 
-		velocity_y = max_velocity;
-	else if (-velocity_y > max_velocity)
-		velocity_y = - max_velocity;
+	if (hero->velocity_y > max_velocity) 
+		hero->velocity_y = max_velocity;
+	else if (-hero->velocity_y > max_velocity)
+		hero->velocity_y = - max_velocity;
 
 	// set positions
-	pos_x += checkBoundsX(velocity_x);
-	pos_y += checkBoundsY(velocity_y - velocity_jump);
+	hero->move(checkBoundsX(hero->velocity_x),
+			   checkBoundsY(hero->velocity_y - hero->velocity_jump));
+}
+
+float PaintView::checkBoundsX(float delta) const{
+	assert(hero);
+	const Rectangle hero_bounds = hero->Bounds();
+	if (hero_bounds.position_x + delta > bounds->right())
+		return bounds->right() - hero_bounds.position_x;
+	if (hero_bounds.position_x + delta  < bounds->left())
+		return hero_bounds.position_x - bounds->left();
+	return delta;
+}
+
+float PaintView::checkBoundsY(float delta) const{
+	assert(hero);
+	const Rectangle hero_bounds = hero->Bounds();
+	if (hero_bounds.position_y + delta > bounds->top())
+		return bounds->top() - hero_bounds.position_y;
+	if (hero_bounds.position_y + delta  < bounds->bottom())
+		return hero_bounds.position_y - bounds->bottom();
+	return delta;
 }
 
 void PaintView::draw()
 {
-
 	if(!valid())
 	{
+		// initialize opengl
 		InitScene();
 		printf("INITIALIZED\n");
-		// get/set bounds
+		
+		// window bounds
 		m_nWindowWidth	= w();
 		m_nWindowHeight	= h();
-		int drawWidth, drawHeight;
-		drawWidth = m_pDoc->m_nPaintWidth;
-		drawHeight = m_pDoc->m_nPaintHeight;
-		m_pPaintBitstart = m_pDoc->m_ucPainting;
-		m_nDrawWidth = drawWidth;
-		m_nDrawHeight = drawHeight;
-		row_w = m_nDrawWidth / (NUM_ROWS * 1.0f);
-		col_h = m_nDrawHeight / (NUM_COLS * 1.0f);
-		bounds_right = m_nDrawWidth - row_w;
-		bounds_left = row_w;
-		bounds_top = m_nDrawHeight - col_h;
-		bounds_bottom = col_h;
+		// draw bounds
+		m_nDrawWidth = m_pDoc->m_nPaintWidth;
+		m_nDrawHeight = m_pDoc->m_nPaintHeight;
+		// row/column
+		row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
+		col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
+		// player bounds
+		if (bounds)
+			delete bounds;
+		bounds = new Rectangle(row_w, m_nDrawHeight - col_h, m_nDrawWidth - 2.0*row_w, m_nDrawHeight - 2*col_h);
+		
+		// constants
 		max_velocity = col_h * MAX_VELOCITY;
 		jump_restitution = col_h * JUMP_RESTITUTION;
 		force_gravity = col_h * FORCE_GRAVITY;
 		jetpack_thrust = col_h * JETPACK_THRUST;
+		
+		// Hero
+		if (hero)
+			delete hero;
+		hero = new MovingThing(50.f, 50.f, row_w, col_h, m_pDoc->sprites);
+
+		// environment
+		if (stat_things){
+			stat_things->clear();
+		}
+		stat_things = new std::vector<StationaryThing *>();
+		loadLevel();
 	}
 
 	// handle any events (keys)
@@ -337,7 +340,6 @@ int PaintView::handle(int event)
 	default:
 		return 0;
 		break;
-
 	}
 	return 1;
 }

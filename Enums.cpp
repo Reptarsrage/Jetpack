@@ -1,3 +1,8 @@
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+*/
+
 #include "Enums.h"
 
 const char *SpriteNames[] = { "Gameover-web-final.jpg",

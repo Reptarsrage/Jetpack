@@ -1,6 +1,13 @@
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+ * Useful Enums
+*/
+
 #ifndef ENUMS_H_
 #define ENUMS_H_
 
+/* Keyboard event identifiers */
 enum KeyBoardEnum {	LEFT_MOUSE_DOWN,
 					LEFT_MOUSE_DRAG,
 					LEFT_MOUSE_UP,
@@ -17,6 +24,7 @@ enum KeyBoardEnum {	LEFT_MOUSE_DOWN,
 					ARROW_DOWN_RELEASE,
 					SPACEBAR_PRESS};
 
+/* Sprite identifiers, corrosponding to the sprites loaded using the same order as SpriteNames[] */
 enum SpriteEnum {   SPRITE_GAMEOVER_WEB_FINAL,
 					SPRITE_IVY,
 					SPRITE_PILLAR,
@@ -153,6 +161,7 @@ enum SpriteEnum {   SPRITE_GAMEOVER_WEB_FINAL,
 					SPRITE_YELLOWTELEPORTER,
 					SPRITE_COUNT};
 
+/* Holds the filenames for all the sprites, order is important */
 extern const char *SpriteNames[];
 
 #endif // ENUMS_H_

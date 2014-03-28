@@ -1,8 +1,14 @@
-// The main driver program for the other parts. We have two major components,
-// UI and Doc.
-// They do have a link to each other as their member such that they can 
-// communicate.
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+ * Main
+*/
 
+/* The main driver program for the other parts. We have two major components,
+ * UI and Doc.
+ * They do have a link to each other as their member such that they can 
+ * communicate.
+ */
 
 #include <stdio.h>
 
@@ -25,7 +31,7 @@ int main(int	argc,
 	// Create the UI
 	impUI = new JetpackUI();
 
-	// Set the impDoc which is used as the bridge between UI and brushes
+	// Set the impDoc
 	impUI->setDocument(impDoc);
 	impDoc->setUI(impUI);
 
@@ -34,15 +40,4 @@ int main(int	argc,
 	impUI->show();
 
 	return Fl::run();
-}
-
-// global functions
-float frand()
-{
-	return (float)rand()/RAND_MAX;
-}
-
-int irand(int max)
-{
-	return rand()%max;
 }

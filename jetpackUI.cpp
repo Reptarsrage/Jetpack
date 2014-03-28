@@ -1,5 +1,8 @@
-// The user interface part for the program.
-
+/* Justin Robb
+ * 3-27-14
+ * JetPack
+ * The user interface part for the program.
+*/
 
 #include <string>
 #include <FL/fl_ask.H>
@@ -8,80 +11,35 @@
 #include "JetpackUI.h"
 #include "JetpackDoc.h"
 
-//------------------------------------- Help Functions --------------------------------------------
-
-//------------------------------------------------------------
-// This returns the UI, given the menu item.  It provides a
-// link from the menu items to the UI
-//------------------------------------------------------------
 JetpackUI* JetpackUI::whoami(Fl_Menu_* o)	
 {
 	return ( (JetpackUI*)(o->parent()->user_data()) );
 }
 
-//--------------------------------- Callback Functions --------------------------------------------
-
-//------------------------------------------------------------
-// Clears the paintview canvas.
-// Called by the UI when the clear canvas menu item is chosen
-//------------------------------------------------------------
-void JetpackUI::cb_clear_canvas(Fl_Menu_* o, void* v)
-{
-	JetpackDoc* pDoc=whoami(o)->getDocument();
-
-	pDoc->clearCanvas();
-}
-
-//------------------------------------------------------------
-// Causes the Jetpack program to exit
-// Called by the UI when the quit menu item is chosen
-//------------------------------------------------------------
 void JetpackUI::cb_exit(Fl_Menu_* o, void* v) 
 {
 	whoami(o)->m_mainWindow->hide();
 }
 
-
-
-//-----------------------------------------------------------
-// Brings up an about dialog box
-// Called by the UI when the about menu item is chosen
-//-----------------------------------------------------------
 void JetpackUI::cb_about(Fl_Menu_* o, void* v) 
 {
 	fl_message("Jetpack");
 }
 
-//---------------------------------- per instance functions --------------------------------------
-
-//------------------------------------------------
-// Return the JetpackDoc used
-//------------------------------------------------
 JetpackDoc* JetpackUI::getDocument()
 {
 	return m_pDoc;
 }
 
-//------------------------------------------------
-// Draw the main window
-//------------------------------------------------
 void JetpackUI::show() {
 	m_mainWindow->show();
 	m_paintView->show();
 }
 
-//------------------------------------------------
-// Change the paint and original window sizes to 
-// w by h
-//------------------------------------------------
 void JetpackUI::resize_windows(int w, int h) {
 	m_paintView->size(w,h);
 }
 
-//------------------------------------------------ 
-// Set the JetpackDoc used by the UI to 
-// communicate with the brushes 
-//------------------------------------------------
 void JetpackUI::setDocument(JetpackDoc* doc)
 {
 	m_pDoc = doc;
@@ -100,8 +58,6 @@ Fl_Menu_Item JetpackUI::menuitems[] = {
 
 	{ 0 }
 };
-
-
 
 //----------------------------------------------------
 // Constructor.  Creates all of the widgets.
@@ -126,10 +82,6 @@ JetpackUI::JetpackUI() {
 		group->end();
 		Fl_Group::current()->resizable(group);
     m_mainWindow->end();
-}
-
-JetpackUI::~JetpackUI()
-{
 }
 
 
