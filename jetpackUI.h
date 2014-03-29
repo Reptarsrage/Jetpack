@@ -13,6 +13,7 @@
 
 #include "jetpack_main.h"
 #include "paintView.h"
+#include "Sprites.h"
 
 const int DEFAULT_WIDTH = 600;		// Default window width
 const int DEFAULT_HEIGHT = 300;		// Default window height
@@ -28,17 +29,14 @@ class JetpackUI {
 public:
 	JetpackUI();
 	
-	/* Sets the animation/state handler for communication */
-	void setDocument(JetpackDoc* doc);
-	
-	/* Returns the animation/state handler */
-	JetpackDoc*	getDocument();
-	
 	/* Draw the main window */
 	void show();
-	
-	/* Change the paint and original window sizes to w by h */
-	void resize_windows(int w, int h);	
+
+		/* Begins animation counter */
+	void	startAnimating();
+
+	/* Stops animation counter */
+	void	stopAnimating();
 
 // All callbacks here.  Callbacks are declared 
 // static
@@ -53,13 +51,8 @@ private:
 	*/
 	static void	cb_about(Fl_Menu_* o, void* v);
 
-// Atributes and FLTK Widgets
-public:
-	PaintView* m_paintView;		// In charge of painting
-	Fl_Window* m_mainWindow;	// The main form
-	Fl_Menu_Bar* m_menubar;		// menubar of main form
+// Static Functions
 private:
-	JetpackDoc*	m_pDoc;			// pointer to document to communicate with the document
 
 	// Static class members
 	static Fl_Menu_Item	menuitems[];		// menu items for main menu bar
@@ -68,6 +61,20 @@ private:
 	 * link from the menu items to the UI 
 	 */
 	static JetpackUI* whoami(Fl_Menu_* o);
+
+// Atributes and FLTK Widgets
+public:
+	PaintView* m_paintView;		// In charge of painting
+	Fl_Window* m_mainWindow;	// The main form
+	Fl_Menu_Bar* m_menubar;		// menubar of main form
+	int				m_nWidth,		// Dimensions of original window.
+					m_nHeight;
+
+	int				m_nPaintWidth,  // Dimensions of the paint window.
+					m_nPaintHeight;						
+
+	Sprites *sprites;				// Sprite manager (all sprites)
+	bool animating;					// controller for animation callbacks
 
 };
 

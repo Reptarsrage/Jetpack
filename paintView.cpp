@@ -2,8 +2,6 @@
  * 3-27-14
  * JetPack
 */
-
-#include "JetpackDoc.h"
 #include "JetpackUI.h"
 #include "paintView.h"
 #include "Sprites.h"
@@ -113,21 +111,21 @@ void PaintView::handleEventKeys() {
 void PaintView::loadLevel() {
 	assert(stat_things);
 	assert(dyn_things);
-	stat_things->push_back(new StationaryThing(10 * row_w, 9 * col_h, row_w, col_h, m_pDoc->sprites));
+	stat_things->push_back(new StationaryThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
 			if ( i % 5 == 0 && j != 0 && j != NUM_COLS - 1 && j != NUM_COLS - 2)
-				stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_pDoc->sprites));
+				stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 		}	
 	}
 	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(10 * row_w, 8 * col_h, row_w, col_h, m_pDoc->sprites));
+		dyn_things->push_back(new Pinwheel(10 * row_w, 8 * col_h, row_w, col_h, m_UI->sprites));
 	}
 	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(j * row_w, col_h, row_w, col_h, m_pDoc->sprites));
+		dyn_things->push_back(new Pinwheel(j * row_w, col_h, row_w, col_h, m_UI->sprites));
 	}
 	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(j * row_w, 0 * col_h, row_w, col_h, m_pDoc->sprites));
+		dyn_things->push_back(new Pinwheel(j * row_w, 0 * col_h, row_w, col_h, m_UI->sprites));
 	}
 	
 }
@@ -135,7 +133,7 @@ void PaintView::loadLevel() {
 void PaintView::drawBackGround() {
 	assert(stat_things);
 	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, m_pDoc->sprites->getSprite(SPRITE_BACKGROUND));
+		glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
 		glTranslatef(bounds->left(), bounds->bottom(), 0);
 		glBegin(GL_QUADS);
 			glTexCoord2f( 0, 0 );                           
@@ -330,9 +328,9 @@ void PaintView::draw()
 		printf("INITIALIZED\n");
 		
 		// draw bounds
-		m_nDrawWidth = m_pDoc->m_nPaintWidth;
-		m_nDrawHeight = m_pDoc->m_nPaintHeight;
-		
+		m_nDrawWidth = w();
+		m_nDrawHeight = h();
+
 		// row/column
 		row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
 		col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
@@ -351,7 +349,7 @@ void PaintView::draw()
 		// Hero
 		if (hero)
 			delete hero;
-		hero = new Hero(50.f, 50.f, row_w, col_h, m_pDoc->sprites);
+		hero = new Hero(50.f, 50.f, row_w, col_h, m_UI->sprites);
 
 		// environment
 		if (stat_things){
@@ -424,9 +422,9 @@ int PaintView::handle(int event)
 			hold_down = true;
 			hold_up = false;
 		} else if (key == 'a')
-			m_pDoc->startAnimating();
+			m_UI->startAnimating();
 		else if (key == 's')
-			m_pDoc->stopAnimating();
+			m_UI->stopAnimating();
 		else if (key == ' ') {
 			eventToDo = SPACEBAR_PRESS;
 		} else
@@ -478,11 +476,6 @@ int PaintView::handle(int event)
 void PaintView::refresh()
 {
 	redraw();
-}
-
-void PaintView::resizeWindow(int width, int height)
-{
-	resize(x(), y(), width, height);
 }
 
 void PaintView::glEnable2D()
@@ -538,6 +531,6 @@ int PaintView::InitScene()
 
         // Disable depth testing
         glDisable( GL_DEPTH_TEST );
-		m_pDoc->sprites->Load("Resources/");
+		m_UI->sprites->Load("Resources/");
 		return 1;
 }

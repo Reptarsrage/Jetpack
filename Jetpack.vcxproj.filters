@@ -13,78 +13,105 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Header Files\Things">
+      <UniqueIdentifier>{2cd074d0-249b-4ae9-b3d4-0738a8272214}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{907ed906-ade8-4d61-9ade-87791101a6ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{4c5ef337-0871-446c-a7ab-b6566e378950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Things\Baddies">
+      <UniqueIdentifier>{481bfae1-bff6-40c9-bacb-0e28dcb044c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{aa74e491-f279-4946-8e45-3b117932aad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{270aac89-6d18-46ec-8856-76a5b8654e1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Things">
+      <UniqueIdentifier>{5ada0e57-e196-470d-b4f1-660a99c43e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jetpack_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="paintView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="jetpackUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="jetpackDoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Enums.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="StationaryThing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hero.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Things</Filter>
     </ClCompile>
     <ClCompile Include="Pinwheel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="paintView.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="jetpackUI.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="paintView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="jetpackUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="jetpackDoc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StationaryThing.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AbstractThing.h">
+      <Filter>Header Files\Things</Filter>
     </ClInclude>
     <ClInclude Include="MovingThing.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Things</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractThing.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="NonSolidThing.h">
+      <Filter>Header Files\Things</Filter>
     </ClInclude>
-    <ClInclude Include="Rectangle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SolidThing.h">
+      <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="StationaryThing.h">
+      <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.h">
+      <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="jetpackUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="paintView.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="Pinwheel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Things\Baddies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

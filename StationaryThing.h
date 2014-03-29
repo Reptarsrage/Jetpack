@@ -1,7 +1,6 @@
 /* Justin Robb
  * 3-27-14
  * JetPack
- * A non-moving thing
 */
 
 #ifndef STATIONARY_THING_H_

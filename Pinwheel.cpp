@@ -10,7 +10,7 @@ Pinwheel::Pinwheel(float x, float y, float w, float h, const Sprites *s){
 	bounds = new Rectangle(x, y, w, h);
 	name = "Pinwheel";
 	sprites = s;
-	srand(time(NULL));
+	srand((int)time(NULL));
 	rand();
 	float dir_angle = fmod(((float)rand()/RAND_MAX), 2*PI);
 	velocity_x = cosf(dir_angle);
@@ -24,7 +24,7 @@ Pinwheel::Pinwheel(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Pinwheel";
 	sprites = s;
-	srand(time(NULL));
+	srand((int)time(NULL));
 	rand();
 	float dir_angle = fmod(((float)rand()/RAND_MAX), 2*PI);
 	velocity_x = cosf(dir_angle);

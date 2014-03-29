@@ -1,7 +1,6 @@
 /* Justin Robb
  * 3-27-14
  * JetPack
- * Abstract thing
 */
 
 #include "StationaryThing.h"

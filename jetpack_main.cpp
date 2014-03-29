@@ -18,23 +18,15 @@
 #include <FL/Fl_Shared_Image.H>
 
 #include "jetpackUI.h"
-#include "jetpackDoc.h"
 
 JetpackUI *impUI;
-JetpackDoc *impDoc;
 
 int main(int	argc, 
 		 char**	argv) 
 {
 
-	impDoc = new JetpackDoc();
-
 	// Create the UI
 	impUI = new JetpackUI();
-
-	// Set the impDoc
-	impUI->setDocument(impDoc);
-	impDoc->setUI(impUI);
 
 	Fl::visual(FL_DOUBLE|FL_INDEX);
 

@@ -17,11 +17,11 @@
 #include "GL/glew.h"
 #endif
 
-class JetpackDoc;
 class Rectangle;
 class MovingThing;
 class Hero;
 class StationaryThing;
+class JetpackUI;
 
 /* Controls the animation and drawing */
 class PaintView : public Fl_Gl_Window
@@ -39,9 +39,6 @@ public:
 
 	/* Forces a redraw */
 	void refresh();
-
-	/* Resizes the painting window */
-	void resizeWindow(int width, int height);
 
 private:
 	/* Helper function to handle key events */
@@ -82,7 +79,7 @@ private:
 
 // Attributes
 public:
-	JetpackDoc *m_pDoc;							// Pointer to handler
+	JetpackUI *m_UI;							// Pointer to handler
 
 private:
 	Rectangle *bounds;							// Current bounds for the hero
