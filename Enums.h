@@ -15,11 +15,12 @@ float m_randf();
 
 
 /* Thing types */
-enum ThingTypeEnum {   SOLID_TYPE,
+enum ThingTypeEnum {SOLID_TYPE,
 					LADDER_TYPE,
 					BADDIE_TYPE,
 					HERO_TYPE,
-					COLLECTABLE_TYPE }; // TODO: add all
+					COLLECTABLE_TYPE,
+					DOOR_TYPE }; // TODO: add all
 
 
 /* Sprite identifiers, corrosponding to the sprites loaded using the same order as SpriteNames[] */

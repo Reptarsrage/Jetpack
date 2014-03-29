@@ -20,12 +20,23 @@ void Collectable::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Collectable";
 	sprites = s;
+	collected = false;
 	type = COLLECTABLE_TYPE;
 	def_sprite = SPRITE_GEM;
 }
 
 Collectable::~Collectable(){
 	delete bounds;
+}
+
+bool Collectable::Collected() {
+	return collected;
+}
+
+int Collectable::Collect() {
+	collected = true;
+	def_sprite = SPRITE_GEMCOLLECTED;
+	return point_value;
 }
 
 const char *Collectable::ToString() const{

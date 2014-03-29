@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collectable.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
@@ -99,6 +100,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractThing.h" />
     <ClInclude Include="Collectable.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="jetpackUI.h" />

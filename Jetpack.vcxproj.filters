@@ -72,6 +72,9 @@
     <ClCompile Include="Collectable.cpp">
       <Filter>Source Files\Things</Filter>
     </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Pinwheel.h">
       <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Header Files\Things</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@
 #include "Ladder.h"
 #include "Hero.h"
 #include "Pinwheel.h"
+#include "Door.h"
 
 static int eventToDo;
 static int isAnEvent=0;
@@ -48,6 +49,7 @@ PaintView::PaintView(int			x,
 	jump_restitution = col_h * JUMP_RESTITUTION;
 	force_gravity = col_h * FORCE_GRAVITY;
 	jetpack_thrust = col_h * JETPACK_THRUST;
+	gem_count = 0;
 
 	// hero/env
 	solid_things = NULL;
@@ -56,10 +58,12 @@ PaintView::PaintView(int			x,
 	dyn_things = NULL;
 	hero = NULL;
 	special_things = NULL;
+	door = NULL;
 }
 
 PaintView::~PaintView() {
 	delete hero;
+	delete door;
 	solid_things->clear();
 	nonsolid_things->clear();
 	collectable_things->clear();
@@ -83,7 +87,30 @@ void PaintView::loadLevel() {
 	for (int i = 1; i < NUM_ROWS - 1; i++) {
 		special_things->push_back(new Ladder(9 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 	}
+	door = new Door((NUM_COLS - 2.f) * row_w,  (NUM_ROWS - 2.f) * col_h, row_w * 2.f, col_h * 2.f, m_UI->sprites);
 	
+	for (int i = 1; i < NUM_COLS - 1; i++) {
+		if (i != 9 && i != 10 && i != 8) {
+			collectable_things->push_back(new Collectable(i * row_w, (NUM_ROWS - 2.f) * col_h, row_w, col_h, m_UI->sprites));
+			gem_count++;
+		}
+	}
+
+}
+
+bool PaintView::heroGetSwag() {
+	for (Collectable *s : *collectable_things){
+		if (s->Overlaps(hero)){
+			if (!s->Collected()) {
+				gem_count--;
+				s->Collect();
+			}
+			if (gem_count == 0)
+				door->Open();
+			return true;
+		}
+	}
+	return false;
 }
 
 void PaintView::drawBackGround() {
@@ -121,6 +148,7 @@ void PaintView::drawBackGround() {
 	for (StationaryThing *s : *special_things) {
 		s->draw();
 	}
+	door->draw();
 }
 
 void PaintView::drawMovingThings() {
@@ -146,6 +174,12 @@ void PaintView::moveThings() {
 void PaintView::moveHero() {
 	assert(hero);
 	
+	// do things based on surroundings
+	if (door->IsOpen() && door->Overlaps(hero)){
+		// TODO: WIN
+	}
+	
+	heroGetSwag();
 	bool touchy = heroTouchingLadder();
 	if (touchy && (hold_up || hold_down))
 		hero->on_ladder = true;
@@ -358,6 +392,10 @@ void PaintView::draw()
 			delete hero;
 		hero = new Hero(50.f, 50.f, row_w, col_h, m_UI->sprites);
 
+		// Door
+		if (door)
+			delete door;
+
 		// environment
 		if (solid_things){
 			solid_things->clear();
@@ -373,7 +411,7 @@ void PaintView::draw()
 		if (collectable_things){
 			collectable_things->clear();
 		}
-		collectable_things = new std::vector<StationaryThing *>();
+		collectable_things = new std::vector<Collectable *>();
 
 
 		if (special_things){
@@ -419,11 +457,10 @@ void PaintView::draw()
 
 int PaintView::handle(int event)
 {
-	int key;
+	int key = Fl::event_key();
 	switch(event) {
 		case FL_SHORTCUT:
 		case FL_KEYBOARD:
-			key = Fl::event_key();
 			switch(key) {
 				case FL_Left:
 					hold_left = true;

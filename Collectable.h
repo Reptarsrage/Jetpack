@@ -30,10 +30,22 @@ public:
 	/* Draws this thing */
 	virtual void draw();
 
+	/* Collects this thing, and returns the points for doing so. */
+	virtual int Collect();
+
+	/* Is this thing already collected? */
+	virtual bool Collected();
+
 // Attributes
 private:
 	/* Which sprite to use to draw this thing */
 	GLuint def_sprite;
+	
+	/* Is this still up for grabs? */
+	bool collected;
+
+	/* How many points is this worth? */
+	int point_value;
 };
 
 #endif // COLLECTABLE_H_
