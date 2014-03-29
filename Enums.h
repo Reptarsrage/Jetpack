@@ -7,6 +7,8 @@
 #ifndef ENUMS_H_
 #define ENUMS_H_
 
+const float PI = 3.14159265359f;
+
 /* Keyboard event identifiers */
 enum KeyBoardEnum {	LEFT_MOUSE_DOWN,
 					LEFT_MOUSE_DRAG,

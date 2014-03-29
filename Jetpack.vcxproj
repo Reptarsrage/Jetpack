@@ -84,11 +84,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enums.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="jetpackDoc.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
     <ClCompile Include="jetpack_main.cpp" />
-    <ClCompile Include="MovingThing.cpp" />
     <ClCompile Include="paintView.cpp" />
+    <ClCompile Include="Pinwheel.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="StationaryThing.cpp" />
@@ -96,11 +97,13 @@
   <ItemGroup>
     <ClInclude Include="AbstractThing.h" />
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="jetpackDoc.h" />
     <ClInclude Include="jetpackUI.h" />
     <ClInclude Include="jetpack_main.h" />
     <ClInclude Include="MovingThing.h" />
     <ClInclude Include="paintView.h" />
+    <ClInclude Include="Pinwheel.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sprites.h" />

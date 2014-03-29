@@ -26,6 +26,7 @@ JetpackDoc *impDoc;
 int main(int	argc, 
 		 char**	argv) 
 {
+
 	impDoc = new JetpackDoc();
 
 	// Create the UI

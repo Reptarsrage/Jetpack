@@ -20,11 +20,11 @@ public:
 	Rectangle(float x, float y, float w, float h);
 	
 	/* Returns true if this rectangle overlaps the other.
-	 * If two rectangles touch, they overlap.
+	 * If two rectangles just touch, they do not overlap.
 	 */
 	bool Overlaps(const Rectangle other) const;
 	
-	/* Returns true if the specified point lies within or touching this rectangle. */
+	/* Returns true if the specified point lies exculsively within this rectangle. */
 	bool ContainsPoint(float x, float y) const;
 	
 	/* Returns the y-coord of the top of this rectangle */

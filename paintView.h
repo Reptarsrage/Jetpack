@@ -20,6 +20,7 @@
 class JetpackDoc;
 class Rectangle;
 class MovingThing;
+class Hero;
 class StationaryThing;
 
 /* Controls the animation and drawing */
@@ -51,13 +52,21 @@ private:
 	
 	/* Helper function to draw all moving things */
 	void drawMovingThings();
+
+	/* Helper function to draw all moving things */
+	void drawHero();
 	
 	/* Helper function to move all moving things (by telling them to move) */
 	void moveThings();
+
+	/* Helper function to move all moving things (by telling them to move) */
+	void moveHero();
 	
 	/* Helper function to advance the position of a moving thing. Does bounds checking! */
 	void advancePosition(MovingThing *thing, float delta_x, float delta_y) const;
 	
+	/* Helper function to advance the position of a moving thing. Does bounds checking! */
+	void advanceHeroPosition(float delta_x, float delta_y) const;
 	
 	/* Helper function to load in all things to be drawn */
 	void loadLevel();
@@ -77,12 +86,11 @@ public:
 
 private:
 	Rectangle *bounds;							// Current bounds for the hero
-	MovingThing *hero;
+	Hero *hero;
 	std::vector<StationaryThing *> *stat_things;// Holds all non moving things
+	std::vector<MovingThing *> *dyn_things;		// Holds all moving things
 	
-	int		m_nWindowWidth,		// Width of enire window
-			m_nWindowHeight,	// Height of entire window
-			m_nDrawHeight,		// Height of our painting section
+	int		m_nDrawHeight,		// Height of our painting section
 			m_nDrawWidth;		// Width of our painting section
 			
 

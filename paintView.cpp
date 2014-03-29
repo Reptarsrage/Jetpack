@@ -10,6 +10,8 @@
 #include "Enums.h"
 #include "MovingThing.h"
 #include "StationaryThing.h"
+#include "Hero.h"
+#include "Pinwheel.h"
 
 static int eventToDo;
 static int isAnEvent=0;
@@ -19,6 +21,7 @@ const float MAX_VELOCITY = 0.12f;
 const float FORCE_GRAVITY = 0.012f;
 const float JETPACK_THRUST = 0.024f;
 const float JUMP_RESTITUTION = 0.4f;
+const float MARGIN = 20.f;
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -28,8 +31,6 @@ PaintView::PaintView(int			x,
 						: Fl_Gl_Window(x,y,w,h,l)
 {
 	// Dimensions
-	m_nWindowWidth	= w;
-	m_nWindowHeight	= h;
 	row_w = w / (NUM_COLS * 1.0f);
 	col_h = h / (NUM_ROWS * 1.0f);
 	bounds = new Rectangle(0, 0, w, h);
@@ -47,6 +48,7 @@ PaintView::PaintView(int			x,
 
 	// hero/env
 	stat_things = NULL;
+	dyn_things = NULL;
 	hero = NULL;
 }
 
@@ -63,14 +65,12 @@ void PaintView::handleEventKeys() {
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			m_pDoc->startAnimating();
 			break;
 		case LEFT_MOUSE_DRAG:
 			break;
 		case LEFT_MOUSE_UP:
 			break;
 		case RIGHT_MOUSE_DOWN:
-			m_pDoc->stopAnimating();
 			break;
 		case RIGHT_MOUSE_DRAG:
 			break;
@@ -101,7 +101,7 @@ void PaintView::handleEventKeys() {
 			hold_right = false;
 			break;
 		case SPACEBAR_PRESS:
-			hero->Jump(jump_restitution);
+			hero->velocity_jump = jump_restitution;
 			break;
 		default:
 			printf("Unknown event!!\n");		
@@ -112,27 +112,68 @@ void PaintView::handleEventKeys() {
 
 void PaintView::loadLevel() {
 	assert(stat_things);
+	assert(dyn_things);
+	stat_things->push_back(new StationaryThing(10 * row_w, 9 * col_h, row_w, col_h, m_pDoc->sprites));
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
 			if ( i % 5 == 0 && j != 0 && j != NUM_COLS - 1 && j != NUM_COLS - 2)
 				stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_pDoc->sprites));
 		}	
 	}
+	for (int j = 0; j < NUM_COLS; j++) {
+		dyn_things->push_back(new Pinwheel(10 * row_w, 8 * col_h, row_w, col_h, m_pDoc->sprites));
+	}
+	for (int j = 0; j < NUM_COLS; j++) {
+		dyn_things->push_back(new Pinwheel(j * row_w, col_h, row_w, col_h, m_pDoc->sprites));
+	}
+	for (int j = 0; j < NUM_COLS; j++) {
+		dyn_things->push_back(new Pinwheel(j * row_w, 0 * col_h, row_w, col_h, m_pDoc->sprites));
+	}
+	
 }
 
 void PaintView::drawBackGround() {
 	assert(stat_things);
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, m_pDoc->sprites->getSprite(SPRITE_BACKGROUND));
+		glTranslatef(bounds->left(), bounds->bottom(), 0);
+		glBegin(GL_QUADS);
+			glTexCoord2f( 0, 0 );                           
+			glVertex2f( 0, 0 );
+			glTexCoord2f(1, 0 );     
+			glVertex2f( bounds->width, 0 );
+			glTexCoord2f( 1, 1 );    
+			glVertex2f( bounds->width, bounds->height );
+			glTexCoord2f( 0, 1 );          
+			glVertex2f( 0, bounds->height );
+		glEnd();
+	glPopMatrix();
+	
 	for (StationaryThing *s : *stat_things) {
 		s->draw();
 	}
 }
 
 void PaintView::drawMovingThings() {
+	assert(dyn_things);
+	for (MovingThing *baddie : *dyn_things){
+		baddie->draw();
+	}
+}
+
+void PaintView::drawHero() {
 	assert(hero);
 	hero->draw();
 }
 
 void PaintView::moveThings() {
+	assert(dyn_things);
+	for (MovingThing *baddie : *dyn_things){
+		advancePosition(baddie, baddie->getIntendedX(), baddie->getIntendedY());
+	}
+}
+
+void PaintView::moveHero() {
 	assert(hero);
 	
 	// move in x-dir
@@ -175,7 +216,52 @@ void PaintView::moveThings() {
 		hero->velocity_y = - max_velocity;
 
 	// set positions
-	advancePosition(hero, hero->velocity_x, hero->velocity_y - hero->velocity_jump);
+	advanceHeroPosition(hero->velocity_x, hero->velocity_y - hero->velocity_jump);
+}
+
+void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
+	assert(hero);
+	
+	// check world bounds
+	const Rectangle hero_bounds = hero->Bounds();
+	const Rectangle new_hero_bounds_y = Rectangle(hero_bounds.position_x,
+		hero_bounds.position_y + delta_y, hero_bounds.width, hero_bounds.height);
+	const Rectangle new_hero_bounds_x = Rectangle(hero_bounds.position_x + delta_x,
+		hero_bounds.position_y, hero_bounds.width, hero_bounds.height);
+
+	// in the x direction
+	if (new_hero_bounds_x.right() > bounds->right())
+		delta_x = bounds->right() - hero_bounds.right();
+	else if (new_hero_bounds_x.left()  < bounds->left()) 
+		delta_x = bounds->left() - hero_bounds.left();
+
+	// and in the y direction
+	if (new_hero_bounds_y.top() > bounds->top())
+		delta_y = bounds->top() - hero_bounds.top();
+	else if (new_hero_bounds_y.bottom() < bounds->bottom())
+		delta_y =  bounds->bottom() - hero_bounds.bottom();
+
+	// check solid objects in x and y directions (if we need to)
+	if (delta_x == 0 && delta_y == 0)
+		return;
+
+	for (StationaryThing *s : *stat_things){
+		const Rectangle s_bounds = s->Bounds();
+		if (s->Overlaps(new_hero_bounds_x)) {
+			if (hero_bounds.right() <= s_bounds.left())
+				delta_x = s_bounds.left() - hero_bounds.right();
+			else
+				delta_x = s_bounds.right() - hero_bounds.left();
+		}
+		if (s->Overlaps(new_hero_bounds_y)) {
+			if (hero_bounds.top() <= s_bounds.bottom())
+				delta_y = s_bounds.bottom() - hero_bounds.top();
+			else
+				delta_y =  s_bounds.top() - hero_bounds.bottom();
+		}
+	}
+
+	hero->move(delta_x, delta_y);
 }
 
 void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y) const {
@@ -189,27 +275,49 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 		thing_bounds.position_y, thing_bounds.width, thing_bounds.height);
 
 	// in the x direction
-	if (new_thing_bounds_x.position_x > bounds->right())
-		delta_x = 0; //bounds->right() - thing_bounds.position_x;
-	if (new_thing_bounds_x.position_x  < bounds->left())
-		delta_x = 0; //thing_bounds.position_x - bounds->left();
-
-	// and in the y direction
-	if (new_thing_bounds_y.position_y > bounds->top())
-		delta_y = 0; //bounds->top() - thing_bounds.position_y;
-	if (new_thing_bounds_y.position_y < bounds->bottom())
-		delta_y = 0; //thing_bounds.position_y - bounds->bottom();
-
-	// check solid objects in x and y directions
-	for (StationaryThing *s : *stat_things){
-		if (s->Overlaps(new_thing_bounds_x)) {
-			delta_x = 0;
-		}
-		if (s->Overlaps(new_thing_bounds_y)) {
-			delta_y = 0;
-		}
+	if (new_thing_bounds_x.right() > bounds->right()) {
+		delta_x = bounds->right() - thing_bounds.right();
+		thing->hit_wall_right = true;
+	} else if (new_thing_bounds_x.left() < bounds->left()) {
+		delta_x = bounds->left() - thing_bounds.left();
+		thing->hit_wall_left = true;
 	}
 
+
+	// and in the y direction
+	if (new_thing_bounds_y.top() > bounds->top()) {
+		delta_y = bounds->top() - thing_bounds.top();
+		thing->hit_wall_top = true;
+	} else if (new_thing_bounds_y.bottom() < bounds->bottom()) {
+		delta_y = bounds->bottom() - thing_bounds.bottom();
+		thing->hit_wall_bottom = true;
+	}
+
+	// check solid objects in x and y directions (if we need to)
+	if (delta_x == 0 && delta_y == 0)
+		return;
+
+	for (StationaryThing *s : *stat_things){
+		const Rectangle s_bounds = s->Bounds();
+		if (s->Overlaps(new_thing_bounds_x)) {
+			if (thing_bounds.right() <= s_bounds.left()) {
+				delta_x = s_bounds.left() - thing_bounds.right();
+				thing->hit_wall_right = true;
+			} else {
+				delta_x = s_bounds.right() - thing_bounds.left();
+				thing->hit_wall_left = true;
+			}
+		}
+		if (s->Overlaps(new_thing_bounds_y)) {
+			if (thing_bounds.top() <= s_bounds.bottom()) {
+				delta_y = s_bounds.bottom() - thing_bounds.top();
+				thing->hit_wall_top = true;
+			} else {
+				delta_y =  s_bounds.top() - thing_bounds.bottom();
+				thing->hit_wall_bottom = true;
+			}
+		}
+	}
 	thing->move(delta_x, delta_y);
 }
 
@@ -221,19 +329,18 @@ void PaintView::draw()
 		InitScene();
 		printf("INITIALIZED\n");
 		
-		// window bounds
-		m_nWindowWidth	= w();
-		m_nWindowHeight	= h();
 		// draw bounds
 		m_nDrawWidth = m_pDoc->m_nPaintWidth;
 		m_nDrawHeight = m_pDoc->m_nPaintHeight;
+		
 		// row/column
 		row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
 		col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
+		
 		// player bounds
 		if (bounds)
 			delete bounds;
-		bounds = new Rectangle(row_w, m_nDrawHeight - col_h, m_nDrawWidth - 2.0*row_w, m_nDrawHeight - 2*col_h);
+		bounds = new Rectangle(0, m_nDrawHeight - MARGIN, m_nDrawWidth, m_nDrawHeight - MARGIN);
 		
 		// constants
 		max_velocity = col_h * MAX_VELOCITY;
@@ -244,13 +351,20 @@ void PaintView::draw()
 		// Hero
 		if (hero)
 			delete hero;
-		hero = new MovingThing(50.f, 50.f, row_w, col_h, m_pDoc->sprites);
+		hero = new Hero(50.f, 50.f, row_w, col_h, m_pDoc->sprites);
 
 		// environment
 		if (stat_things){
 			stat_things->clear();
 		}
 		stat_things = new std::vector<StationaryThing *>();
+
+		// baddies
+		if (dyn_things){
+			dyn_things->clear();
+		}
+		dyn_things = new std::vector<MovingThing *>();
+
 		loadLevel();
 	}
 
@@ -258,6 +372,7 @@ void PaintView::draw()
 	handleEventKeys();
 	
 	// move things
+	moveHero();
 	moveThings();
 	
 	// Draw Scene
@@ -277,6 +392,7 @@ void PaintView::draw()
 	drawBackGround();
 	
 	// draw everything else
+	drawHero();
 	drawMovingThings();
 
 	glDisable2D();

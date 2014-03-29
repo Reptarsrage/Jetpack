@@ -25,16 +25,16 @@ Rectangle::Rectangle(float x, float y, float w, float h){
 
 bool Rectangle::Overlaps(const Rectangle other) const{
 	
-	return (left() <= other.right() && right() >= other.left() &&
-			 bottom() <= other.top() && top() >= other.bottom());
+	return (left() < other.right() && right() > other.left() &&
+			 bottom() < other.top() && top() > other.bottom());
 
 }
 
 bool Rectangle::ContainsPoint(float x, float y) const {
-	return (x >= left()) && 
-		   (x <= right()) && 
-		   (y <= top()) &&
-		   (y >= bottom());
+	return (x > left()) && 
+		   (x < right()) && 
+		   (y < top()) &&
+		   (y > bottom());
 }
 
 float Rectangle::top() const {
