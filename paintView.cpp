@@ -73,21 +73,15 @@ void PaintView::loadLevel() {
 	assert(collectable_things);
 	assert(dyn_things);
 	assert(special_things);
-	solid_things->push_back(new SolidThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
+	//solid_things->push_back(new SolidThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
-			if ( i % 5 == 0 && j != 0 && j != NUM_COLS - 1 && j != NUM_COLS - 2)
+			if ( i == 0 || i == NUM_ROWS - 1 || (j == 8 && i != 1) || (j == 10 && i != NUM_ROWS - 2))
 				solid_things->push_back(new SolidThing(j * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 		}	
 	}
-	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(10 * row_w, 8 * col_h, row_w, col_h, m_UI->sprites));
-	}
-	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(j * row_w, col_h, row_w, col_h, m_UI->sprites));
-	}
-	for (int j = 0; j < NUM_COLS; j++) {
-		dyn_things->push_back(new Pinwheel(j * row_w, 0 * col_h, row_w, col_h, m_UI->sprites));
+	for (int i = 1; i < NUM_ROWS - 1; i++) {
+		special_things->push_back(new Ladder(9 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 	}
 	
 }
@@ -152,6 +146,12 @@ void PaintView::moveThings() {
 void PaintView::moveHero() {
 	assert(hero);
 	
+	bool touchy = heroTouchingLadder();
+	if (touchy && (hold_up || hold_down))
+		hero->on_ladder = true;
+	else if (!touchy)
+		hero->on_ladder = false;
+
 	// move in x-dir
 	if (hold_left && !Fl::event_key(FL_Left)) {
 		hold_left = false;
@@ -168,7 +168,7 @@ void PaintView::moveHero() {
 	if (hold_up && !Fl::event_key(FL_Up)) {
 		hold_up = false;
 	} else if (hold_up && hero->on_ladder) {
-			hero->velocity_y = max_velocity;
+			hero->velocity_y = -max_velocity;
 	} else if (hold_jet_pack && !Fl::event_key('z')) {
 		hold_jet_pack = false;
 	} else if (hold_jet_pack) {
@@ -177,7 +177,9 @@ void PaintView::moveHero() {
 	} else if (hold_down && !Fl::event_key(FL_Down)) 
 		hold_down = false;
 	else if (hold_down && hero->on_ladder)
-		hero->velocity_y = -max_velocity;
+		hero->velocity_y = max_velocity;
+	else if (hero->on_ladder)
+		hero->velocity_y = 0;
 	else
 		hero->force_y = 0.0;
 
@@ -185,6 +187,10 @@ void PaintView::moveHero() {
 	hero->applyGravity(force_gravity);
 	
 	// Check limits
+	if (hero->on_ladder) {
+		hero->velocity_jump = 0;
+	}
+
 	if (hero->velocity_jump < 0.0)
 		hero->velocity_jump = 0.0;
 	
@@ -308,6 +314,16 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 		}
 	}
 	thing->move(delta_x, delta_y);
+}
+
+bool PaintView::heroTouchingLadder() {
+	for (StationaryThing *s : *special_things) {
+		if (s->getType() == LADDER_TYPE &&
+			s->Overlaps(hero)){
+				return true;
+		}
+	}
+	return false;
 }
 
 void PaintView::draw()

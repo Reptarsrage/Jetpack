@@ -20,6 +20,7 @@ void Collectable::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Collectable";
 	sprites = s;
+	type = COLLECTABLE_TYPE;
 	def_sprite = SPRITE_GEM;
 }
 

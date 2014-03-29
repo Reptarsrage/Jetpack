@@ -30,6 +30,9 @@ public:
 	void SetBounds(float x, float y, float width, float height) 
 		{ if (bounds) delete bounds; bounds = new Rectangle(x, y, width, height); }
 
+	/* returns a descriptive integer to what this thing is */
+	int getType() { return type; }
+
 // Pure Virtual Functions
 public:
 	/* Returns the name of this thing. */
@@ -43,6 +46,7 @@ protected:
 	Rectangle *bounds;			// The bounds of this thing.
 	char * name;				// The name of this thing.
 	const Sprites *sprites;		// A pointer to the sprite manager (for drawing this thing).
+	int type;					// What kind of thing?
 };
 
 #endif // ABSTRACT_THING_H_

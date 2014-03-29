@@ -42,6 +42,9 @@ public:
 
 private:
 	
+	/* Helper function to test if hero is touching a ladder */
+	bool heroTouchingLadder();
+	
 	/* Helper function to draw all non moving things */
 	void drawBackGround();
 	
