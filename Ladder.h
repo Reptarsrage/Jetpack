@@ -20,7 +20,8 @@ public:
 	Ladder(float x, float y, float w, float h, const Sprites *s);
 	Ladder(const Rectangle r, const Sprites *s);
 	~Ladder();
-	
+	void Init(const Rectangle r, const Sprites *s);
+
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
 

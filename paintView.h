@@ -41,8 +41,6 @@ public:
 	void refresh();
 
 private:
-	/* Helper function to handle key events */
-	void handleEventKeys();
 	
 	/* Helper function to draw all non moving things */
 	void drawBackGround();
@@ -84,8 +82,11 @@ public:
 private:
 	Rectangle *bounds;							// Current bounds for the hero
 	Hero *hero;
-	std::vector<StationaryThing *> *stat_things;// Holds all non moving things
-	std::vector<MovingThing *> *dyn_things;		// Holds all moving things
+	std::vector<StationaryThing *> *solid_things;       // Holds all solid things
+	std::vector<StationaryThing *> *nonsolid_things;    // Holds all non-solid, un-interactable things
+	std::vector<StationaryThing *> *special_things;     // Holds all non-solid, interactable things (ladders, teleporters)
+	std::vector<StationaryThing *> *collectable_things; // Holds all collectable things
+	std::vector<MovingThing *> *dyn_things;				// Holds all moving things
 	
 	int		m_nDrawHeight,		// Height of our painting section
 			m_nDrawWidth;		// Width of our painting section
@@ -102,7 +103,9 @@ private:
 			hold_right,		// Should our hero move right?
 			hold_up,		// Should our hero move up?
 			hold_down,		// Should our hero move down?
+			hold_jet_pack,		 // Should our hero activate his jetpack?
 			level_loaded;	// Should we load the sprites of the level?
+
 };
 
 #endif

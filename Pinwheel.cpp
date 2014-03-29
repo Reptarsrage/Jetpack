@@ -6,27 +6,20 @@ const float SPEED = 2.f;
 const float EPSILON = 0.1f;
 
 Pinwheel::Pinwheel(float x, float y, float w, float h, const Sprites *s){
-	assert(s);
-	bounds = new Rectangle(x, y, w, h);
-	name = "Pinwheel";
-	sprites = s;
-	srand((int)time(NULL));
-	rand();
-	float dir_angle = fmod(((float)rand()/RAND_MAX), 2*PI);
-	velocity_x = cosf(dir_angle);
-	velocity_y = sinf(dir_angle);
-	printf("Initial Pinwheel angle = %g\n", dir_angle);
-	hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
+	const Rectangle r = Rectangle(x, y, w, h);
+	Init(r, s);
 }
 
 Pinwheel::Pinwheel(const Rectangle r, const Sprites *s) {
+	Init(r, s);
+}
+
+void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Pinwheel";
 	sprites = s;
-	srand((int)time(NULL));
-	rand();
-	float dir_angle = fmod(((float)rand()/RAND_MAX), 2*PI);
+	float dir_angle = fmod(m_randf(), 2*PI);
 	velocity_x = cosf(dir_angle);
 	velocity_y = sinf(dir_angle);
 	printf("Initial Pinwheel angle = %g\n", dir_angle);
@@ -35,6 +28,10 @@ Pinwheel::Pinwheel(const Rectangle r, const Sprites *s) {
 
 Pinwheel::~Pinwheel(){
 	delete bounds;
+}
+
+float Pinwheel::applyGravity(float force_gravity) {
+	return 0;
 }
 
 const char *Pinwheel::ToString() const{
@@ -47,15 +44,12 @@ void Pinwheel::randomize_dir() {
 	float velocity_x_old = velocity_x;
 	float velocity_y_old = velocity_y;
 	float angle = atanf(velocity_y / velocity_x);
-	if (rand() % 3 == 0)
+	if (m_rand() % 3 == 0)
 		angle += EPSILON;
 	else
 		angle -= EPSILON;
 	velocity_x = sign_x * fabs(cosf(angle));
 	velocity_y = sign_y * fabs(sinf(angle));
-	//assert(velocity_x_old == velocity_x);
-	//assert(velocity_y_old == velocity_y);
-
 }
 
 void Pinwheel::calculate_dir(float norm_x, float norm_y) {

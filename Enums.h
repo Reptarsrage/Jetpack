@@ -9,22 +9,11 @@
 
 const float PI = 3.14159265359f;
 
-/* Keyboard event identifiers */
-enum KeyBoardEnum {	LEFT_MOUSE_DOWN,
-					LEFT_MOUSE_DRAG,
-					LEFT_MOUSE_UP,
-					RIGHT_MOUSE_DOWN,
-					RIGHT_MOUSE_DRAG,
-					RIGHT_MOUSE_UP,
-					ARROW_UP_PRESS,
-					ARROW_UP_RELEASE,
-					ARROW_LEFT_PRESS,
-					ARROW_LEFT_RELEASE,
-					ARROW_RIGHT_PRESS,
-					ARROW_RIGHT_RELEASE,
-					ARROW_DOWN_PRESS,
-					ARROW_DOWN_RELEASE,
-					SPACEBAR_PRESS};
+int m_rand();
+void init_rand();
+float m_randf();
+
+
 
 /* Sprite identifiers, corrosponding to the sprites loaded using the same order as SpriteNames[] */
 enum SpriteEnum {   SPRITE_GAMEOVER_WEB_FINAL,

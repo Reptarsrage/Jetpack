@@ -8,7 +8,6 @@
 #define PINWHEEL_H_
 
 #include "MovingThing.h"
-#include <time.h> // for seeding rand()
 
 class Rectangle;
 class Sprites;
@@ -24,6 +23,7 @@ public:
 	~Pinwheel();
 	Pinwheel(float x, float y, float w, float h, const Sprites *s);
 	Pinwheel(const Rectangle r, const Sprites *s);
+	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -36,6 +36,9 @@ public:
 
 	/* Gets the intended x-dir change */
 	virtual float getIntendedX();
+
+	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
+	virtual float applyGravity(float force_gravity);
 
 private:
 	/* Calculates the ricochet */

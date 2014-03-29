@@ -8,6 +8,10 @@
 #include "Enums.h"
 #include "MovingThing.h"
 #include "StationaryThing.h"
+#include "SolidThing.h"
+#include "NonSolidThing.h"
+#include "Collectable.h"
+#include "Ladder.h"
 #include "Hero.h"
 #include "Pinwheel.h"
 
@@ -36,7 +40,8 @@ PaintView::PaintView(int			x,
 	m_nDrawHeight = h;
 
 	// Controls
-	hold_left = level_loaded = hold_right = hold_up = hold_down = false;
+	hold_left = level_loaded = hold_right = false;
+	hold_up = hold_down = hold_jet_pack = false;
 
 	// consts
 	max_velocity = col_h * MAX_VELOCITY;
@@ -45,77 +50,34 @@ PaintView::PaintView(int			x,
 	jetpack_thrust = col_h * JETPACK_THRUST;
 
 	// hero/env
-	stat_things = NULL;
+	solid_things = NULL;
+	nonsolid_things = NULL;
+	collectable_things = NULL;
 	dyn_things = NULL;
 	hero = NULL;
+	special_things = NULL;
 }
 
 PaintView::~PaintView() {
 	delete hero;
-	stat_things->clear();
-}
-
-void PaintView::handleEventKeys() {
-	if (isAnEvent) {
-		isAnEvent	= 0;	
-
-		// This is the event handler
-		switch (eventToDo) 
-		{
-		case LEFT_MOUSE_DOWN:
-			break;
-		case LEFT_MOUSE_DRAG:
-			break;
-		case LEFT_MOUSE_UP:
-			break;
-		case RIGHT_MOUSE_DOWN:
-			break;
-		case RIGHT_MOUSE_DRAG:
-			break;
-		case RIGHT_MOUSE_UP:
-			break;
-		case ARROW_UP_PRESS:
-			hold_up = true;
-			break;
-		case ARROW_UP_RELEASE:
-			hold_up = false;
-			break;
-		case ARROW_DOWN_PRESS:
-			hold_down = true;
-			break;
-		case ARROW_DOWN_RELEASE:
-			hold_down = false;
-			break;
-		case ARROW_LEFT_PRESS:
-			hold_left = true;
-			break;
-		case ARROW_LEFT_RELEASE:
-			hold_left = false;
-			break;
-		case ARROW_RIGHT_PRESS:
-			hold_right = true;
-			break;
-		case ARROW_RIGHT_RELEASE:
-			hold_right = false;
-			break;
-		case SPACEBAR_PRESS:
-			hero->velocity_jump = jump_restitution;
-			break;
-		default:
-			printf("Unknown event!!\n");		
-			break;
-		}
-	}
+	solid_things->clear();
+	nonsolid_things->clear();
+	collectable_things->clear();
+	dyn_things->clear();
+	special_things->clear();
 }
 
 void PaintView::loadLevel() {
-	assert(stat_things);
+	assert(solid_things);
+	assert(nonsolid_things);
+	assert(collectable_things);
 	assert(dyn_things);
-	stat_things->push_back(new StationaryThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
+	assert(special_things);
+	solid_things->push_back(new SolidThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
 			if ( i % 5 == 0 && j != 0 && j != NUM_COLS - 1 && j != NUM_COLS - 2)
-				stat_things->push_back(new StationaryThing(j * row_w, i * col_h, row_w, col_h, m_UI->sprites));
+				solid_things->push_back(new SolidThing(j * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 		}	
 	}
 	for (int j = 0; j < NUM_COLS; j++) {
@@ -131,7 +93,10 @@ void PaintView::loadLevel() {
 }
 
 void PaintView::drawBackGround() {
-	assert(stat_things);
+	assert(solid_things);
+	assert(nonsolid_things);
+	assert(collectable_things);
+	assert(special_things);
 	glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
 		glTranslatef(bounds->left(), bounds->bottom(), 0);
@@ -147,7 +112,19 @@ void PaintView::drawBackGround() {
 		glEnd();
 	glPopMatrix();
 	
-	for (StationaryThing *s : *stat_things) {
+	for (StationaryThing *s : *solid_things) {
+		s->draw();
+	}
+
+	for (StationaryThing *s : *nonsolid_things) {
+		s->draw();
+	}
+
+	for (StationaryThing *s : *collectable_things) {
+		s->draw();
+	}
+
+	for (StationaryThing *s : *special_things) {
 		s->draw();
 	}
 }
@@ -167,6 +144,7 @@ void PaintView::drawHero() {
 void PaintView::moveThings() {
 	assert(dyn_things);
 	for (MovingThing *baddie : *dyn_things){
+		baddie->applyGravity(force_gravity);
 		advancePosition(baddie, baddie->getIntendedX(), baddie->getIntendedY());
 	}
 }
@@ -180,7 +158,7 @@ void PaintView::moveHero() {
 	} else if (hold_left){
 		hero->velocity_x = - max_velocity;
 	} else if (hold_right && !Fl::event_key(FL_Right)) {
-		hold_left = false;
+		hold_right = false;
 	} else if (hold_right) {
 		hero->velocity_x = max_velocity;
 	} else
@@ -189,15 +167,22 @@ void PaintView::moveHero() {
 	// move in y-dir
 	if (hold_up && !Fl::event_key(FL_Up)) {
 		hold_up = false;
-	} else if (hold_up) {
+	} else if (hold_up && hero->on_ladder) {
+			hero->velocity_y = max_velocity;
+	} else if (hold_jet_pack && !Fl::event_key('z')) {
+		hold_jet_pack = false;
+	} else if (hold_jet_pack) {
+		hero->on_ground = false;
 		hero->force_y = - jetpack_thrust;
-	} else
+	} else if (hold_down && !Fl::event_key(FL_Down)) 
+		hold_down = false;
+	else if (hold_down && hero->on_ladder)
+		hero->velocity_y = -max_velocity;
+	else
 		hero->force_y = 0.0;
 
 	// apply forces
-	hero->velocity_jump -=  force_gravity * hero->mass;
-	hero->velocity_y += (hero->force_y + force_gravity) * hero->mass;
-	hero->velocity_x += hero->force_x * hero->mass;
+	hero->applyGravity(force_gravity);
 	
 	// Check limits
 	if (hero->velocity_jump < 0.0)
@@ -219,7 +204,7 @@ void PaintView::moveHero() {
 
 void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 	assert(hero);
-	
+
 	// check world bounds
 	const Rectangle hero_bounds = hero->Bounds();
 	const Rectangle new_hero_bounds_y = Rectangle(hero_bounds.position_x,
@@ -234,8 +219,10 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 		delta_x = bounds->left() - hero_bounds.left();
 
 	// and in the y direction
-	if (new_hero_bounds_y.top() > bounds->top())
+	if (new_hero_bounds_y.top() > bounds->top()) {
 		delta_y = bounds->top() - hero_bounds.top();
+		hero->on_ground = true;
+	}
 	else if (new_hero_bounds_y.bottom() < bounds->bottom())
 		delta_y =  bounds->bottom() - hero_bounds.bottom();
 
@@ -243,7 +230,7 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 	if (delta_x == 0 && delta_y == 0)
 		return;
 
-	for (StationaryThing *s : *stat_things){
+	for (StationaryThing *s : *solid_things){
 		const Rectangle s_bounds = s->Bounds();
 		if (s->Overlaps(new_hero_bounds_x)) {
 			if (hero_bounds.right() <= s_bounds.left())
@@ -252,13 +239,17 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 				delta_x = s_bounds.right() - hero_bounds.left();
 		}
 		if (s->Overlaps(new_hero_bounds_y)) {
-			if (hero_bounds.top() <= s_bounds.bottom())
+			if (hero_bounds.top() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - hero_bounds.top();
-			else
+				hero->on_ground = true;
+			} else {
 				delta_y =  s_bounds.top() - hero_bounds.bottom();
+			}
 		}
 	}
 
+	if (delta_y != 0)
+		hero->on_ground = false;
 	hero->move(delta_x, delta_y);
 }
 
@@ -295,7 +286,7 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 	if (delta_x == 0 && delta_y == 0)
 		return;
 
-	for (StationaryThing *s : *stat_things){
+	for (StationaryThing *s : *solid_things){
 		const Rectangle s_bounds = s->Bounds();
 		if (s->Overlaps(new_thing_bounds_x)) {
 			if (thing_bounds.right() <= s_bounds.left()) {
@@ -352,10 +343,27 @@ void PaintView::draw()
 		hero = new Hero(50.f, 50.f, row_w, col_h, m_UI->sprites);
 
 		// environment
-		if (stat_things){
-			stat_things->clear();
+		if (solid_things){
+			solid_things->clear();
 		}
-		stat_things = new std::vector<StationaryThing *>();
+		solid_things = new std::vector<StationaryThing *>();
+
+		if (nonsolid_things){
+			nonsolid_things->clear();
+		}
+		nonsolid_things = new std::vector<StationaryThing *>();
+
+
+		if (collectable_things){
+			collectable_things->clear();
+		}
+		collectable_things = new std::vector<StationaryThing *>();
+
+
+		if (special_things){
+			special_things->clear();
+		}
+		special_things = new std::vector<StationaryThing *>();
 
 		// baddies
 		if (dyn_things){
@@ -365,9 +373,6 @@ void PaintView::draw()
 
 		loadLevel();
 	}
-
-	// handle any events (keys)
-	handleEventKeys();
 	
 	// move things
 	moveHero();
@@ -396,80 +401,80 @@ void PaintView::draw()
 	glDisable2D();
 }
 
-
 int PaintView::handle(int event)
 {
 	int key;
-	switch(event)
-	{
-	case FL_SHORTCUT:
-	case FL_KEYBOARD:
-		key = Fl::event_key();
-		if (key == FL_Left){
-			eventToDo = ARROW_LEFT_PRESS;
-			hold_left = true;
-			hold_right = false;
-		} else if (key == FL_Right){
-			eventToDo = ARROW_RIGHT_PRESS;
-			hold_right= true;
-			hold_left = false;
-		} else if (key == FL_Up){
-			eventToDo = ARROW_UP_PRESS;
-			hold_up = true;
-			hold_down = false;
-		} else if (key == FL_Down){
-			eventToDo = ARROW_DOWN_PRESS;
-			hold_down = true;
-			hold_up = false;
-		} else if (key == 'a')
-			m_UI->startAnimating();
-		else if (key == 's')
-			m_UI->stopAnimating();
-		else if (key == ' ') {
-			eventToDo = SPACEBAR_PRESS;
-		} else
+	switch(event) {
+		case FL_SHORTCUT:
+		case FL_KEYBOARD:
+			key = Fl::event_key();
+			switch(key) {
+				case FL_Left:
+					hold_left = true;
+					hold_right = false;
+					break;
+				case FL_Right:
+					hold_right= true;
+					hold_left = false;
+					break;
+				case FL_Up:
+					hold_up = true;
+					hold_down = false;
+					break;
+				case FL_Down:
+					hold_down = true;
+					hold_up = false;
+					break;
+				case 'a':
+					m_UI->startAnimating();
+					break;
+				case 's':
+					m_UI->stopAnimating();
+					break;
+				case 'z':
+					hold_jet_pack = true;
+					break;
+				case ' ':
+					hero->Jump(jump_restitution);
+					break;
+			}
 			break;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_KEYUP:
-		key = Fl::event_key();
-		if (key == FL_Left) {
-			hold_left = false;
-			eventToDo = ARROW_LEFT_RELEASE;
-			if (Fl::event_key(FL_Right))
-				hold_right = true;
-		} else if (key == FL_Right){
-			eventToDo = ARROW_RIGHT_RELEASE;
-			hold_right = false;
-			if (Fl::event_key(FL_Left))
-				hold_left = true;
-		} else if (key == FL_Up){
-			eventToDo = ARROW_UP_RELEASE;
-			hold_up = false;
-			if (Fl::event_key(FL_Down))
-				hold_down = true;
-		} else if (key == FL_Down){
-			eventToDo = ARROW_DOWN_RELEASE;
-			hold_down = false;
-			if (Fl::event_key(FL_Up))
-				hold_up = true;
-		} else
+		case FL_KEYUP:
+			switch(key) {
+				case FL_Left:
+					hold_left = false;
+					if (Fl::event_key(FL_Right))
+						hold_right = true;
+					break;
+				case FL_Right:
+					hold_right = false;
+					if (Fl::event_key(FL_Left))
+						hold_left = true;
+					break;
+				case FL_Up:
+					hold_up = false;
+					if (Fl::event_key(FL_Down))
+						hold_down = true;
+					break;
+				case FL_Down:
+					hold_down = false;
+					if (Fl::event_key(FL_Up))
+						hold_up = true;
+					break;
+				case 'z':
+					hold_jet_pack = false;
+					break;
+			}
 			break;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_ENTER:
-	    redraw();
-		break;
-	case FL_MOVE:
-	case FL_FOCUS:
-	case FL_UNFOCUS:
-		break;
-	default:
-		return 0;
-		break;
-	}
+		case FL_ENTER:
+		case FL_MOVE:
+		case FL_FOCUS:
+		case FL_UNFOCUS:
+			break;
+		default:
+			return 0;
+			break;
+		}
 	return 1;
 }
 

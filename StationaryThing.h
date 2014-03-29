@@ -17,17 +17,14 @@ class Sprites;
 class StationaryThing : public AbstractThing{
 // Functions
 public:
-	StationaryThing(float x, float y, float w, float h, const Sprites *s);
-	StationaryThing(const Rectangle r, const Sprites *s);
-	~StationaryThing();
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-
-	/* Draws this thing */
-	virtual void draw();
+	/* Initialization for multiple cnstrs */
+	virtual void Init(const Rectangle r, const Sprites *s) = 0;
 
 // Attributes
+public:
+	bool is_solid,
+		 is_collectable;
+
 private:
 	/* Which sprite to use to draw this thing */
 	GLuint def_sprite;

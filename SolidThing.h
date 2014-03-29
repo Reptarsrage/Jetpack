@@ -21,6 +21,9 @@ public:
 	SolidThing(const Rectangle r, const Sprites *s);
 	~SolidThing();
 	
+	/* Initialization for multiple cnstrs */
+	virtual void Init(const Rectangle r, const Sprites *s);
+
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
 

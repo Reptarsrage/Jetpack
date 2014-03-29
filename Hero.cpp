@@ -3,20 +3,7 @@
 
 const int DEFAULT_SPRITE = SPRITE_FRONT;
 
-Hero::Hero(float x, float y, float w, float h, const Sprites *s){
-	assert(s);
-	bounds = new Rectangle(x, y, w, h);
-	name = "Hero";
-	sprites = s;
-	velocity_x = 0.0;
-	velocity_y = 0.0;
-	velocity_jump = 0.0;
-	force_x = 0.0;
-	force_y = 0.0,
-	mass = 1.0;
-}
-
-Hero::Hero(const Rectangle r, const Sprites *s) {
+void Hero::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Hero";
@@ -27,6 +14,17 @@ Hero::Hero(const Rectangle r, const Sprites *s) {
 	force_x = 0.0;
 	force_y = 0.0,
 	mass = 1.0;
+	on_ground = false;
+	on_ladder = false;
+}
+
+Hero::Hero(float x, float y, float w, float h, const Sprites *s){
+	const Rectangle r = Rectangle(x, y, w, h);
+	Init(r, s);
+}
+
+Hero::Hero(const Rectangle r, const Sprites *s) {
+	Init(r, s);
 }
 
 Hero::~Hero(){
@@ -40,6 +38,21 @@ const char *Hero::ToString() const{
 void Hero::move(float x, float y){
 	bounds->position_x += x;
 	bounds->position_y += y;
+}
+
+void Hero::Jump(float restitution) {
+	if (on_ground)
+		velocity_jump = restitution;
+}
+
+float Hero::applyGravity(float force_gravity) {
+	if (!on_ground) {
+		velocity_jump -=  force_gravity * mass;
+		velocity_y += (force_y + force_gravity) * mass;
+		velocity_x += force_x * mass;
+		return force_gravity;
+	}
+	return 0;
 }
 
 void Hero::draw(){

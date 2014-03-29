@@ -16,7 +16,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Shared_Image.H>
-
+#include "Enums.h"
 #include "jetpackUI.h"
 
 JetpackUI *impUI;
@@ -24,7 +24,9 @@ JetpackUI *impUI;
 int main(int	argc, 
 		 char**	argv) 
 {
-
+	// initialize randos
+	init_rand();
+	
 	// Create the UI
 	impUI = new JetpackUI();
 

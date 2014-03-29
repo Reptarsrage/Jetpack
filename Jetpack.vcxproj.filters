@@ -48,9 +48,6 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="StationaryThing.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
     <ClCompile Include="Pinwheel.cpp">
       <Filter>Source Files\Things</Filter>
     </ClCompile>
@@ -62,6 +59,18 @@
     </ClCompile>
     <ClCompile Include="jetpackUI.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder.cpp">
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidThing.cpp">
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="NonSolidThing.cpp">
+      <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectable.cpp">
+      <Filter>Source Files\Things</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

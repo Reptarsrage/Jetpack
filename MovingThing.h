@@ -30,6 +30,9 @@ public:
 	/* Gets the intended x-dir change */
 	virtual float getIntendedX() = 0;
 
+	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
+	virtual float applyGravity(float force_gravity) = 0;
+
 // Attributes
 public:
 	float hit_wall_top,		// Baddies must know a little about there environment to hunt the hero

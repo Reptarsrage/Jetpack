@@ -83,15 +83,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
     <ClCompile Include="jetpack_main.cpp" />
+    <ClCompile Include="Ladder.cpp" />
+    <ClCompile Include="NonSolidThing.cpp" />
     <ClCompile Include="paintView.cpp" />
     <ClCompile Include="Pinwheel.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="SolidThing.cpp" />
     <ClCompile Include="Sprites.cpp" />
-    <ClCompile Include="StationaryThing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractThing.h" />

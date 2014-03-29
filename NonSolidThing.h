@@ -20,6 +20,9 @@ public:
 	NonSolidThing(float x, float y, float w, float h, const Sprites *s);
 	NonSolidThing(const Rectangle r, const Sprites *s);
 	~NonSolidThing();
+
+	/* Initialization for multiple cnstrs */
+	virtual void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;

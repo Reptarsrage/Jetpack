@@ -4,6 +4,22 @@
 */
 
 #include "Enums.h"
+#include <time.h> // for seeding rand()
+#include <stdlib.h> // for seeding rand()
+
+int m_rand() {
+	rand();
+	return rand();
+}
+
+void init_rand() {
+	srand(time(NULL));
+}
+
+float m_randf() {
+	rand();
+	return (float)rand() / RAND_MAX;
+}
 
 const char *SpriteNames[] = { "Gameover-web-final.jpg",
 							"Ivy.png",

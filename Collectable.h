@@ -21,6 +21,9 @@ public:
 	Collectable(const Rectangle r, const Sprites *s);
 	~Collectable();
 	
+	/* Initialization for multiple cnstrs */
+	virtual void Init(const Rectangle r, const Sprites *s);
+
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
 
