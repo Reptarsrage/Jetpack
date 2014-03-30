@@ -20,6 +20,7 @@ enum ThingTypeEnum {SOLID_TYPE,
 					BADDIE_TYPE,
 					PREDATOR_TYPE,
 					HERO_TYPE,
+					ROBOT_TYPE,
 					COLLECTABLE_TYPE,
 					DOOR_TYPE }; // TODO: add all
 

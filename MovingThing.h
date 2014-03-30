@@ -40,7 +40,7 @@ public:
 	virtual void Grounded(bool b) { on_ground = b; }
 
 	/*  Sets whether this moving thing can climb a ladder */
-	virtual void OnLadder(bool b) { on_ladder = b; }
+	virtual void OnLadder(bool b, float ladder_x, float ladder_y) { on_ladder = b; }
 
 // Attributes
 public:

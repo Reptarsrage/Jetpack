@@ -3,7 +3,7 @@
 
 const int DEFAULT_SPRITE = SPRITE_ROBOLEFT1;
 const float SPEED = 1.8f;
-const float EPSILON = 0.1f;
+const float EPSILON = 1.f;
 
 Robot::Robot(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -23,11 +23,18 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	velocity_y = 0;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
-	type = BADDIE_TYPE;
+	type = ROBOT_TYPE;
 }
 
 Robot::~Robot(){
 	delete bounds;
+}
+
+void Robot::SetDir() {
+	if (hero_x > bounds->position_x)
+		velocity_x = SPEED;
+	else
+		velocity_x = -SPEED;
 }
 
 void Robot::move(float x, float y) {
@@ -37,27 +44,78 @@ void Robot::move(float x, float y) {
 }
 
 void Robot::Grounded(bool b) {
+	if (on_ladder)
+		// not applicable when on a ladder
+		return;
+	
 	if (on_ground && !b) {
+		// Just left solid ground
 		velocity_y = 0;
 	}
 
 	if (!on_ground && b) {
-		// touched down
-		if (hero_x > bounds->position_x)
-			velocity_x = SPEED;
-		else
-			velocity_x = -SPEED;
+		// touched down on solid ground
+		SetDir();
 	}
 
 	on_ground = b;
 }
 
+void Robot::OnLadder(bool b, float ladder_x, float ladder_y) {
+	if (on_ladder && b ) {
+		// already on a ladder
+		return;
+	}
+	if (!on_ladder && !b){ 
+		// already not on a ladder
+		return;
+	}
+
+	if (on_ladder && !b) {
+		// no longer on a ladder!
+		velocity_y = 0;
+		on_ladder = false;
+		SetDir();
+	}
+
+	if (!on_ladder && b) {
+		// should we climb?
+		if (hero_y > bounds->position_y + EPSILON) {
+			// climb down
+			bounds->position_x = ladder_x;
+			bounds->position_y = ladder_y + EPSILON;
+			velocity_y = SPEED;
+			velocity_x = 0;
+			on_ladder = true;
+			hit_wall_top = false;
+			hit_wall_bottom = false;
+		} else if (hero_y < bounds->position_y - EPSILON){
+			// climb up
+			bounds->position_x = ladder_x;
+			bounds->position_y = ladder_y - EPSILON;
+			velocity_y = -SPEED;
+			velocity_x = 0;
+			on_ladder = true;
+			hit_wall_top = false;
+			hit_wall_bottom = false;
+		}
+	}
+}
+
 float Robot::applyGravity(float force_gravity, float max_velocity_grav) {
-	if (!on_ground) {
+	if (on_ladder)
+		// no gravity on a ladder
+		return 0;
+	
+	if (!on_ground)
+		// only apply gravity when falling
 		velocity_y += force_gravity;
-	} else
+	else
+		// apply a little bit while on ground to stay on ground, and register being on ground
 		velocity_y = 1.f;
+	
 	if (velocity_y > max_velocity_grav)
+		// bound falling speed
 		velocity_y = max_velocity_grav;
 
 	return velocity_y;
@@ -68,30 +126,48 @@ const char *Robot::ToString() const{
 }
 
 float Robot::getIntendedY() {
+	if (hit_wall_top && on_ladder) {
+		// We've reached the top of the ladder, move sideways
+		velocity_y = 0;
+		SetDir();
+	} 
+	hit_wall_top = false;
+
+	if (hit_wall_bottom && on_ladder) {
+		// We've reached the bottom of the ladder, move sideways
+		velocity_y = 0;
+		SetDir();
+	} 
+	hit_wall_bottom = false;
+	
 	return velocity_y;
 }
 
 float Robot::getIntendedX() {
 	if (!on_ground) {
+		// falling? can't move at all
 		return 0;
 	}
 
 	if (hit_wall_left) {
+		// hit a wall to the left, switch directions
 		hit_wall_left = false;
-		velocity_x = SPEED;
+		velocity_x *= -1;
 	}
 
 	if (hit_wall_right) {
+		// hit a wall to the left, switch directions
 		hit_wall_right = false;
-		velocity_x = -SPEED;
+		velocity_x *= -1;
 	}
 	return velocity_x;
 }
 
 void Robot::draw(){
 	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+		glBindTexture(GL_TEXTURE_2D, 0);//sprites->getSprite(DEFAULT_SPRITE));
 		glTranslatef(bounds->left(), bounds->bottom(), 0);
+		glColor3f(1,0,0);
 		glBegin(GL_QUADS);
 			glTexCoord2f( 0, 0 );                           
 			glVertex2f( 0, 0 );

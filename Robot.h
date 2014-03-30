@@ -46,7 +46,10 @@ public:
 	virtual void Grounded(bool b);
 
 	/*  Sets whether this moving thing can climb a ladder */
-	//virtual void OnLadder(bool b);
+	virtual void OnLadder(bool b, float ladder_x, float ladder_y);
+
+	/*  Sets the x-velocity to match the direction to hunt the hero */
+	virtual void SetDir();
 
 // Attributes
 private:
