@@ -15,15 +15,21 @@
 #include "Hero.h"
 #include "Pinwheel.h"
 #include "Door.h"
+#include "Bat.h"
+#include "Predator.h"
+#include "Spring.h"
+#include "Egg.h"
+#include "Robot.h"
 
 static int eventToDo;
 static int isAnEvent=0;
 const int NUM_ROWS = 16;
 const int NUM_COLS = 26;
 const float MAX_VELOCITY = 0.12f;
+const float MAX_VELOCITY_GRAV = 0.2f;
 const float FORCE_GRAVITY = 0.012f;
-const float JETPACK_THRUST = 0.024f;
-const float JUMP_RESTITUTION = 0.4f;
+const float JETPACK_THRUST = 0.028f;
+const float JUMP_RESTITUTION = 0.45f;
 const float MARGIN = 20.f;
 
 PaintView::PaintView(int			x, 
@@ -49,6 +55,7 @@ PaintView::PaintView(int			x,
 	jump_restitution = col_h * JUMP_RESTITUTION;
 	force_gravity = col_h * FORCE_GRAVITY;
 	jetpack_thrust = col_h * JETPACK_THRUST;
+	max_velocity_grav = col_h * MAX_VELOCITY_GRAV;
 	gem_count = 0;
 
 	// hero/env
@@ -95,7 +102,12 @@ void PaintView::loadLevel() {
 			gem_count++;
 		}
 	}
-
+	dyn_things->push_back(new Bat(0, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Pinwheel(row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Robot(2*row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Spring(3*row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Egg(4*row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Predator(5*row_w, col_h, row_w, col_h, m_UI->sprites));
 }
 
 bool PaintView::heroGetSwag() {
@@ -166,7 +178,7 @@ void PaintView::drawHero() {
 void PaintView::moveThings() {
 	assert(dyn_things);
 	for (MovingThing *baddie : *dyn_things){
-		baddie->applyGravity(force_gravity);
+		baddie->applyGravity(force_gravity, max_velocity_grav);
 		advancePosition(baddie, baddie->getIntendedX(), baddie->getIntendedY());
 	}
 }
@@ -227,14 +239,14 @@ void PaintView::moveHero() {
 
 	if (hero->velocity_jump < 0.0)
 		hero->velocity_jump = 0.0;
-	
+
 	if (hero->velocity_x > max_velocity) 
 		hero->velocity_x = max_velocity;
 	else if (-hero->velocity_x > max_velocity)
 		hero->velocity_x = - max_velocity;
 	
-	if (hero->velocity_y > max_velocity) 
-		hero->velocity_y = max_velocity;
+	if (hero->velocity_y > max_velocity_grav) 
+		hero->velocity_y = max_velocity_grav;
 	else if (-hero->velocity_y > max_velocity)
 		hero->velocity_y = - max_velocity;
 
@@ -316,10 +328,11 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 	// and in the y direction
 	if (new_thing_bounds_y.top() > bounds->top()) {
 		delta_y = bounds->top() - thing_bounds.top();
-		thing->hit_wall_top = true;
+		thing->hit_wall_bottom = true;
+		thing->on_ground = true;
 	} else if (new_thing_bounds_y.bottom() < bounds->bottom()) {
 		delta_y = bounds->bottom() - thing_bounds.bottom();
-		thing->hit_wall_bottom = true;
+		thing->hit_wall_top = true;
 	}
 
 	// check solid objects in x and y directions (if we need to)
@@ -340,10 +353,11 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 		if (s->Overlaps(new_thing_bounds_y)) {
 			if (thing_bounds.top() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - thing_bounds.top();
-				thing->hit_wall_top = true;
+				thing->hit_wall_bottom = true;
+				thing->on_ground = true;
 			} else {
 				delta_y =  s_bounds.top() - thing_bounds.bottom();
-				thing->hit_wall_bottom = true;
+				thing->hit_wall_top = true;
 			}
 		}
 	}
@@ -386,6 +400,7 @@ void PaintView::draw()
 		jump_restitution = col_h * JUMP_RESTITUTION;
 		force_gravity = col_h * FORCE_GRAVITY;
 		jetpack_thrust = col_h * JETPACK_THRUST;
+		max_velocity_grav = col_h * MAX_VELOCITY_GRAV;
 		
 		// Hero
 		if (hero)

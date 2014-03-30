@@ -108,6 +108,7 @@ private:
 			max_velocity,		// scalable maximum velocity of things
 			jump_restitution,	// scalable jump power of hero
 			force_gravity,		// scalable force of gravity on moving things
+			max_velocity_grav,  // scalable maximum drop speed due to gravity
 			jetpack_thrust;		// scalable thrust of hero's jetpack 
 
 	bool	hold_left,		// Should our hero move left?

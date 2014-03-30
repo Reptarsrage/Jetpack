@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Things">
       <UniqueIdentifier>{5ada0e57-e196-470d-b4f1-660a99c43e04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Things\Baddies">
+      <UniqueIdentifier>{db0230c8-a35c-4ac1-a247-a28bdb2cfe1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jetpack_main.cpp">
@@ -47,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Pinwheel.cpp">
-      <Filter>Source Files\Things</Filter>
     </ClCompile>
     <ClCompile Include="Hero.cpp">
       <Filter>Source Files\Things</Filter>
@@ -74,6 +74,24 @@
     </ClCompile>
     <ClCompile Include="Door.cpp">
       <Filter>Source Files\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Pinwheel.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
+    </ClCompile>
+    <ClCompile Include="Bat.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
+    </ClCompile>
+    <ClCompile Include="Predator.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
+    </ClCompile>
+    <ClCompile Include="Egg.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +145,21 @@
     </ClInclude>
     <ClInclude Include="Door.h">
       <Filter>Header Files\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Spring.h">
+      <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Egg.h">
+      <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Predator.h">
+      <Filter>Header Files\Things\Baddies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

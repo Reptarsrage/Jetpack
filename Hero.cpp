@@ -47,6 +47,13 @@ void Hero::Jump(float restitution) {
 }
 
 float Hero::applyGravity(float force_gravity) {
+	if (on_ladder) {
+		velocity_jump = 0;
+	}
+
+	if (velocity_jump < 0.0)
+		velocity_jump = 0.0;
+	
 	if (!on_ground && !on_ladder) {
 		velocity_jump -=  force_gravity * mass;
 		velocity_y += (force_y + force_gravity) * mass;

@@ -31,7 +31,7 @@ public:
 	virtual float getIntendedX() = 0;
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
-	virtual float applyGravity(float force_gravity) = 0;
+	virtual float applyGravity(float force_gravity, float max_velocity_grav) = 0;
 
 // Attributes
 public:
@@ -41,6 +41,9 @@ public:
 		  hit_wall_right,
 		  hero_x,
 		  hero_y;
+
+	bool on_ground,
+		 on_ladder;
 };
 
 

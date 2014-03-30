@@ -83,8 +83,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Egg.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
@@ -93,14 +95,19 @@
     <ClCompile Include="NonSolidThing.cpp" />
     <ClCompile Include="paintView.cpp" />
     <ClCompile Include="Pinwheel.cpp" />
+    <ClCompile Include="Predator.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SolidThing.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractThing.h" />
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Egg.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="jetpackUI.h" />
@@ -110,9 +117,12 @@
     <ClInclude Include="NonSolidThing.h" />
     <ClInclude Include="paintView.h" />
     <ClInclude Include="Pinwheel.h" />
+    <ClInclude Include="Predator.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Robot.h" />
     <ClInclude Include="SolidThing.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="StationaryThing.h" />
   </ItemGroup>

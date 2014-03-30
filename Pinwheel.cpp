@@ -23,14 +23,15 @@ void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	velocity_x = cosf(dir_angle);
 	velocity_y = sinf(dir_angle);
 	printf("Initial Pinwheel angle = %g\n", dir_angle);
-	hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
+	on_ladder = on_ground = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
+	hero_x = hero_y = 0;
 }
 
 Pinwheel::~Pinwheel(){
 	delete bounds;
 }
 
-float Pinwheel::applyGravity(float force_gravity) {
+float Pinwheel::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
@@ -75,11 +76,11 @@ float Pinwheel::getIntendedY() {
 	}
 	float norm_y = 0.f;
 	if (hit_wall_bottom) {
-		norm_y = 1.f;
+		norm_y = -1.f;
 		hit_wall_bottom = false;
 		calculate_dir(0.f, norm_y);
 	} else if (hit_wall_top) {
-		norm_y = -1.f;
+		norm_y = 1.f;
 		hit_wall_top = false;
 		calculate_dir(0.f, norm_y);
 	} 

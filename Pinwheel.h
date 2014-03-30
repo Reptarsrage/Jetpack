@@ -38,7 +38,7 @@ public:
 	virtual float getIntendedX();
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
-	virtual float applyGravity(float force_gravity);
+	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
 private:
 	/* Calculates the ricochet */
