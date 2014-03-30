@@ -2,7 +2,7 @@
 #include "Enums.h"
 
 const int DEFAULT_SPRITE = SPRITE_ROBOLEFT1;
-const float SPEED = 2.f;
+const float SPEED = 1.8f;
 const float EPSILON = 0.1f;
 
 Robot::Robot(float x, float y, float w, float h, const Sprites *s){
@@ -19,18 +19,48 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Robot";
 	sprites = s;
-	velocity_x = 0;
+	velocity_x = SPEED;
 	velocity_y = 0;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
+	type = BADDIE_TYPE;
 }
 
 Robot::~Robot(){
 	delete bounds;
 }
 
+void Robot::move(float x, float y) {
+	if (on_ground)
+		bounds->position_x += x;
+	bounds->position_y += y;
+}
+
+void Robot::Grounded(bool b) {
+	if (on_ground && !b) {
+		velocity_y = 0;
+	}
+
+	if (!on_ground && b) {
+		// touched down
+		if (hero_x > bounds->position_x)
+			velocity_x = SPEED;
+		else
+			velocity_x = -SPEED;
+	}
+
+	on_ground = b;
+}
+
 float Robot::applyGravity(float force_gravity, float max_velocity_grav) {
-	return force_gravity;
+	if (!on_ground) {
+		velocity_y += force_gravity;
+	} else
+		velocity_y = 1.f;
+	if (velocity_y > max_velocity_grav)
+		velocity_y = max_velocity_grav;
+
+	return velocity_y;
 }
 
 const char *Robot::ToString() const{
@@ -38,13 +68,24 @@ const char *Robot::ToString() const{
 }
 
 float Robot::getIntendedY() {
-	// TODO
-	return 0;
+	return velocity_y;
 }
 
 float Robot::getIntendedX() {
-	// TODO
-	return 0;
+	if (!on_ground) {
+		return 0;
+	}
+
+	if (hit_wall_left) {
+		hit_wall_left = false;
+		velocity_x = SPEED;
+	}
+
+	if (hit_wall_right) {
+		hit_wall_right = false;
+		velocity_x = -SPEED;
+	}
+	return velocity_x;
 }
 
 void Robot::draw(){

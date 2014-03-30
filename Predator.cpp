@@ -2,8 +2,7 @@
 #include "Enums.h"
 
 const int DEFAULT_SPRITE = SPRITE_HUNTERV1;
-const float SPEED = 2.f;
-const float EPSILON = 0.1f;
+const float SPEED = 0.175f;
 
 Predator::Predator(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -22,7 +21,8 @@ void Predator::Init(const Rectangle r, const Sprites *s) {
 	velocity_x = 0;
 	velocity_y = 0;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
-	hero_x = hero_y = 0;
+	type = PREDATOR_TYPE;
+	hero_x = hero_y = 0.f;
 }
 
 Predator::~Predator(){
@@ -38,13 +38,20 @@ const char *Predator::ToString() const{
 }
 
 float Predator::getIntendedY() {
-	//TODO
-	return 0;
+	if (hero_y > bounds->position_y){
+		return SPEED;
+	} else {
+		return -SPEED;
+	}
+
 }
 
 float Predator::getIntendedX() {
-	//TODO
-	return 0;
+	if (hero_x > bounds->position_x){
+		return SPEED;
+	} else {
+		return -SPEED;
+	}
 }
 
 void Predator::draw(){

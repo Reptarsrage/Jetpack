@@ -24,6 +24,9 @@ public:
 	Robot(const Rectangle r, const Sprites *s);
 	void Init(const Rectangle r, const Sprites *s);
 	
+	/* Moves this thing by one */
+	virtual void move(float x, float y);
+
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
 	
@@ -39,9 +42,15 @@ public:
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
+	/*  Sets whether this moving thing is on a solid surface */
+	virtual void Grounded(bool b);
+
+	/*  Sets whether this moving thing can climb a ladder */
+	//virtual void OnLadder(bool b);
+
 // Attributes
 private:
-	
+
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

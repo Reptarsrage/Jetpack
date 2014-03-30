@@ -21,6 +21,7 @@ void Spring::Init(const Rectangle r, const Sprites *s) {
 	velocity_x = 0;
 	velocity_y = SPEED;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
+	type = BADDIE_TYPE;
 }
 
 Spring::~Spring(){

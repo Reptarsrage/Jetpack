@@ -18,6 +18,7 @@ float m_randf();
 enum ThingTypeEnum {SOLID_TYPE,
 					LADDER_TYPE,
 					BADDIE_TYPE,
+					PREDATOR_TYPE,
 					HERO_TYPE,
 					COLLECTABLE_TYPE,
 					DOOR_TYPE }; // TODO: add all

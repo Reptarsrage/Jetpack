@@ -94,6 +94,9 @@ void PaintView::loadLevel() {
 	for (int i = 1; i < NUM_ROWS - 1; i++) {
 		special_things->push_back(new Ladder(9 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 	}
+	for (int i = 1; i < 8 - 1; i++) {
+		solid_things->push_back(new SolidThing(i * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
+	}
 	door = new Door((NUM_COLS - 2.f) * row_w,  (NUM_ROWS - 2.f) * col_h, row_w * 2.f, col_h * 2.f, m_UI->sprites);
 	
 	for (int i = 1; i < NUM_COLS - 1; i++) {
@@ -102,12 +105,12 @@ void PaintView::loadLevel() {
 			gem_count++;
 		}
 	}
-	dyn_things->push_back(new Bat(0, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Pinwheel(row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Robot(2*row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Spring(3*row_w, col_h, row_w, col_h, m_UI->sprites));
+	//dyn_things->push_back(new Bat(0, col_h, row_w, col_h, m_UI->sprites));
+	//dyn_things->push_back(new Pinwheel(row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Robot(3*row_w, col_h, row_w, col_h, m_UI->sprites));
+	//dyn_things->push_back(new Spring(3*row_w, col_h, row_w, col_h, m_UI->sprites));
 	dyn_things->push_back(new Egg(4*row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Predator(5*row_w, col_h, row_w, col_h, m_UI->sprites));
+	//dyn_things->push_back(new Predator(5*row_w, col_h, row_w, col_h, m_UI->sprites));
 }
 
 bool PaintView::heroGetSwag() {
@@ -178,6 +181,8 @@ void PaintView::drawHero() {
 void PaintView::moveThings() {
 	assert(dyn_things);
 	for (MovingThing *baddie : *dyn_things){
+		const Rectangle r = hero->Bounds();
+		baddie->updateHeroLoc(r.left(), r.top());
 		baddie->applyGravity(force_gravity, max_velocity_grav);
 		advancePosition(baddie, baddie->getIntendedX(), baddie->getIntendedY());
 	}
@@ -308,6 +313,7 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y) const {
 	assert(thing);
 	
+	bool grounded = false;
 	// check world bounds
 	const Rectangle thing_bounds = thing->Bounds();
 	const Rectangle new_thing_bounds_y = Rectangle(thing_bounds.position_x,
@@ -329,7 +335,7 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 	if (new_thing_bounds_y.top() > bounds->top()) {
 		delta_y = bounds->top() - thing_bounds.top();
 		thing->hit_wall_bottom = true;
-		thing->on_ground = true;
+		grounded = true;
 	} else if (new_thing_bounds_y.bottom() < bounds->bottom()) {
 		delta_y = bounds->bottom() - thing_bounds.bottom();
 		thing->hit_wall_top = true;
@@ -339,28 +345,32 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 	if (delta_x == 0 && delta_y == 0)
 		return;
 
-	for (StationaryThing *s : *solid_things){
-		const Rectangle s_bounds = s->Bounds();
-		if (s->Overlaps(new_thing_bounds_x)) {
-			if (thing_bounds.right() <= s_bounds.left()) {
-				delta_x = s_bounds.left() - thing_bounds.right();
-				thing->hit_wall_right = true;
-			} else {
-				delta_x = s_bounds.right() - thing_bounds.left();
-				thing->hit_wall_left = true;
+	if (thing->getType() != PREDATOR_TYPE) {
+		for (StationaryThing *s : *solid_things){
+			const Rectangle s_bounds = s->Bounds();
+			if (s->Overlaps(new_thing_bounds_x)) {
+				if (thing_bounds.right() <= s_bounds.left()) {
+					delta_x = s_bounds.left() - thing_bounds.right();
+					thing->hit_wall_right = true;
+				} else {
+					delta_x = s_bounds.right() - thing_bounds.left();
+					thing->hit_wall_left = true;
+				}
 			}
-		}
-		if (s->Overlaps(new_thing_bounds_y)) {
-			if (thing_bounds.top() <= s_bounds.bottom()) {
-				delta_y = s_bounds.bottom() - thing_bounds.top();
-				thing->hit_wall_bottom = true;
-				thing->on_ground = true;
-			} else {
-				delta_y =  s_bounds.top() - thing_bounds.bottom();
-				thing->hit_wall_top = true;
+			if (s->Overlaps(new_thing_bounds_y)) {
+				if (thing_bounds.top() <= s_bounds.bottom()) {
+					delta_y = s_bounds.bottom() - thing_bounds.top();
+					thing->hit_wall_bottom = true;
+					grounded = true;
+				} else {
+					delta_y =  s_bounds.top() - thing_bounds.bottom();
+					thing->hit_wall_top = true;
+				}
 			}
 		}
 	}
+
+	thing->Grounded(grounded);
 	thing->move(delta_x, delta_y);
 }
 

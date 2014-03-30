@@ -2,7 +2,7 @@
 #include "Enums.h"
 
 const int DEFAULT_SPRITE = SPRITE_EGG;
-const float SPEED = 2.f;
+const float SPEED = 1.8f;
 const float EPSILON = 0.1f;
 
 Egg::Egg(float x, float y, float w, float h, const Sprites *s){
@@ -23,16 +23,31 @@ void Egg::Init(const Rectangle r, const Sprites *s) {
 	velocity_y = 0;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
+	type = BADDIE_TYPE;
 }
 
 Egg::~Egg(){
 	delete bounds;
 }
 
+void Egg::move(float x, float y) {
+	if (on_ground)
+		bounds->position_x += x;
+	bounds->position_y += y;
+}
+
+void Egg::Grounded(bool b) {
+	if (on_ground && !b) {
+		velocity_y = 0;
+	}
+	on_ground = b;
+}
+
 float Egg::applyGravity(float force_gravity, float max_velocity_grav) {
 	if (!on_ground) {
 		velocity_y += force_gravity;
-	}
+	} else
+		velocity_y = 1.f;
 	if (velocity_y > max_velocity_grav)
 		velocity_y = max_velocity_grav;
 
@@ -51,7 +66,7 @@ float Egg::getIntendedX() {
 	if (!on_ground) {
 		return 0;
 	}
-	on_ground = false;
+
 	if (hit_wall_left) {
 		hit_wall_left = false;
 		velocity_x = SPEED;

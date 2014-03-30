@@ -33,16 +33,27 @@ public:
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav) = 0;
 
+	/* Updates the location of the hero on the map, used for hunting purposes */
+	virtual void updateHeroLoc(float x, float y) { hero_x = x; hero_y = y; }
+
+	/*  Sets whether this moving thing is on a solid surface */
+	virtual void Grounded(bool b) { on_ground = b; }
+
+	/*  Sets whether this moving thing can climb a ladder */
+	virtual void OnLadder(bool b) { on_ladder = b; }
+
 // Attributes
 public:
-	float hit_wall_top,		// Baddies must know a little about there environment to hunt the hero
+	bool hit_wall_top,		// Baddies must know a little about their environment to hunt the hero
 		  hit_wall_bottom,
 		  hit_wall_left,
-		  hit_wall_right,
-		  hero_x,
+		  hit_wall_right;
+	
+	float hero_x,
 		  hero_y;
 
-	bool on_ground,
+protected:
+	bool on_ground,	// Baddies must know a little about their state to hunt the hero
 		 on_ladder;
 };
 
