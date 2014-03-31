@@ -24,8 +24,8 @@ GLuint Sprites::getSprite(int code) const {
 int Sprites::Load(const char * directory) {
 	assert(directory);
 	
-	if (loaded)
-		return 1;
+	//if (loaded)
+	//	return 1;
 	for (int i = 0; i < SPRITE_COUNT; i++){
 		std::string name = std::string(directory);
 		name += SpriteNames[i];

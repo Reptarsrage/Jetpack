@@ -93,6 +93,9 @@
     <ClCompile Include="Egg.cpp">
       <Filter>Source Files\Things\Baddies</Filter>
     </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Predator.h">
       <Filter>Header Files\Things\Baddies</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

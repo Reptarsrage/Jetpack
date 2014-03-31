@@ -1,11 +1,11 @@
 /* Justin Robb
- * 3-27-14
+ * 3-30-14
  * JetPack
- * The painting window
+ * The editing window
 */
 
-#ifndef PAINTVIEW_H
-#define PAINTVIEW_H
+#ifndef PaintView_H
+#define PaintView_H
 
 #include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
@@ -30,7 +30,7 @@ class PaintView : public Fl_Gl_Window
 {
 // Functions
 public:
-	PaintView(int x, int y, int w, int h, const char* l);
+	PaintView(float x, float y, float w, float h, const char* l);
 	~PaintView();
 	
 	/* Draws all the things */
@@ -97,9 +97,11 @@ private:
 	std::vector<Collectable *> *collectable_things; // Holds all collectable things
 	std::vector<MovingThing *> *dyn_things;				// Holds all moving things
 	
-	int		m_nDrawHeight,		// Height of our painting section
-			m_nDrawWidth,		// Width of our painting section
-			gem_count;			// Number of gems left in the level 
+	float	m_position_x,
+			m_position_y,
+			m_nDrawHeight,		// Height of our painting section
+			m_nDrawWidth;		// Width of our painting section
+	int		gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)
 			
 
@@ -120,4 +122,4 @@ private:
 
 };
 
-#endif
+#endif // PaintView_H

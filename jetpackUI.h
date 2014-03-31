@@ -10,14 +10,16 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Tabs.H>
 
 #include "jetpack_main.h"
 #include "paintView.h"
+#include "Editor.h"
 #include "Sprites.h"
 
-const int DEFAULT_WIDTH = 800;		// Default window width
-const int DEFAULT_HEIGHT = 400;		// Default window height
-const int DEFAULT_MARGIN = 25;		// Default menu-bar height
+const float DEFAULT_WIDTH = 800;		// Default window width
+const float DEFAULT_HEIGHT = 400;		// Default window height
+const float DEFAULT_MARGIN = 25;		// Default menu-bar height
 
 /*
  * Handles all forms, windows, menus and UI related things.
@@ -50,7 +52,8 @@ private:
 	 * Called by the UI when the about menu item is chosen 
 	*/
 	static void	cb_about(Fl_Menu_* o, void* v);
-
+	static void	cb_switch1(Fl_Menu_* o, void* v);
+	static void	cb_switch2(Fl_Menu_* o, void* v);
 // Static Functions
 private:
 
@@ -64,13 +67,20 @@ private:
 
 // Atributes and FLTK Widgets
 public:
-	PaintView* m_paintView;		// In charge of painting
-	Fl_Window* m_mainWindow;	// The main form
-	Fl_Menu_Bar* m_menubar;		// menubar of main form
-	int				m_nWidth,		// Dimensions of original window.
+	Fl_Group* m_gamePlay_group;				// FLTK Group holding the game
+	Fl_Group* m_editor_group;				// FLTK Group holding the level editor
+	
+	PaintView* m_gamePlay;				// In charge of painting/controlling the game
+	Editor* m_editor;					// In charge of painting/controlling the level editor
+	
+	Fl_Gl_Window *m_current;			// Current thing being used (animated).
+	
+	Fl_Window* m_mainWindow;			// The main form
+	Fl_Menu_Bar* m_menubar;				// menubar of main form
+	int				m_nWidth,			// Dimensions of original window.
 					m_nHeight;
 
-	int				m_nPaintWidth,  // Dimensions of the paint window.
+	int				m_nPaintWidth,		// Dimensions of the paint window.
 					m_nPaintHeight;						
 
 	Sprites *sprites;				// Sprite manager (all sprites)

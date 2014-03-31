@@ -3,7 +3,7 @@
  * JetPack
 */
 #include "JetpackUI.h"
-#include "paintView.h"
+#include "PaintView.h"
 #include "Sprites.h"
 #include "Enums.h"
 #include "MovingThing.h"
@@ -30,21 +30,23 @@ const float MAX_VELOCITY_GRAV = 0.2f;
 const float FORCE_GRAVITY = 0.012f;
 const float JETPACK_THRUST = 0.028f;
 const float JUMP_RESTITUTION = 0.45f;
-const float MARGIN = 20.f;
+const float MARGIN = 8.f;
 
-PaintView::PaintView(int			x, 
-					 int			y, 
-					 int			w, 
-					 int			h, 
+PaintView::PaintView(float			x, 
+					 float			y, 
+					 float			w, 
+					 float			h, 
 					 const char*	l)
 						: Fl_Gl_Window(x,y,w,h,l)
 {
 	// Dimensions
-	row_w = w / (NUM_COLS * 1.0f);
-	col_h = h / (NUM_ROWS * 1.0f);
 	bounds = new Rectangle(0, 0, w, h);
-	m_nDrawWidth = w;
-	m_nDrawHeight = h;
+	m_nDrawWidth = w - MARGIN;
+	m_nDrawHeight = h - MARGIN;
+	m_position_x = x,
+	m_position_y = y;
+	row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
+	col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
 
 	// Controls
 	hold_left = level_loaded = hold_right = false;
@@ -88,6 +90,7 @@ void PaintView::loadLevel() {
 	for (int i = 0; i < NUM_COLS; i++) {
 		if ( i != 8)
 			solid_things->push_back(new SolidThing(i * row_w, 10 * col_h, row_w, col_h, m_UI->sprites));
+		solid_things->push_back(new SolidThing(i * row_w, (NUM_ROWS) * col_h, row_w, col_h, m_UI->sprites));
 	}
 	for (int i = NUM_ROWS - 1; i > 9; i--) {
 		special_things->push_back(new Ladder(8 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
@@ -425,21 +428,22 @@ void PaintView::draw()
 	if(!valid())
 	{
 		// initialize opengl
+		valid(1);
 		InitScene();
 		printf("INITIALIZED\n");
 		
 		// draw bounds
-		m_nDrawWidth = w();
-		m_nDrawHeight = h();
+		//m_nDrawWidth = w();
+		//m_nDrawHeight = h();
 
 		// row/column
-		row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
-		col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
+		//row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
+		//col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
 		
 		// player bounds
 		if (bounds)
 			delete bounds;
-		bounds = new Rectangle(0, m_nDrawHeight - MARGIN, m_nDrawWidth, m_nDrawHeight - MARGIN);
+		bounds = new Rectangle(0, m_nDrawHeight, m_nDrawWidth, m_nDrawHeight);
 		
 		// constants
 		max_velocity = col_h * MAX_VELOCITY;
@@ -496,7 +500,7 @@ void PaintView::draw()
 	glEnable2D();
 
 	// Make the sprite 2 times bigger (optional)
-	glScalef( 2.0f, 2.0f, 0.0f );
+	//glScalef( 2.0f, 2.0f, 0.0f );
 	
 	// clear screen and initialize things
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
@@ -517,6 +521,8 @@ void PaintView::draw()
 
 int PaintView::handle(int event)
 {
+	if (Fl_Gl_Window::handle(event) != 0)
+		return 1;
 	int key = Fl::event_key();
 	switch(event) {
 		case FL_SHORTCUT:
@@ -649,6 +655,8 @@ int PaintView::InitScene()
 
         // Disable depth testing
         glDisable( GL_DEPTH_TEST );
+
 		m_UI->sprites->Load("Resources/");
+
 		return 1;
 }

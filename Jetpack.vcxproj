@@ -51,7 +51,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)\SOIL\src;$(ProjectDir)\glew\include;C:\Program Files\fltk-1.1.10\zlib;C:\Program Files\fltk-1.1.10\png;C:\Program Files\fltk-1.1.10\jpeg;C:\Program Files\fltk-1.1.10;$(ProjectDir)\file dialog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -86,6 +86,7 @@
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Egg.cpp" />
     <ClCompile Include="Enums.cpp" />
     <ClCompile Include="Hero.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Editor.h" />
     <ClInclude Include="Egg.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Hero.h" />
