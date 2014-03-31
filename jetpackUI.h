@@ -15,8 +15,8 @@
 #include "paintView.h"
 #include "Sprites.h"
 
-const int DEFAULT_WIDTH = 600;		// Default window width
-const int DEFAULT_HEIGHT = 300;		// Default window height
+const int DEFAULT_WIDTH = 800;		// Default window width
+const int DEFAULT_HEIGHT = 400;		// Default window height
 const int DEFAULT_MARGIN = 25;		// Default menu-bar height
 
 /*

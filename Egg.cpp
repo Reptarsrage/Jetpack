@@ -4,6 +4,8 @@
 const int DEFAULT_SPRITE = SPRITE_EGG;
 const float SPEED = 1.8f;
 const float EPSILON = 0.1f;
+const float HERO_WIDTH_RATIO = .9f;
+const float HERO_HEIGHT_RATIO = .9f;
 
 Egg::Egg(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -16,7 +18,7 @@ Egg::Egg(const Rectangle r, const Sprites *s) {
 
 void Egg::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
+	bounds = new Rectangle(r.position_x, r.position_y, r.width * HERO_WIDTH_RATIO, r.height * HERO_HEIGHT_RATIO);
 	name = "Egg";
 	sprites = s;
 	velocity_x = SPEED;

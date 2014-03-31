@@ -53,7 +53,7 @@ public:
 
 // Attributes
 private:
-
+	bool on_top_of_ladder;
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

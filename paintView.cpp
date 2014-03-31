@@ -84,21 +84,16 @@ void PaintView::loadLevel() {
 	assert(collectable_things);
 	assert(dyn_things);
 	assert(special_things);
-	//solid_things->push_back(new SolidThing(10 * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
-	for (int i = 0; i < NUM_ROWS; i++) {
-		for (int j = 0; j < NUM_COLS; j++) {
-			if ( i == 0 || i == NUM_ROWS - 1)
-				solid_things->push_back(new SolidThing(j * row_w, i * col_h, row_w, col_h, m_UI->sprites));
-		}	
+	solid_things->push_back(new SolidThing(8 * row_w, 8 * col_h, row_w, col_h, m_UI->sprites));
+	for (int i = 0; i < NUM_COLS; i++) {
+		if ( i != 8)
+			solid_things->push_back(new SolidThing(i * row_w, 10 * col_h, row_w, col_h, m_UI->sprites));
 	}
-	for (int i = 1; i < NUM_ROWS - 1; i++) {
-		special_things->push_back(new Ladder(9 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
-	}
-	for (int i = 0; i < 9; i++) {
-		solid_things->push_back(new SolidThing(i * row_w, 9 * col_h, row_w, col_h, m_UI->sprites));
+	for (int i = NUM_ROWS - 1; i > 9; i--) {
+		special_things->push_back(new Ladder(8 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
 	}
 	door = new Door((NUM_COLS - 2.f) * row_w,  (NUM_ROWS - 2.f) * col_h, row_w * 2.f, col_h * 2.f, m_UI->sprites);
-	hero = new Hero(20*row_w, 14*col_h, row_w, col_h, m_UI->sprites);
+	hero = new Hero(0*row_w, col_h, row_w, col_h, m_UI->sprites);
 
 	for (int i = 1; i < NUM_COLS - 1; i++) {
 		if (i != 9 && i != 10 && i != 8) {
@@ -108,9 +103,9 @@ void PaintView::loadLevel() {
 	}
 	//dyn_things->push_back(new Bat(0, col_h, row_w, col_h, m_UI->sprites));
 	//dyn_things->push_back(new Pinwheel(row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Robot(0*row_w, col_h, row_w, col_h, m_UI->sprites));
+	dyn_things->push_back(new Robot(20*row_w, 14*col_h, row_w, col_h, m_UI->sprites));
 	//dyn_things->push_back(new Spring(3*row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Egg(4*row_w, col_h, row_w, col_h, m_UI->sprites));
+	//dyn_things->push_back(new Egg(4*row_w, col_h, row_w, col_h, m_UI->sprites));
 	//dyn_things->push_back(new Predator(5*row_w, col_h, row_w, col_h, m_UI->sprites));
 }
 
@@ -184,20 +179,22 @@ void PaintView::moveThings() {
 	for (MovingThing *baddie : *dyn_things){
 		const Rectangle r = hero->Bounds();
 		baddie->updateHeroLoc(r.left(), r.top());
+		
 		// If we have a robot, check if it's on a ladder
 		if (baddie->getType() == ROBOT_TYPE) {
+			const Rectangle bb = baddie->Bounds();
+			const Rectangle bbd = Rectangle(bb.position_x, bb.position_y + max_velocity, bb.width, bb.height);
 			bool on_ladder = false;
 			float x = 0;
 			float y = 0;
 			for (StationaryThing *s : *special_things) {
-				if (s->getType() == LADDER_TYPE &&
-					s->Overlaps(baddie)) {
-						// touching a ladder!
-						const Rectangle r = s->Bounds();
-						x = r.position_x;
-						y = r.position_y;
-						on_ladder = true;
-						break;
+				if (s->getType() == LADDER_TYPE && (s->Overlaps(baddie) || s->Overlaps(bbd))) {
+					// touching a ladder! (or at least on top of one)
+					const Rectangle sb = s->Bounds();
+					x = sb.position_x;
+					y = sb.position_y;
+					on_ladder = true;
+					break;
 				}
 			}
 			baddie->OnLadder(on_ladder, x, y);
@@ -306,15 +303,30 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 	if (delta_x == 0 && delta_y == 0)
 		return;
 
+	// stop on top of ladders, treat ladder tops as ground
+	if (!hero->on_ladder && delta_y > 0) {
+		for (StationaryThing *s : *special_things){
+			if (s->getType() == LADDER_TYPE) {
+				if (s->Overlaps(new_hero_bounds_y)) {
+					const Rectangle s_bounds = s->Bounds();
+					delta_y = s_bounds.bottom() - hero_bounds.top();
+					hero->on_ground = true;
+				}
+			}
+		}
+	}
+
+
 	for (StationaryThing *s : *solid_things){
-		const Rectangle s_bounds = s->Bounds();
 		if (s->Overlaps(new_hero_bounds_x)) {
+			const Rectangle s_bounds = s->Bounds();
 			if (hero_bounds.right() <= s_bounds.left())
 				delta_x = s_bounds.left() - hero_bounds.right();
 			else
 				delta_x = s_bounds.right() - hero_bounds.left();
 		}
 		if (s->Overlaps(new_hero_bounds_y)) {
+			const Rectangle s_bounds = s->Bounds();
 			if (hero_bounds.top() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - hero_bounds.top();
 				hero->on_ground = true;
@@ -395,10 +407,14 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 }
 
 bool PaintView::heroTouchingLadder() {
+	const Rectangle b = hero->Bounds();
+	const Rectangle yb = Rectangle(b.left(), b.top() + max_velocity, b.width, b.height);
 	for (StationaryThing *s : *special_things) {
-		if (s->getType() == LADDER_TYPE &&
-			s->Overlaps(hero)){
-				return true;
+		if (s->getType() == LADDER_TYPE && s->Overlaps(hero)) {
+			return true;
+		} else if (s->getType() == LADDER_TYPE && s->Overlaps(yb)) {
+			// standing on top of the ladder
+			return true;
 		}
 	}
 	return false;

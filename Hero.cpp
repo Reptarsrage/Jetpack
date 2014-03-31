@@ -2,10 +2,12 @@
 #include "Enums.h"
 
 const int DEFAULT_SPRITE = SPRITE_FRONT;
+const float HERO_WIDTH_RATIO = .6f;
+const float HERO_HEIGHT_RATIO = .9f;
 
 void Hero::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
+	bounds = new Rectangle(r.position_x, r.position_y, r.width * HERO_WIDTH_RATIO, r.height * HERO_HEIGHT_RATIO);
 	name = "Hero";
 	sprites = s;
 	velocity_x = 0.0;
