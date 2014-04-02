@@ -27,6 +27,7 @@ const float MARGIN_TOP = 5.f;
 const float MARGIN_BOTTOM = 40.f;
 const float MARGIN_LEFT = 5.f;
 const float MARGIN_RIGHT = 15.f;
+const int FRAME_SKIP = 3;
 
 Editor::Editor(	float			x, 
 				float			y, 
@@ -51,13 +52,16 @@ Editor::Editor(	float			x,
 
 	// Controls
 	choosing = hold_left = hold_right = false;
-	hold_up = hold_down = false;
+	hold_up = hold_down = hold_place = false;
 
 	// curser
 	curser = new Rectangle(left, top, row_w, col_h);
 	menu = new Rectangle(left, bottom, bounds->width, 2.f*col_h);
 	menu_items = NULL;
 	prev_curser = Rectangle(left, top, row_w, col_h);
+	frame = FRAME_SKIP;
+	selected = -1;
+	placed_items = std::list<AbstractThing *>();
 }
 
 Editor::~Editor() {
@@ -65,6 +69,7 @@ Editor::~Editor() {
 
 void Editor::draw()
 {
+
 	if(!valid())
 	{
 		// initialize opengl
@@ -91,7 +96,7 @@ void Editor::draw()
 			}
 		}
 	}
-	
+
 	// move
 	moveCurser();
 	
@@ -109,6 +114,12 @@ void Editor::draw()
 	// Draw Backdrop
 	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
 	bounds->draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// draw placed items
+	for (AbstractThing *thing : placed_items) {
+		thing->draw();
+	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// draw menu
@@ -150,6 +161,30 @@ void Editor::switchContext() {
 	}
 }
 
+void Editor::placeThing(){
+	assert(!choosing);
+	if (selected < 0)
+		return;
+
+	AbstractThing *item = getThingFromCode(selected, curser->position_x, curser->position_y,
+		row_w, col_h, m_UI->sprites);
+	std::list<AbstractThing *>::iterator it;
+	for (it =  placed_items.begin(); it != placed_items.end(); ++it) {
+		if ((*it)->Overlaps(item)) {
+			placed_items.erase(it);
+			break;
+		} 
+	}
+	placed_items.push_back(item);
+}
+
+void Editor::chooseThing(){
+	assert(choosing);
+	int row = (curser->position_y - menu->position_y + col_h) / col_h;
+	int col = (curser->position_x - menu->position_x) / row_w;
+	selected = col + row*NUM_COLS;
+}
+
 void Editor::advancePosition(bool upf, bool downf, bool leftf, bool rightf) {
 	if ((choosing && upf && curser->top() > menu->bottom() + col_h)
 		|| (!choosing && upf && curser->top() > top)) {
@@ -168,6 +203,22 @@ void Editor::advancePosition(bool upf, bool downf, bool leftf, bool rightf) {
 
 void Editor::moveCurser() {
 	assert(curser);
+	
+	//place/choose
+	if (hold_place && !Fl::event_key(' ')) {
+		hold_place = false;
+	} else if (hold_place) {
+   		handleSpace();
+	}
+	
+	// skip some frames
+	if (frame < 0)
+		frame = FRAME_SKIP;
+	else {
+		frame--;
+		return;
+	}
+
 	bool up, down, left, right;
 	up = down = left = right = false;
 
@@ -194,6 +245,16 @@ void Editor::moveCurser() {
 
 	// set positions
 	advancePosition(up, down, left, right);
+}
+
+void Editor::handleSpace() {
+	if (choosing) {
+		// select item
+		chooseThing();
+	} else {
+		// place item
+		placeThing();
+	}
 }
 
 void Editor::DrawMenu() {
@@ -252,22 +313,34 @@ int Editor::handle(int event)
 		case FL_SHORTCUT:
 		case FL_KEYBOARD:
 			switch(key) {
+				case ' ':
+					hold_place = true;
+					handleSpace();
+					break;
 				case FL_Enter:
 					switchContext();
 					break;
 				case FL_Left:
+					advancePosition(false, false, true, false);
+					frame = 20;
 					hold_left = true;
 					hold_right = false;
 					break;
 				case FL_Right:
+					advancePosition(false, false, false, true);
+					frame = 20;
 					hold_right= true;
 					hold_left = false;
 					break;
 				case FL_Up:
+					advancePosition(true, false, false, false);
+					frame = 20;
 					hold_up = true;
 					hold_down = false;
 					break;
 				case FL_Down:
+					advancePosition(false, true, false, false);
+					frame = 20;
 					hold_down = true;
 					hold_up = false;
 					break;
@@ -281,6 +354,9 @@ int Editor::handle(int event)
 			break;
 		case FL_KEYUP:
 			switch(key) {
+				case ' ':
+					hold_place = false;
+					break;	
 				case FL_Left:
 					hold_left = false;
 					if (Fl::event_key(FL_Right))

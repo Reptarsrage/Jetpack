@@ -7,7 +7,7 @@
 #include <FL/fl_ask.H>
 #include "JetpackUI.h"
 
-const int FRAME_RATE = 30; // not sure if this is right...
+const int FRAME_RATE = 100; // not sure if this is right...
 
 void callback(void* o) {
 		((JetpackUI *)o)->m_current->redraw();
