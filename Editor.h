@@ -10,6 +10,7 @@
 #include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
 #include <vector>
+#include "Rectangle.h"
 
 #ifdef __APPLE__
 #include "OpenGL/glew.h"
@@ -24,6 +25,8 @@ class StationaryThing;
 class JetpackUI;
 class Collectable;
 class Door;
+class Bounds;
+class AbstractThing;
 
 /* Controls the animation and drawing for
  * the level editor.
@@ -41,41 +44,20 @@ public:
 	/* called when a key event happens in fltk */
 	int handle(int event);
 
-	/* Forces a redraw */
-	void refresh();
-
 private:
 	
-	/* Helper function to test if hero is touching a ladder */
-	bool heroTouchingLadder();
+	/* Switches context to menu, and back again */
+	void switchContext();
 
-	/* Helper function to test if hero can collect anything*/
-	bool heroGetSwag();
-	
-	/* Helper function to draw all non moving things */
-	void drawBackGround();
-	
-	/* Helper function to draw all moving things */
-	void drawMovingThings();
+	/* Displays the menu for choosing a thing */
+	void DrawMenu();
 
-	/* Helper function to draw all moving things */
-	void drawHero();
-	
-	/* Helper function to move all moving things (by telling them to move) */
-	void moveThings();
+	/* Moves the curser */
+	void advancePosition(bool up, bool down, bool left, bool right);
 
-	/* Helper function to move all moving things (by telling them to move) */
-	void moveHero();
-	
-	/* Helper function to advance the position of a moving thing. Does bounds checking! */
-	void advancePosition(MovingThing *thing, float delta_x, float delta_y) const;
-	
-	/* Helper function to advance the position of a moving thing. Does bounds checking! */
-	void advanceHeroPosition(float delta_x, float delta_y) const;
-	
-	/* Helper function to load in all things to be drawn */
-	void loadLevel();
-	
+	/* handles user controls */
+	void moveCurser();
+
 	/* Helper function to initialize opengl for drawing*/
 	int InitScene();
 	
@@ -87,41 +69,27 @@ private:
 
 // Attributes
 public:
-	JetpackUI *m_UI;							// Pointer to handler
+	JetpackUI *m_UI;		// Pointer to handler
 
 private:
-	Rectangle *bounds;							// Current bounds for the hero
-	Hero *hero;
-	Door *door;
-	std::vector<StationaryThing *> *solid_things;       // Holds all solid things
-	std::vector<StationaryThing *> *nonsolid_things;    // Holds all non-solid, un-interactable things
-	std::vector<StationaryThing *> *special_things;     // Holds all non-solid, interactable things (ladders, teleporters)
-	std::vector<Collectable *> *collectable_things; // Holds all collectable things
-	std::vector<MovingThing *> *dyn_things;				// Holds all moving things
-	
-	float	m_position_x,
-			m_position_y,
-			m_nDrawHeight,		// Height of our painting section
-			m_nDrawWidth;		// Width of our painting section
-	int		gem_count;			// Number of gems left in the level 
-								// (hero must collect all gems to open door and beat level)
-			
+	Rectangle *bounds;		// Current bounds for the map
+	Rectangle *curser;		// Current curser position
+	Rectangle *menu;		// bounds of the menu
+	AbstractThing **menu_items;
+	Rectangle prev_curser;
 
-	float	row_w,				// width of one column in our painting grid
-			col_h,				// height of one row in our painting grid
-			max_velocity,		// scalable maximum velocity of things
-			jump_restitution,	// scalable jump power of hero
-			force_gravity,		// scalable force of gravity on moving things
-			max_velocity_grav,  // scalable maximum drop speed due to gravity
-			jetpack_thrust;		// scalable thrust of hero's jetpack 
+	float row_w,
+		  col_h,
+		  left,
+		  top,
+		  bottom,
+		  right;
 
 	bool	hold_left,		// Should our hero move left?
 			hold_right,		// Should our hero move right?
 			hold_up,		// Should our hero move up?
 			hold_down,		// Should our hero move down?
-			hold_jet_pack,		 // Should our hero activate his jetpack?
-			level_loaded;	// Should we load the sprites of the level?
-
+			choosing;		// Is the menu showing/user picking a thing?
 };
 
 #endif // EDITOR_H

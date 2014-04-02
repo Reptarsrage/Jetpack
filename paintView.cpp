@@ -21,8 +21,6 @@
 #include "Egg.h"
 #include "Robot.h"
 
-static int eventToDo;
-static int isAnEvent=0;
 const int NUM_ROWS = 16;
 const int NUM_COLS = 26;
 const float MAX_VELOCITY = 0.12f;
@@ -595,11 +593,6 @@ int PaintView::handle(int event)
 			break;
 		}
 	return 1;
-}
-
-void PaintView::refresh()
-{
-	redraw();
 }
 
 void PaintView::glEnable2D()

@@ -30,6 +30,22 @@ bool Rectangle::Overlaps(const Rectangle other) const{
 
 }
 
+/*  draws a filled-in rectangle */
+void  Rectangle::draw() const{
+	glPushMatrix();
+		glBegin(GL_QUADS);
+			glTexCoord2f( 0, 1 );                           
+			glVertex2f( left(), top() );
+			glTexCoord2f( 0, 0 );                           
+			glVertex2f( left(), bottom() );
+			glTexCoord2f( 1, 0 );                           
+			glVertex2f( right(), bottom() );
+			glTexCoord2f( 1, 1 );                           
+			glVertex2f( right(), top() );
+		glEnd();
+	glPopMatrix();
+}
+
 bool Rectangle::ContainsPoint(float x, float y) const {
 	return (x > left()) && 
 		   (x < right()) && 

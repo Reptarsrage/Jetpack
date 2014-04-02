@@ -8,6 +8,11 @@
 #define RECTANGLE_H_
 
 #include <assert.h>     /* assert */
+#ifdef __APPLE__
+#include "OpenGL/glew.h"
+#else
+#include "GL/glew.h"
+#endif
 
 /*
  * Used to represent bounds of things, as well as bounds of the window.
@@ -38,6 +43,9 @@ public:
 	
 	/* Returns the x-coord of the right-edge of this rectangle */
 	float right() const;
+
+	/* Draws in the bounds of this rectangle */
+	void draw() const;
 
 // Attributes
 public:

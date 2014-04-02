@@ -39,9 +39,6 @@ public:
 	/* called when a key event happens in fltk */
 	int handle(int event);
 
-	/* Forces a redraw */
-	void refresh();
-
 private:
 	
 	/* Helper function to test if hero is touching a ladder */

@@ -5,7 +5,18 @@
 
 #include "Enums.h"
 #include <time.h> // for seeding rand()
-#include <stdlib.h> // for seeding rand()
+#include <stdlib.h>
+#include "SolidThing.h"
+#include "NonSolidThing.h"
+#include "Collectable.h"
+#include "Ladder.h"
+#include "Pinwheel.h"
+#include "Bat.h"
+#include "Predator.h"
+#include "Spring.h"
+#include "Egg.h"
+#include "Robot.h"
+
 
 int m_rand() {
 	rand();
@@ -19,6 +30,168 @@ void init_rand() {
 float m_randf() {
 	rand();
 	return (float)rand() / RAND_MAX;
+}
+
+AbstractThing* getThingFromCode(int code, float x, float y, float width, float height, Sprites *sprites){
+	AbstractThing *result = NULL;
+	switch (code) {
+		case MENU_IVY:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_PILLAR:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_REDSWITCH:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_BAT:
+			result = new Bat(x,y,width, height, sprites);
+			break;
+		case MENU_BLUESWITCH:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_BLUESWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_BOX:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_CONVEYORSOLIDLEFT:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_CONVEYORSOLIDRIGHT:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_D:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_DEATHDOWN:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_DEATHLEFT:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_DEATHRIGHT:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_DEATHUP:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_EGG:
+			result = new Egg(x,y,width, height, sprites);
+			break;
+		case MENU_FASTSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_FULLFUEL:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GEM:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GOLD1:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GOLD2:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GOLD3:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GOLD4:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_GOLDSWITCH:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_GOLDSWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_GREENTELEPORTER:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_HALFFUEL:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_HARDERSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_HBLUESWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_HGOLDSWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_HREDSWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_HUNTER:
+			result = new Predator(x,y,width, height, sprites);
+			break;
+		case MENU_ICESOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_INVINCIBILITY:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_L:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_LADDER:
+			result = new Ladder(x,y,width, height, sprites);
+			break;
+		case MENU_LADDERUP:
+			result = new Ladder(x,y,width, height, sprites);
+			break;
+		case MENU_LADDERDOWN:
+			result = new Ladder(x,y,width, height, sprites);
+			break;
+		case MENU_MINE:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_MISSILE:
+			result = new Spring(x,y,width, height, sprites);
+			break;
+		case MENU_MOSSSOLID:
+			break;
+		case MENU_NONPSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_PINWHEEL:
+			result = new Pinwheel(x,y,width, height, sprites);
+			break;
+		case MENU_PURPLETELEPORTER:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_R:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_REDSWITCHSOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_ROBOT:
+			result = new Robot(x,y,width, height, sprites);
+			break;
+		case MENU_SOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_SPRING:
+			result = new Spring(x,y,width, height, sprites);
+			break;
+		case MENU_TIMER:
+			result = new Collectable(x,y,width, height, sprites);
+			break;
+		case MENU_U:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case MENU_YELLOWTELEPORTER:
+			result = new NonSolidThing(x,y,width, height, sprites);
+			break;
+		default:
+			printf("UNIDENTIFIED THING!");
+			break;
+	}
+	return result;
 }
 
 const char *SpriteNames[] = { "Gameover-web-final.jpg",

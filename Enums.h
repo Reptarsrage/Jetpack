@@ -7,11 +7,13 @@
 #ifndef ENUMS_H_
 #define ENUMS_H_
 
+#include "AbstractThing.h"
 const float PI = 3.14159265359f;
 
 int m_rand();
 void init_rand();
 float m_randf();
+AbstractThing* getThingFromCode(int code, float x, float y, float width, float height, Sprites *sprites);
 
 
 /* Thing types */
@@ -23,6 +25,8 @@ enum ThingTypeEnum {SOLID_TYPE,
 					ROBOT_TYPE,
 					COLLECTABLE_TYPE,
 					DOOR_TYPE }; // TODO: add all
+
+
 
 
 /* Sprite identifiers, corrosponding to the sprites loaded using the same order as SpriteNames[] */
@@ -161,6 +165,60 @@ enum SpriteEnum {   SPRITE_GAMEOVER_WEB_FINAL,
 					SPRITE_WIN3,
 					SPRITE_YELLOWTELEPORTER,
 					SPRITE_COUNT};
+
+/* Identifiers for the edit level menu */
+enum MenuEnum {		MENU_IVY,
+					MENU_PILLAR,
+					MENU_REDSWITCH,
+					MENU_BAT,
+					MENU_BLUESWITCH,
+					MENU_BLUESWITCHSOLID,
+					MENU_BOX,
+					MENU_CONVEYORSOLIDLEFT,
+					MENU_CONVEYORSOLIDRIGHT,
+					MENU_D,
+					MENU_DEATHDOWN,
+					MENU_DEATHLEFT,
+					MENU_DEATHRIGHT,
+					MENU_DEATHUP,
+					MENU_EGG,
+					MENU_FASTSOLID,
+					MENU_FULLFUEL,
+					MENU_GEM,
+					MENU_GOLD1,
+					MENU_GOLD2,
+					MENU_GOLD3,
+					MENU_GOLD4,
+					MENU_GOLDSWITCH,
+					MENU_GOLDSWITCHSOLID,
+					MENU_GREENTELEPORTER,
+					MENU_HALFFUEL,
+					MENU_HARDERSOLID,
+					MENU_HBLUESWITCHSOLID,
+					MENU_HGOLDSWITCHSOLID,
+					MENU_HREDSWITCHSOLID,
+					MENU_HUNTER,
+					MENU_ICESOLID,
+					MENU_INVINCIBILITY,
+					MENU_L,
+					MENU_LADDER,
+					MENU_LADDERUP,
+					MENU_LADDERDOWN,
+					MENU_MINE,
+					MENU_MISSILE,
+					MENU_MOSSSOLID,
+					MENU_NONPSOLID,
+					MENU_PINWHEEL,
+					MENU_PURPLETELEPORTER,
+					MENU_R,
+					MENU_REDSWITCHSOLID,
+					MENU_ROBOT,
+					MENU_SOLID,
+					MENU_SPRING,
+					MENU_TIMER,
+					MENU_U,
+					MENU_YELLOWTELEPORTER,
+					MENU_COUNT};
 
 /* Holds the filenames for all the sprites, order is important */
 extern const char *SpriteNames[];
