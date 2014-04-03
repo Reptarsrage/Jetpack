@@ -61,7 +61,7 @@ Editor::Editor(	float			x,
 	prev_curser = Rectangle(left, top, row_w, col_h);
 	frame = FRAME_SKIP;
 	selected = -1;
-	placed_items = std::list<AbstractThing *>();
+	placed_items = new std::list<AbstractThing *>();
 }
 
 Editor::~Editor() {
@@ -117,7 +117,7 @@ void Editor::draw()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// draw placed items
-	for (AbstractThing *thing : placed_items) {
+	for (AbstractThing *thing : *placed_items) {
 		thing->draw();
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -146,6 +146,44 @@ void Editor::draw()
 	glDisable2D();
 }
 
+void Editor::Clear() {
+	delete placed_items;
+	placed_items = new std::list<AbstractThing *>();
+}
+
+void Editor::loadLevel(std::list<AbstractThing *> level) {
+	Clear();
+	if (level.empty())
+		return;
+	
+	for (AbstractThing *thing : level) {
+		const Rectangle b = thing->Bounds();
+		thing->SetBounds(left + b.position_x * row_w, top + b.position_y*col_h, row_w, col_h);
+		placed_items->push_back(thing);
+	}
+}
+
+const std::queue<AbstractThing *>* Editor::getLevel() {
+	std::queue<AbstractThing *> *q = new std::queue<AbstractThing *>();
+	Rectangle ptr = Rectangle(left, top, row_w, col_h);
+	for (int row = 0; row < NUM_ROWS; row++){
+		for (int col = 0; col < NUM_COLS; col++) {
+			for (AbstractThing *thing : *placed_items) {
+				if (thing->Overlaps(ptr)) {
+					printf("Saving thing at col %d and row %d\n", col, row);
+					q->push(thing);
+				}
+			}
+			q->push(NULL);
+			ptr.position_x += row_w;
+		}
+		ptr.position_x = left;
+		ptr.position_y += col_h;
+	}
+	return q;
+}
+
+
 void Editor::switchContext() {
 	if (choosing) {
 		// turn off menu, restore curser
@@ -169,13 +207,13 @@ void Editor::placeThing(){
 	AbstractThing *item = getThingFromCode(selected, curser->position_x, curser->position_y,
 		row_w, col_h, m_UI->sprites);
 	std::list<AbstractThing *>::iterator it;
-	for (it =  placed_items.begin(); it != placed_items.end(); ++it) {
+	for (it =  placed_items->begin(); it != placed_items->end(); ++it) {
 		if ((*it)->Overlaps(item)) {
-			placed_items.erase(it);
+			placed_items->erase(it);
 			break;
 		} 
 	}
-	placed_items.push_back(item);
+	placed_items->push_back(item);
 }
 
 void Editor::chooseThing(){

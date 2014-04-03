@@ -17,7 +17,8 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 
 
 /* Thing types */
-enum ThingTypeEnum {SOLID_TYPE,
+enum ThingTypeEnum {EMPTY_TYPE,
+					SOLID_TYPE,
 					LADDER_TYPE,
 					BADDIE_TYPE,
 					PREDATOR_TYPE,

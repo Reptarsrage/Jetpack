@@ -6,6 +6,7 @@
 
 #include <FL/fl_ask.H>
 #include "JetpackUI.h"
+#include "fileio.h"
 
 const int FRAME_RATE = 100; // not sure if this is right...
 
@@ -30,6 +31,53 @@ void JetpackUI::stopAnimating() {
 	}
 }
 
+void JetpackUI::loadLevel() {
+	assert(m_current == m_editor);
+	string filename = "test.level";
+	int num_rows;
+	int num_cols;
+	string *title;
+	string *description;
+	string *passcode;
+	std::list<AbstractThing *> *l = new std::list<AbstractThing *>();
+	load(filename, m_editor->row_w, 
+				m_editor->col_h, 
+				&num_rows, 
+				&num_cols,
+				&title,
+				&description,
+				&passcode,
+				l,
+				sprites);
+	m_editor->loadLevel(*l);
+	if (l->empty())
+		delete l;
+	delete title;
+	delete description;
+	delete passcode;
+}
+
+void JetpackUI::saveLevel() {
+	assert(m_current == m_editor);
+	printf("Saving...\n");
+	string filename = string("test.level");
+	int num_rows = 16;
+	int num_cols = 26;
+	string title = string("Test");
+	string description = string("Test level, file I/O.");
+	string passcode = string("Justin is super awesome.");
+	const std::queue<AbstractThing *> *q = m_editor->getLevel();
+
+	save( filename, 
+		  title, 
+		  description, 
+		  passcode, 
+		  *q,
+		  num_rows, 
+		  num_cols);
+	delete q;
+	printf("LEVEL SAVED!\n");
+}
 
 JetpackUI* JetpackUI::whoami(Fl_Menu_* o)	
 {
@@ -46,6 +94,11 @@ void JetpackUI::cb_about(Fl_Menu_* o, void* v)
 	fl_message("Jetpack");
 }
 
+void JetpackUI::cb_clear(Fl_Menu_* o, void* v) 
+{
+	whoami(o)->m_editor->Clear();
+}
+
 void JetpackUI::cb_switch1(Fl_Menu_* o, void* v) 
 {
 	whoami(o)->m_gamePlay_group->hide();
@@ -60,6 +113,18 @@ void JetpackUI::cb_switch2(Fl_Menu_* o, void* v)
 	whoami(o)->m_current = whoami(o)->m_gamePlay;
 }
 
+void JetpackUI::cb_load_level(Fl_Menu_* o, void* v) 
+{
+	whoami(o)->loadLevel();
+}
+
+
+void JetpackUI::cb_save_level(Fl_Menu_* o, void* v) 
+{
+	whoami(o)->saveLevel();
+}
+
+
 void JetpackUI::show() {
 	m_mainWindow->show();
 }
@@ -67,13 +132,19 @@ void JetpackUI::show() {
 // Main menu definition
 Fl_Menu_Item JetpackUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
-		{ "&Editor",			FL_ALT + 'e', (Fl_Callback *)JetpackUI::cb_switch1 },
-		{ "&Gameplay",			FL_ALT + 'g', (Fl_Callback *)JetpackUI::cb_switch2 },
-		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)JetpackUI::cb_exit },
+		{ "&Quit",			FL_CTRL + 'w', (Fl_Callback *)JetpackUI::cb_exit },
 		{ 0 },
-
+	{ "&Game",		0, 0, 0, FL_SUBMENU },
+		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch2 },
+		{ 0 },
+	{ "&Editor",		0, 0, 0, FL_SUBMENU },
+		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch1},
+		{ "&Load Level",	FL_CTRL + 'w', (Fl_Callback *)JetpackUI::cb_load_level},
+		{ "&Save Level",	FL_CTRL + 'l', (Fl_Callback *)JetpackUI::cb_save_level},
+		{ "&Clear current level",	0, (Fl_Callback *)JetpackUI::cb_clear},
+		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
-		{ "&About",	FL_ALT + 'a', (Fl_Callback *)JetpackUI::cb_about },
+		{ "&About",	0, (Fl_Callback *)JetpackUI::cb_about },
 		{ 0 },
 
 	{ 0 }

@@ -188,7 +188,7 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
 		default:
-			printf("UNIDENTIFIED THING!");
+			printf("UNIDENTIFIED THING!\n");
 			break;
 	}
 	return result;

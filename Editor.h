@@ -12,6 +12,7 @@
 #include <vector>
 #include "Rectangle.h"
 #include <list>
+#include <queue>
 
 #ifdef __APPLE__
 #include "OpenGL/glew.h"
@@ -45,7 +46,17 @@ public:
 	/* called when a key event happens in fltk */
 	int handle(int event);
 
+	/* loads the level from a file */
+	void loadLevel(const std::list<AbstractThing *> level);
+
+	/* saves the level to a file */
+	const std::queue<AbstractThing *> *getLevel();
+
+	/* removes all placed items */
+	void Clear();
+
 private:
+
 	/* handles the space key */
 	void handleSpace();
 	
@@ -79,7 +90,8 @@ private:
 // Attributes
 public:
 	JetpackUI *m_UI;		// Pointer to handler
-
+	float row_w,			// width of one thing
+		  col_h;			// height of one thing
 private:
 	Rectangle *bounds;		// Current bounds for the map
 	Rectangle *curser;		// Current curser position
@@ -88,13 +100,11 @@ private:
 								// in the col-wise order in which they appear
 	Rectangle prev_curser;		// saved curser positino when switching contexts
 	int selected;				// currently slected menu item
-	std::list<AbstractThing *> placed_items;	// all placed items
+	std::list<AbstractThing *> *placed_items;	// all placed items
 
 	int frame;					// current frame number, used to slow down controls
 
-	float row_w,				// width of one thing
-		  col_h,				// height of one thing
-		  left,					// drawing bounds left
+	float left,					// drawing bounds left
 		  top,					// drawing bounds top
 		  bottom,				// drawing bounds bottom
 		  right;				// drawing bounds right
