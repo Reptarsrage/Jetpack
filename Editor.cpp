@@ -286,9 +286,22 @@ void Editor::placeThing(){
 
 void Editor::chooseThing(){
 	assert(choosing);
+	
 	int row = (curser->position_y - menu->position_y + col_h) / col_h;
 	int col = (curser->position_x - menu->position_x) / row_w;
-	selected = col + row*NUM_COLS;
+	int special_case = 0;
+	if (col + row*NUM_COLS >= TYPE_DOOR)
+		special_case++;
+	if (col + row*NUM_COLS >= TYPE_HERO)
+		special_case++;
+	if (special_case + col + row*NUM_COLS >= TYPE_COUNT){
+		printf("Not a choosable thing!\n");
+		return;
+	}
+	AbstractThing *t = getThingFromCode(special_case + col + row*NUM_COLS, 0, 0 ,0 ,0, m_UI->sprites);
+	printf("chose %s\n", t->ToString());
+	delete t;
+	selected = special_case + col + row*NUM_COLS;
 }
 
 void Editor::advancePosition(bool upf, bool downf, bool leftf, bool rightf) {
@@ -357,6 +370,7 @@ void Editor::handleSpace() {
 	if (choosing) {
 		// select item
 		chooseThing();
+		hold_place = false;
 	} else {
 		// place item
 		placeThing();

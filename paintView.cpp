@@ -68,13 +68,13 @@ PaintView::PaintView(float			x,
 	gem_count = 0;
 
 	// hero/env
-	solid_things = NULL;
-	nonsolid_things = NULL;
-	collectable_things = NULL;
-	dyn_things = NULL;
 	hero = NULL;
 	door = NULL;
-	special_things = NULL;
+	solid_things = new std::vector<StationaryThing *>();
+	nonsolid_things = new std::vector<StationaryThing *>();
+	collectable_things = new std::vector<Collectable *>();
+	special_things = new std::vector<StationaryThing *>();
+	dyn_things = new std::vector<MovingThing *>();
 	
 }
 
@@ -96,6 +96,11 @@ void PaintView::Clear() {
 	collectable_things->clear();
 	dyn_things->clear();
 	special_things->clear();
+	solid_things = new std::vector<StationaryThing *>();
+	nonsolid_things = new std::vector<StationaryThing *>();
+	collectable_things = new std::vector<Collectable *>();
+	special_things = new std::vector<StationaryThing *>();
+	dyn_things = new std::vector<MovingThing *>();
 	gem_count = 0;
 }
 
@@ -181,8 +186,9 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 				break;
 			case TYPE_HERO:
 				hero = reinterpret_cast<Hero *>(thing);
+				break;
 			default:
-				printf("UNIDENTIFIED THING!\n");
+				printf("UNIDENTIFIED THING! CODE:%d\n", thing->getType());
 				break;
 		}
 	}
@@ -505,45 +511,13 @@ void PaintView::draw()
 		valid(1);
 		InitScene();
 		printf("INITIALIZED\n");
-		
 		// Hero
-		if (hero)
-			delete hero;
-		hero = new Hero(bounds->left(), bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
+		if (!hero)
+			hero = new Hero(bounds->left(), bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
 		
 		// Door
-		if (door)
-			delete door;
-		door = new Door(bounds->left() + 4*row_w, bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
-
-		// environment
-		if (solid_things){
-			solid_things->clear();
-		}
-		solid_things = new std::vector<StationaryThing *>();
-
-		if (nonsolid_things){
-			nonsolid_things->clear();
-		}
-		nonsolid_things = new std::vector<StationaryThing *>();
-
-
-		if (collectable_things){
-			collectable_things->clear();
-		}
-		collectable_things = new std::vector<Collectable *>();
-
-
-		if (special_things){
-			special_things->clear();
-		}
-		special_things = new std::vector<StationaryThing *>();
-
-		// baddies
-		if (dyn_things){
-			dyn_things->clear();
-		}
-		dyn_things = new std::vector<MovingThing *>();
+		if (!door)
+			door = new Door(bounds->left() + 4*row_w, bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
 	}
 	
 	// move things
