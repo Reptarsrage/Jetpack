@@ -29,6 +29,11 @@ const float FORCE_GRAVITY = 0.012f;
 const float JETPACK_THRUST = 0.028f;
 const float JUMP_RESTITUTION = 0.45f;
 const float MARGIN = 8.f;
+const float MARGIN_TOP = 5.f;
+const float MARGIN_BOTTOM = 40.f;
+const float MARGIN_LEFT = 5.f;
+const float MARGIN_RIGHT = 15.f;
+
 
 PaintView::PaintView(float			x, 
 					 float			y, 
@@ -38,16 +43,20 @@ PaintView::PaintView(float			x,
 						: Fl_Gl_Window(x,y,w,h,l)
 {
 	// Dimensions
-	bounds = new Rectangle(0, 0, w, h);
-	m_nDrawWidth = w - MARGIN;
-	m_nDrawHeight = h - MARGIN;
-	m_position_x = x,
-	m_position_y = y;
-	row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
-	col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
+	float width = w - (MARGIN_LEFT + MARGIN_RIGHT);
+	float height = h - (MARGIN_BOTTOM + MARGIN_TOP);
+	row_w = width / (NUM_COLS * 1.0f);
+	col_h = height / (NUM_ROWS * 1.0f);
+	bounds = new Rectangle(MARGIN_LEFT, h - MARGIN_BOTTOM, width, height);
+
+	// better bounds
+	left = bounds->left();
+	top = bounds->bottom() + col_h;
+	bottom = bounds->top();
+	right = bounds->right();
 
 	// Controls
-	hold_left = level_loaded = hold_right = false;
+	hold_left = hold_right = false;
 	hold_up = hold_down = hold_jet_pack = false;
 
 	// consts
@@ -87,6 +96,7 @@ void PaintView::Clear() {
 	collectable_things->clear();
 	dyn_things->clear();
 	special_things->clear();
+	gem_count = 0;
 }
 
 void PaintView::loadLevel(std::list<AbstractThing *> level) {
@@ -149,8 +159,9 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 			case TYPE_ROBOT:
 				dyn_things->push_back(reinterpret_cast<MovingThing *>(thing));
 				break;
-			case TYPE_FULLFUEL:
 			case TYPE_GEM:
+				gem_count++;
+			case TYPE_FULLFUEL:
 			case TYPE_GOLD1:
 			case TYPE_GOLD2:
 			case TYPE_GOLD3:
@@ -197,20 +208,10 @@ void PaintView::drawBackGround() {
 	assert(nonsolid_things);
 	assert(collectable_things);
 	assert(special_things);
-	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
-		glTranslatef(bounds->left(), bounds->bottom(), 0);
-		glBegin(GL_QUADS);
-			glTexCoord2f( 0, 0 );                           
-			glVertex2f( 0, 0 );
-			glTexCoord2f(1, 0 );     
-			glVertex2f( bounds->width, 0 );
-			glTexCoord2f( 1, 1 );    
-			glVertex2f( bounds->width, bounds->height );
-			glTexCoord2f( 0, 1 );          
-			glVertex2f( 0, bounds->height );
-		glEnd();
-	glPopMatrix();
+	// Draw Backdrop
+	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
+	bounds->draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	for (StationaryThing *s : *solid_things) {
 		s->draw();
@@ -354,18 +355,22 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 		hero_bounds.position_y, hero_bounds.width, hero_bounds.height);
 
 	// in the x direction
-	if (new_hero_bounds_x.right() > bounds->right())
-		delta_x = bounds->right() - hero_bounds.right();
-	else if (new_hero_bounds_x.left()  < bounds->left()) 
-		delta_x = bounds->left() - hero_bounds.left();
+	if (new_hero_bounds_x.right() > right)
+		// hit right side
+		delta_x = right - hero_bounds.right();
+	else if (new_hero_bounds_x.left()  < left) 
+		// hit left side
+		delta_x = left - hero_bounds.left();
 
 	// and in the y direction
-	if (new_hero_bounds_y.top() > bounds->top()) {
-		delta_y = bounds->top() - hero_bounds.top();
+	if (new_hero_bounds_y.top() > bottom) {
+		// hit ground
+		delta_y = bottom - hero_bounds.top();
 		hero->on_ground = true;
 	}
-	else if (new_hero_bounds_y.bottom() < bounds->bottom())
-		delta_y =  bounds->bottom() - hero_bounds.bottom();
+	else if (new_hero_bounds_y.top() < top)
+		// hit ceiling
+		delta_y =  top - hero_bounds.top();
 
 	// check solid objects in x and y directions (if we need to)
 	if (delta_x == 0 && delta_y == 0)
@@ -419,24 +424,28 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 		thing_bounds.position_y + delta_y, thing_bounds.width, thing_bounds.height);
 	const Rectangle new_thing_bounds_x = Rectangle(thing_bounds.position_x + delta_x,
 		thing_bounds.position_y, thing_bounds.width, thing_bounds.height);
-
+	
 	// in the x direction
-	if (new_thing_bounds_x.right() > bounds->right()) {
-		delta_x = bounds->right() - thing_bounds.right();
+	if (new_thing_bounds_x.right() > right) {
+		// hit right side
+		delta_x = right - thing_bounds.right();
 		thing->hit_wall_right = true;
-	} else if (new_thing_bounds_x.left() < bounds->left()) {
-		delta_x = bounds->left() - thing_bounds.left();
+	} else if (new_thing_bounds_x.left()  < left) {
+		// hit left side
+		delta_x = left - thing_bounds.left();
 		thing->hit_wall_left = true;
 	}
 
-
 	// and in the y direction
-	if (new_thing_bounds_y.top() > bounds->top()) {
-		delta_y = bounds->top() - thing_bounds.top();
+	if (new_thing_bounds_y.top() > bottom) {
+		// hit ground
+		delta_y = bottom - thing_bounds.top();
 		thing->hit_wall_bottom = true;
 		grounded = true;
-	} else if (new_thing_bounds_y.bottom() < bounds->bottom()) {
-		delta_y = bounds->bottom() - thing_bounds.bottom();
+	}
+	else if (new_thing_bounds_y.top() < top) {
+		// hit ceiling
+		delta_y =  top - thing_bounds.top();
 		thing->hit_wall_top = true;
 	}
 
@@ -497,26 +506,6 @@ void PaintView::draw()
 		InitScene();
 		printf("INITIALIZED\n");
 		
-		// draw bounds
-		//m_nDrawWidth = w();
-		//m_nDrawHeight = h();
-
-		// row/column
-		//row_w = m_nDrawWidth / (NUM_COLS * 1.0f);
-		//col_h = m_nDrawHeight / (NUM_ROWS * 1.0f);
-		
-		// player bounds
-		if (bounds)
-			delete bounds;
-		bounds = new Rectangle(0, m_nDrawHeight, m_nDrawWidth, m_nDrawHeight);
-
-		// constants
-		max_velocity = col_h * MAX_VELOCITY;
-		jump_restitution = col_h * JUMP_RESTITUTION;
-		force_gravity = col_h * FORCE_GRAVITY;
-		jetpack_thrust = col_h * JETPACK_THRUST;
-		max_velocity_grav = col_h * MAX_VELOCITY_GRAV;
-		
 		// Hero
 		if (hero)
 			delete hero;
@@ -563,9 +552,6 @@ void PaintView::draw()
 	
 	// Draw Scene
 	glEnable2D();
-
-	// Make the sprite 2 times bigger (optional)
-	//glScalef( 2.0f, 2.0f, 0.0f );
 	
 	// clear screen and initialize things
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer

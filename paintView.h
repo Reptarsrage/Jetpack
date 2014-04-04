@@ -100,26 +100,25 @@ private:
 	std::vector<Collectable *> *collectable_things; // Holds all collectable things
 	std::vector<MovingThing *> *dyn_things;				// Holds all moving things
 	
-	float	m_position_x,
-			m_position_y,
-			m_nDrawHeight,		// Height of our painting section
-			m_nDrawWidth;		// Width of our painting section
 	int		gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)
 			
-
 	float	max_velocity,		// scalable maximum velocity of things
 			jump_restitution,	// scalable jump power of hero
 			force_gravity,		// scalable force of gravity on moving things
 			max_velocity_grav,  // scalable maximum drop speed due to gravity
 			jetpack_thrust;		// scalable thrust of hero's jetpack 
 
+	float left,					// drawing bounds left
+		  top,					// drawing bounds top
+		  bottom,				// drawing bounds bottom
+		  right;				// drawing bounds right
+
 	bool	hold_left,		// Should our hero move left?
 			hold_right,		// Should our hero move right?
 			hold_up,		// Should our hero move up?
 			hold_down,		// Should our hero move down?
-			hold_jet_pack,		 // Should our hero activate his jetpack?
-			level_loaded;	// Should we load the sprites of the level?
+			hold_jet_pack;		 // Should our hero activate his jetpack?
 
 };
 

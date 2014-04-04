@@ -39,18 +39,7 @@ const char *Door::ToString() const{
 }
 
 void Door::draw(){
-	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-		glTranslatef(bounds->left(), bounds->bottom(), 0);
-		glBegin(GL_QUADS);
-			glTexCoord2f( 0, 0 );                           
-			glVertex2f( 0, 0 );
-			glTexCoord2f( 1, 0 );     
-			glVertex2f( bounds->width, 0 );
-			glTexCoord2f( 1, 1);    
-			glVertex2f( bounds->width, bounds->height );
-			glTexCoord2f( 0, 1 );          
-			glVertex2f( 0, bounds->height );
-		glEnd();
-	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+	bounds->draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
