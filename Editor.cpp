@@ -56,12 +56,14 @@ Editor::Editor(	float			x,
 
 	// curser
 	curser = new Rectangle(left, top, row_w, col_h);
-	menu = new Rectangle(left, bottom, bounds->width, 2.f*col_h);
+	menu = new Rectangle(left, bottom, bounds->width, (TYPE_COUNT / NUM_COLS)*col_h);
 	menu_items = NULL;
 	prev_curser = Rectangle(left, top, row_w, col_h);
 	frame = FRAME_SKIP;
 	selected = -1;
 	placed_items = new std::list<AbstractThing *>();
+	hero = NULL;
+	door = NULL;
 }
 
 Editor::~Editor() {
@@ -84,8 +86,18 @@ void Editor::draw()
 			int item_count = 0;
 			Rectangle menu_ptr = Rectangle(menu->left(), menu->bottom() + col_h, row_w, col_h);
 			menu_items = new AbstractThing*[rows * cols];
+			for (int i = 0; i < rows * cols; i++){
+				menu_items[i] = NULL;
+			}
+			
 			for (int j = 0; j < rows; j++) {
 				for (int i = 0; i < cols; i++) {	                      
+					if (item_count >= TYPE_COUNT)
+						break;
+					
+					if (item_count == TYPE_DOOR || item_count == TYPE_HERO)
+						item_count++;
+					
 					menu_items[item_count] = getThingFromCode(item_count, menu_ptr.position_x, menu_ptr.position_y,
 															  row_w, col_h, m_UI->sprites);
 					item_count++;
@@ -120,6 +132,10 @@ void Editor::draw()
 	for (AbstractThing *thing : *placed_items) {
 		thing->draw();
 	}
+	if (hero)
+		hero->draw();
+	if (door)
+		door->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// draw menu
@@ -148,26 +164,78 @@ void Editor::draw()
 
 void Editor::Clear() {
 	delete placed_items;
+	delete hero;
+	delete door;
+	hero = NULL;
+	door = NULL;
 	placed_items = new std::list<AbstractThing *>();
+}
+
+void Editor::placeHero() {
+	if (choosing)
+		return;
+	if (hero)
+		hero = NULL;
+
+	hero = new Hero(curser->left(), curser->top(), row_w, col_h, m_UI->sprites);
+
+}
+
+void Editor::placeDoor() {
+	if (choosing)
+		return;
+	if (door)
+		door = NULL;
+
+	door = new Door(curser->left(), curser->top(), row_w, col_h, m_UI->sprites);
 }
 
 void Editor::loadLevel(std::list<AbstractThing *> level) {
 	Clear();
 	if (level.empty())
 		return;
-	
+
+	int row, col;
 	for (AbstractThing *thing : level) {
 		const Rectangle b = thing->Bounds();
-		thing->SetBounds(left + b.position_x * row_w, top + b.position_y*col_h, row_w, col_h);
-		placed_items->push_back(thing);
+		row = static_cast<int>(b.position_x);
+		col = static_cast<int>(b.position_y);
+		thing->SetBounds(left + b.position_x * row_w, top + b.position_y*col_h, b.width, b.height);
+		if (thing->getType() == TYPE_HERO) {
+			hero = reinterpret_cast<Hero *>(thing);
+			printf("loading hero at col %d and row %d\n", col, row);
+		}
+		else if (thing->getType() == TYPE_DOOR){
+			door = reinterpret_cast<Door *>(thing);
+			printf("loading door at col %d and row %d\n", col, row);
+		}
+		else {
+			placed_items->push_back(thing);
+			printf("loading thing at col %d and row %d\n", col, row);
+		}
 	}
 }
 
+bool Editor::Playable() {
+	return hero && door;
+}
+
 const std::queue<AbstractThing *>* Editor::getLevel() {
+	assert(hero);
+	assert(door);
+	
 	std::queue<AbstractThing *> *q = new std::queue<AbstractThing *>();
 	Rectangle ptr = Rectangle(left, top, row_w, col_h);
 	for (int row = 0; row < NUM_ROWS; row++){
 		for (int col = 0; col < NUM_COLS; col++) {
+			if (hero->Overlaps(ptr)) {
+				printf("Saving hero at col %d and row %d\n", col, row);
+				q->push(hero);
+			}
+			if (door->Overlaps(ptr)) {
+				printf("Saving door at col %d and row %d\n", col, row);
+				q->push(door);
+			}
 			for (AbstractThing *thing : *placed_items) {
 				if (thing->Overlaps(ptr)) {
 					printf("Saving thing at col %d and row %d\n", col, row);
@@ -300,7 +368,6 @@ void Editor::DrawMenu() {
 	int sprite = 0;
 	int rows = menu->height / col_h;
 	int cols = menu->width / row_w;
-	int item_count = 0;
 	Rectangle menu_ptr = Rectangle(menu->left(), menu->bottom() + col_h, row_w, col_h);
 	
 	// draw backdrop for menu
@@ -310,9 +377,10 @@ void Editor::DrawMenu() {
 	// draw all menu items
 	glPushMatrix();
 		glColor3f(1,1,1);	
-		while (menu_items[item_count] != NULL) {
-			menu_items[item_count]->draw();
-			item_count++;
+		for (int i = 0; i < TYPE_COUNT; i++){
+			if (menu_items[i] != NULL) {
+				menu_items[i]->draw();
+			}
 		}
 		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
@@ -351,6 +419,12 @@ int Editor::handle(int event)
 		case FL_SHORTCUT:
 		case FL_KEYBOARD:
 			switch(key) {
+				case 'j':
+					placeHero();
+					break;
+				case 'd':
+					placeDoor();
+					break;
 				case ' ':
 					hold_place = true;
 					handleSpace();

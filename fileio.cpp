@@ -72,12 +72,17 @@ void load(string& filename,
 		int row_c, col_c;
 		row_c = col_c = 0;
 		uint8_t code;
+		int code_i;
+		AbstractThing *thing;
 		while (!fp_in.eof()) {
 			fp_in.read((char *)&code, sizeof(uint8_t));
 			while (code != 255) { // skip seperator tokens
-				level->push_back(getThingFromCode(static_cast<int>(code), col_c,
-					row_c, row_w, col_h, sprites));
-				printf("loading thing at col %d and row %d\n", col_c, row_c);
+				code_i = static_cast<int>(code);
+				assert(code_i < TYPE_COUNT);
+				thing = getThingFromCode(code_i, static_cast<float>(col_c),
+					static_cast<float>(row_c), row_w, col_h, sprites);
+				assert(thing != NULL);
+				level->push_back(thing);
 				fp_in.read((char *)&code, sizeof(uint8_t));
 			}
 			if (col_c+ 1 == *num_cols){

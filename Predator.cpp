@@ -21,7 +21,7 @@ void Predator::Init(const Rectangle r, const Sprites *s) {
 	velocity_x = 0;
 	velocity_y = 0;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
-	type = PREDATOR_TYPE;
+	type = TYPE_HUNTER;
 	hero_x = hero_y = 0.f;
 }
 

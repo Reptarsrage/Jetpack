@@ -10,6 +10,7 @@
 #include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
 #include <vector>
+#include <list>
 
 #ifdef __APPLE__
 #include "OpenGL/glew.h"
@@ -24,6 +25,7 @@ class StationaryThing;
 class JetpackUI;
 class Collectable;
 class Door;
+class AbstractThing;
 
 /* Controls the animation and drawing */
 class PaintView : public Fl_Gl_Window
@@ -38,6 +40,12 @@ public:
 
 	/* called when a key event happens in fltk */
 	int handle(int event);
+
+	/* called when a key event happens in fltk */
+	void loadLevel(std::list<AbstractThing *> level);
+
+	/* clear the current map of things */
+	void Clear();
 
 private:
 	
@@ -68,9 +76,6 @@ private:
 	/* Helper function to advance the position of a moving thing. Does bounds checking! */
 	void advanceHeroPosition(float delta_x, float delta_y) const;
 	
-	/* Helper function to load in all things to be drawn */
-	void loadLevel();
-	
 	/* Helper function to initialize opengl for drawing*/
 	int InitScene();
 	
@@ -83,7 +88,8 @@ private:
 // Attributes
 public:
 	JetpackUI *m_UI;							// Pointer to handler
-
+	float row_w,				// width of one column in our painting grid
+		  col_h;				// height of one row in our painting grid
 private:
 	Rectangle *bounds;							// Current bounds for the hero
 	Hero *hero;
@@ -102,9 +108,7 @@ private:
 								// (hero must collect all gems to open door and beat level)
 			
 
-	float	row_w,				// width of one column in our painting grid
-			col_h,				// height of one row in our painting grid
-			max_velocity,		// scalable maximum velocity of things
+	float	max_velocity,		// scalable maximum velocity of things
 			jump_restitution,	// scalable jump power of hero
 			force_gravity,		// scalable force of gravity on moving things
 			max_velocity_grav,  // scalable maximum drop speed due to gravity

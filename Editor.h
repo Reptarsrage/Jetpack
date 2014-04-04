@@ -55,7 +55,15 @@ public:
 	/* removes all placed items */
 	void Clear();
 
+	/* Only can save/play a level with a hero and a door placed*/
+	bool Playable();
+
 private:
+	/* places the hero */
+	void placeHero();
+
+	/* places the door */
+	void placeDoor();
 
 	/* handles the space key */
 	void handleSpace();
@@ -98,6 +106,9 @@ private:
 	Rectangle *menu;		// bounds of the menu
 	AbstractThing **menu_items;	// a container holding all menu items 
 								// in the col-wise order in which they appear
+	Hero *hero;					// our hero!
+	Door *door;					// his destination.
+	
 	Rectangle prev_curser;		// saved curser positino when switching contexts
 	int selected;				// currently slected menu item
 	std::list<AbstractThing *> *placed_items;	// all placed items

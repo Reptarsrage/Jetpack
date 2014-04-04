@@ -28,7 +28,7 @@ void Bat::Init(const Rectangle r, const Sprites *s) {
 	hit_wall_right = false;
 	hit_wall_top = false;
 	hero_x = hero_y = 0.f;
-	type = BADDIE_TYPE;
+	type = TYPE_BAT;
 }
 
 Bat::~Bat(){

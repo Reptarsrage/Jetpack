@@ -64,8 +64,9 @@ PaintView::PaintView(float			x,
 	collectable_things = NULL;
 	dyn_things = NULL;
 	hero = NULL;
-	special_things = NULL;
 	door = NULL;
+	special_things = NULL;
+	
 }
 
 PaintView::~PaintView() {
@@ -78,36 +79,102 @@ PaintView::~PaintView() {
 	special_things->clear();
 }
 
-void PaintView::loadLevel() {
+void PaintView::Clear() {
+	delete hero;
+	delete door;
+	solid_things->clear();
+	nonsolid_things->clear();
+	collectable_things->clear();
+	dyn_things->clear();
+	special_things->clear();
+}
+
+void PaintView::loadLevel(std::list<AbstractThing *> level) {
+	Clear();
 	assert(solid_things);
 	assert(nonsolid_things);
 	assert(collectable_things);
 	assert(dyn_things);
 	assert(special_things);
-	solid_things->push_back(new SolidThing(8 * row_w, 8 * col_h, row_w, col_h, m_UI->sprites));
-	for (int i = 0; i < NUM_COLS; i++) {
-		if ( i != 8)
-			solid_things->push_back(new SolidThing(i * row_w, 10 * col_h, row_w, col_h, m_UI->sprites));
-		solid_things->push_back(new SolidThing(i * row_w, (NUM_ROWS) * col_h, row_w, col_h, m_UI->sprites));
-	}
-	for (int i = NUM_ROWS - 1; i > 9; i--) {
-		special_things->push_back(new Ladder(8 * row_w, i * col_h, row_w, col_h, m_UI->sprites));
-	}
-	door = new Door((NUM_COLS - 2.f) * row_w,  (NUM_ROWS - 2.f) * col_h, row_w * 2.f, col_h * 2.f, m_UI->sprites);
-	hero = new Hero(0*row_w, col_h, row_w, col_h, m_UI->sprites);
-
-	for (int i = 1; i < NUM_COLS - 1; i++) {
-		if (i != 9 && i != 10 && i != 8) {
-			collectable_things->push_back(new Collectable(i * row_w, (NUM_ROWS - 2.f) * col_h, row_w, col_h, m_UI->sprites));
-			gem_count++;
+	
+	if (level.empty())
+		return;
+	
+	for (AbstractThing *thing : level) {
+		const Rectangle b = thing->Bounds();
+		thing->SetBounds(bounds->left() + b.position_x * row_w, bounds->bottom() + col_h + b.position_y*col_h, b.width, b.height);
+		switch (thing->getType()){
+			case TYPE_IVY:
+			case TYPE_PILLAR:
+			case TYPE_GREENTELEPORTER:
+			case TYPE_YELLOWTELEPORTER:
+			case TYPE_GOLDSWITCH:
+			case TYPE_REDSWITCH:
+			case TYPE_BLUESWITCH:
+			case TYPE_PURPLETELEPORTER:
+				nonsolid_things->push_back(reinterpret_cast<NonSolidThing *>(thing));
+				break;
+			case TYPE_MOSSSOLID:
+			case TYPE_NONPSOLID:
+			case TYPE_GOLDSWITCHSOLID:
+			case TYPE_HARDERSOLID:
+			case TYPE_ICESOLID:
+			case TYPE_FASTSOLID:
+			case TYPE_BLUESWITCHSOLID:
+			case TYPE_BOX:
+			case TYPE_CONVEYORSOLIDLEFT:
+			case TYPE_CONVEYORSOLIDRIGHT:
+			case TYPE_D:
+			case TYPE_U:
+			case TYPE_R:
+			case TYPE_L:
+			case TYPE_DEATHDOWN:
+			case TYPE_DEATHLEFT:
+			case TYPE_DEATHRIGHT:
+			case TYPE_DEATHUP:
+			case TYPE_HBLUESWITCHSOLID:
+			case TYPE_HGOLDSWITCHSOLID:
+			case TYPE_HREDSWITCHSOLID:
+			case TYPE_REDSWITCHSOLID:
+			case TYPE_SOLID:
+				solid_things->push_back(reinterpret_cast<SolidThing *>(thing));
+				break;
+			case TYPE_SPRING:
+			case TYPE_EGG:
+			case TYPE_BAT:
+			case TYPE_MINE:
+			case TYPE_HUNTER:
+			case TYPE_MISSILE:
+			case TYPE_PINWHEEL:
+			case TYPE_ROBOT:
+				dyn_things->push_back(reinterpret_cast<MovingThing *>(thing));
+				break;
+			case TYPE_FULLFUEL:
+			case TYPE_GEM:
+			case TYPE_GOLD1:
+			case TYPE_GOLD2:
+			case TYPE_GOLD3:
+			case TYPE_GOLD4:
+			case TYPE_HALFFUEL:
+			case TYPE_INVINCIBILITY:
+			case TYPE_TIMER:
+				collectable_things->push_back(reinterpret_cast<Collectable *>(thing));
+				break;
+			case TYPE_LADDER:
+			case TYPE_LADDERUP:
+			case TYPE_LADDERDOWN:
+				special_things->push_back(reinterpret_cast<Ladder *>(thing));
+				break;
+			case TYPE_DOOR:
+				door = reinterpret_cast<Door *>(thing);
+				break;
+			case TYPE_HERO:
+				hero = reinterpret_cast<Hero *>(thing);
+			default:
+				printf("UNIDENTIFIED THING!\n");
+				break;
 		}
 	}
-	//dyn_things->push_back(new Bat(0, col_h, row_w, col_h, m_UI->sprites));
-	//dyn_things->push_back(new Pinwheel(row_w, col_h, row_w, col_h, m_UI->sprites));
-	dyn_things->push_back(new Robot(20*row_w, 14*col_h, row_w, col_h, m_UI->sprites));
-	//dyn_things->push_back(new Spring(3*row_w, col_h, row_w, col_h, m_UI->sprites));
-	//dyn_things->push_back(new Egg(4*row_w, col_h, row_w, col_h, m_UI->sprites));
-	//dyn_things->push_back(new Predator(5*row_w, col_h, row_w, col_h, m_UI->sprites));
 }
 
 bool PaintView::heroGetSwag() {
@@ -182,14 +249,14 @@ void PaintView::moveThings() {
 		baddie->updateHeroLoc(r.left(), r.top());
 		
 		// If we have a robot, check if it's on a ladder
-		if (baddie->getType() == ROBOT_TYPE) {
+		if (baddie->getType() == TYPE_ROBOT) {
 			const Rectangle bb = baddie->Bounds();
 			const Rectangle bbd = Rectangle(bb.position_x, bb.position_y + max_velocity, bb.width, bb.height);
 			bool on_ladder = false;
 			float x = 0;
 			float y = 0;
 			for (StationaryThing *s : *special_things) {
-				if (s->getType() == LADDER_TYPE && (s->Overlaps(baddie) || s->Overlaps(bbd))) {
+				if (s->getType() == TYPE_LADDER && (s->Overlaps(baddie) || s->Overlaps(bbd))) {
 					// touching a ladder! (or at least on top of one)
 					const Rectangle sb = s->Bounds();
 					x = sb.position_x;
@@ -307,7 +374,7 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 	// stop on top of ladders, treat ladder tops as ground
 	if (!hero->on_ladder && delta_y > 0) {
 		for (StationaryThing *s : *special_things){
-			if (s->getType() == LADDER_TYPE) {
+			if (s->getType() == TYPE_LADDER) {
 				if (s->Overlaps(new_hero_bounds_y)) {
 					const Rectangle s_bounds = s->Bounds();
 					delta_y = s_bounds.bottom() - hero_bounds.top();
@@ -378,7 +445,7 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 		return;
 
 	// check solid objects in x and y directions (except for predators which don't give no F@$!S)
-	if (thing->getType() != PREDATOR_TYPE) {
+	if (thing->getType() != TYPE_HUNTER) {
 		for (StationaryThing *s : *solid_things){
 			const Rectangle s_bounds = s->Bounds();
 			if (s->Overlaps(new_thing_bounds_x)) {
@@ -411,9 +478,9 @@ bool PaintView::heroTouchingLadder() {
 	const Rectangle b = hero->Bounds();
 	const Rectangle yb = Rectangle(b.left(), b.top() + max_velocity, b.width, b.height);
 	for (StationaryThing *s : *special_things) {
-		if (s->getType() == LADDER_TYPE && s->Overlaps(hero)) {
+		if (s->getType() == TYPE_LADDER && s->Overlaps(hero)) {
 			return true;
-		} else if (s->getType() == LADDER_TYPE && s->Overlaps(yb)) {
+		} else if (s->getType() == TYPE_LADDER && s->Overlaps(yb)) {
 			// standing on top of the ladder
 			return true;
 		}
@@ -442,7 +509,7 @@ void PaintView::draw()
 		if (bounds)
 			delete bounds;
 		bounds = new Rectangle(0, m_nDrawHeight, m_nDrawWidth, m_nDrawHeight);
-		
+
 		// constants
 		max_velocity = col_h * MAX_VELOCITY;
 		jump_restitution = col_h * JUMP_RESTITUTION;
@@ -453,10 +520,12 @@ void PaintView::draw()
 		// Hero
 		if (hero)
 			delete hero;
-
+		hero = new Hero(bounds->left(), bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
+		
 		// Door
 		if (door)
 			delete door;
+		door = new Door(bounds->left() + 4*row_w, bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
 
 		// environment
 		if (solid_things){
@@ -486,8 +555,6 @@ void PaintView::draw()
 			dyn_things->clear();
 		}
 		dyn_things = new std::vector<MovingThing *>();
-
-		loadLevel();
 	}
 	
 	// move things

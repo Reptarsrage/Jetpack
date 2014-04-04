@@ -25,7 +25,7 @@ void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	printf("Initial Pinwheel angle = %g\n", dir_angle);
 	on_ladder = on_ground = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
-	type = BADDIE_TYPE;
+	type = TYPE_PINWHEEL;
 }
 
 Pinwheel::~Pinwheel(){

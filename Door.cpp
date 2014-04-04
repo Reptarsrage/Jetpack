@@ -20,7 +20,7 @@ void Door::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Door";
 	sprites = s;
-	type = DOOR_TYPE;
+	type = TYPE_DOOR;
 	def_sprite = SPRITE_DOORCLOSED;
 	is_open = false;
 }

@@ -21,7 +21,7 @@ void Collectable::Init(const Rectangle r, const Sprites *s) {
 	name = "Collectable";
 	sprites = s;
 	collected = false;
-	type = COLLECTABLE_TYPE;
+	type = TYPE_GEM;
 	def_sprite = SPRITE_GEM;
 }
 

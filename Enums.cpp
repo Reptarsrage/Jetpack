@@ -16,6 +16,8 @@
 #include "Spring.h"
 #include "Egg.h"
 #include "Robot.h"
+#include "Door.h"
+#include "Hero.h"
 
 
 int m_rand() {
@@ -35,160 +37,166 @@ float m_randf() {
 AbstractThing* getThingFromCode(int code, float x, float y, float width, float height, Sprites *sprites){
 	AbstractThing *result = NULL;
 	switch (code) {
-		case MENU_IVY:
+		case TYPE_IVY:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_PILLAR:
+		case TYPE_PILLAR:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_REDSWITCH:
+		case TYPE_REDSWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_BAT:
+		case TYPE_BAT:
 			result = new Bat(x,y,width, height, sprites);
 			break;
-		case MENU_BLUESWITCH:
+		case TYPE_BLUESWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_BLUESWITCHSOLID:
+		case TYPE_BLUESWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_BOX:
+		case TYPE_BOX:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_CONVEYORSOLIDLEFT:
+		case TYPE_CONVEYORSOLIDLEFT:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_CONVEYORSOLIDRIGHT:
+		case TYPE_CONVEYORSOLIDRIGHT:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_D:
+		case TYPE_D:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_DEATHDOWN:
+		case TYPE_DEATHDOWN:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_DEATHLEFT:
+		case TYPE_DEATHLEFT:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_DEATHRIGHT:
+		case TYPE_DEATHRIGHT:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_DEATHUP:
+		case TYPE_DEATHUP:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_EGG:
+		case TYPE_EGG:
 			result = new Egg(x,y,width, height, sprites);
 			break;
-		case MENU_FASTSOLID:
+		case TYPE_FASTSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_FULLFUEL:
+		case TYPE_FULLFUEL:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GEM:
+		case TYPE_GEM:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GOLD1:
+		case TYPE_GOLD1:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GOLD2:
+		case TYPE_GOLD2:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GOLD3:
+		case TYPE_GOLD3:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GOLD4:
+		case TYPE_GOLD4:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_GOLDSWITCH:
+		case TYPE_GOLDSWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_GOLDSWITCHSOLID:
+		case TYPE_GOLDSWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_GREENTELEPORTER:
+		case TYPE_GREENTELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_HALFFUEL:
+		case TYPE_HALFFUEL:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_HARDERSOLID:
+		case TYPE_HARDERSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_HBLUESWITCHSOLID:
+		case TYPE_HBLUESWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_HGOLDSWITCHSOLID:
+		case TYPE_HGOLDSWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_HREDSWITCHSOLID:
+		case TYPE_HREDSWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_HUNTER:
+		case TYPE_HUNTER:
 			result = new Predator(x,y,width, height, sprites);
 			break;
-		case MENU_ICESOLID:
+		case TYPE_ICESOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_INVINCIBILITY:
+		case TYPE_INVINCIBILITY:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_L:
+		case TYPE_L:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_LADDER:
+		case TYPE_LADDER:
 			result = new Ladder(x,y,width, height, sprites);
 			break;
-		case MENU_LADDERUP:
+		case TYPE_LADDERUP:
 			result = new Ladder(x,y,width, height, sprites);
 			break;
-		case MENU_LADDERDOWN:
+		case TYPE_LADDERDOWN:
 			result = new Ladder(x,y,width, height, sprites);
 			break;
-		case MENU_MINE:
+		case TYPE_MINE:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_MISSILE:
+		case TYPE_MISSILE:
 			result = new Spring(x,y,width, height, sprites);
 			break;
-		case MENU_MOSSSOLID:
+		case TYPE_MOSSSOLID:
 			break;
-		case MENU_NONPSOLID:
+		case TYPE_NONPSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_PINWHEEL:
+		case TYPE_PINWHEEL:
 			result = new Pinwheel(x,y,width, height, sprites);
 			break;
-		case MENU_PURPLETELEPORTER:
+		case TYPE_PURPLETELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_R:
+		case TYPE_R:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_REDSWITCHSOLID:
+		case TYPE_REDSWITCHSOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_ROBOT:
+		case TYPE_ROBOT:
 			result = new Robot(x,y,width, height, sprites);
 			break;
-		case MENU_SOLID:
+		case TYPE_SOLID:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_SPRING:
+		case TYPE_SPRING:
 			result = new Spring(x,y,width, height, sprites);
 			break;
-		case MENU_TIMER:
+		case TYPE_TIMER:
 			result = new Collectable(x,y,width, height, sprites);
 			break;
-		case MENU_U:
+		case TYPE_U:
 			result = new SolidThing(x,y,width, height, sprites);
 			break;
-		case MENU_YELLOWTELEPORTER:
+		case TYPE_YELLOWTELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
 			break;
+		case TYPE_DOOR:
+			result = new Door(x,y,width, height, sprites);
+			break;
+		case TYPE_HERO:
+			result = new Hero(x,y,width, height, sprites);
+			break;
 		default:
-			printf("UNIDENTIFIED THING!\n");
+			printf("UNIDENTIFIED THING! CODE:%d\n", code);
 			break;
 	}
 	return result;

@@ -20,7 +20,7 @@ void SolidThing::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "SolidThing";
 	sprites = s;
-	type = SOLID_TYPE;
+	type = TYPE_SOLID;
 	def_sprite = SPRITE_NONPSOLID;
 }
 

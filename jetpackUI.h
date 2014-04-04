@@ -46,6 +46,9 @@ public:
 	/* Saves the current edited level */
 	void	saveLevel();
 
+	/* plays a loaded level */
+	void playLoaded();
+
 // All callbacks here.  Callbacks are declared 
 // static
 private:
@@ -59,10 +62,11 @@ private:
 	*/
 	static void	cb_clear(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
-	static void	cb_switch1(Fl_Menu_* o, void* v);
-	static void	cb_switch2(Fl_Menu_* o, void* v);
+	static void	cb_switch_to_editor(Fl_Menu_* o, void* v);
+	static void	cb_switch_to_game(Fl_Menu_* o, void* v);
 	static void	cb_load_level(Fl_Menu_* o, void* v);
 	static void	cb_save_level(Fl_Menu_* o, void* v);
+	static void	cb_play_loaded(Fl_Menu_* o, void* v);
 
 // Static Functions
 private:

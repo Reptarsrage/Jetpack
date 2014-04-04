@@ -18,6 +18,7 @@ void Hero::Init(const Rectangle r, const Sprites *s) {
 	mass = 1.0;
 	on_ground = false;
 	on_ladder = false;
+	type = TYPE_HERO;
 }
 
 Hero::Hero(float x, float y, float w, float h, const Sprites *s){

@@ -59,6 +59,10 @@ void JetpackUI::loadLevel() {
 
 void JetpackUI::saveLevel() {
 	assert(m_current == m_editor);
+	if (!m_editor->Playable()){
+		printf("You must place both a hero and a door before you save.\n");
+		return;
+	}
 	printf("Saving...\n");
 	string filename = string("test.level");
 	int num_rows = 16;
@@ -99,14 +103,14 @@ void JetpackUI::cb_clear(Fl_Menu_* o, void* v)
 	whoami(o)->m_editor->Clear();
 }
 
-void JetpackUI::cb_switch1(Fl_Menu_* o, void* v) 
+void JetpackUI::cb_switch_to_editor(Fl_Menu_* o, void* v) 
 {
 	whoami(o)->m_gamePlay_group->hide();
 	whoami(o)->m_editor_group->show();
 	whoami(o)->m_current = whoami(o)->m_editor;
 }
 
-void JetpackUI::cb_switch2(Fl_Menu_* o, void* v) 
+void JetpackUI::cb_switch_to_game(Fl_Menu_* o, void* v) 
 {
 	whoami(o)->m_editor_group->hide();
 	whoami(o)->m_gamePlay_group->show();
@@ -124,9 +128,43 @@ void JetpackUI::cb_save_level(Fl_Menu_* o, void* v)
 	whoami(o)->saveLevel();
 }
 
+void JetpackUI::playLoaded() {
+	assert(m_gamePlay);
+	string filename = "test.level";
+	int num_rows;
+	int num_cols;
+	string *title;
+	string *description;
+	string *passcode;
+	std::list<AbstractThing *> *l = new std::list<AbstractThing *>();
+	load(filename, m_gamePlay->row_w, 
+				m_gamePlay->col_h, 
+				&num_rows, 
+				&num_cols,
+				&title,
+				&description,
+				&passcode,
+				l,
+				sprites);
+	m_gamePlay->loadLevel(*l);
+	if (l->empty())
+		delete l;
+	delete title;
+	delete description;
+	delete passcode;
+	m_editor_group->hide();
+	m_gamePlay_group->show();
+	m_current = m_gamePlay;
+
+}
+
 
 void JetpackUI::show() {
 	m_mainWindow->show();
+}
+
+void JetpackUI::cb_play_loaded(Fl_Menu_* o, void* v) {
+	whoami(o)->playLoaded();
 }
 
 // Main menu definition
@@ -135,10 +173,11 @@ Fl_Menu_Item JetpackUI::menuitems[] = {
 		{ "&Quit",			FL_CTRL + 'w', (Fl_Callback *)JetpackUI::cb_exit },
 		{ 0 },
 	{ "&Game",		0, 0, 0, FL_SUBMENU },
-		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch2 },
+		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch_to_game },
+		{ "&Play a loaded level",	0, (Fl_Callback *)JetpackUI::cb_play_loaded },
 		{ 0 },
 	{ "&Editor",		0, 0, 0, FL_SUBMENU },
-		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch1},
+		{ "&Switch to this",	0, (Fl_Callback *)JetpackUI::cb_switch_to_editor},
 		{ "&Load Level",	FL_CTRL + 'w', (Fl_Callback *)JetpackUI::cb_load_level},
 		{ "&Save Level",	FL_CTRL + 'l', (Fl_Callback *)JetpackUI::cb_save_level},
 		{ "&Clear current level",	0, (Fl_Callback *)JetpackUI::cb_clear},

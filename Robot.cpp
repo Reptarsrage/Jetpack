@@ -25,7 +25,7 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	velocity_y = 0;
 	on_top_of_ladder = on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
-	type = ROBOT_TYPE;
+	type = TYPE_ROBOT;
 }
 
 Robot::~Robot(){
