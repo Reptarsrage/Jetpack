@@ -163,6 +163,10 @@ enum SolidAttributesEnum {  ICY,
 							CONVEYOR_LEFT,
 							ATTRIBUTE_COUNT };
 
+/* differentate between directions */
+enum DirectionEnum {  UP, DOWN, LEFT, RIGHT};
+
+
 /* Difffent switch groups */
 enum SwitchGroupEnum {  SWITCH_RED_V, 
 						SWITCH_BLUE_V, 
@@ -172,15 +176,46 @@ enum SwitchGroupEnum {  SWITCH_RED_V,
 						SWITCH_GOLD_H,
 						SWITCH_COUNT };
 
+/* Difffent teleporter groups */
+enum TeleporterGroupEnum {  TELE_PURPLE,
+						TELE_GREEN, 
+						TELE_YELLOW,
+						TELE_COUNT };
+
 
 /* Identifiers for the edit level menu, as well as general types of things */
-enum TypeEnum {		TYPE_IVY,
-					TYPE_PILLAR,
-					TYPE_REDSWITCH,
+enum TypeEnum {		TYPE_DOOR,
+					TYPE_HERO,
+					TYPE_GEM,
+					
+					// Baddies
+					TYPE_ROBOT,
+					TYPE_SPRING,
+					TYPE_PINWHEEL,
+					TYPE_EGG,
+					TYPE_MISSILE,
 					TYPE_BAT,
+					TYPE_HUNTER,
+					TYPE_MINE,
+					TYPE_DEATHDOWN,
+					TYPE_DEATHLEFT,
+					TYPE_DEATHRIGHT,
+					TYPE_DEATHUP,
+
+					// switches
+					TYPE_GOLDSWITCH,
 					TYPE_BLUESWITCH,
+					TYPE_REDSWITCH,
+
+					// switch solids
+					TYPE_HBLUESWITCHSOLID,
 					TYPE_BLUESWITCHSOLID,
-					TYPE_BOX,
+					TYPE_HREDSWITCHSOLID,
+					TYPE_REDSWITCHSOLID,
+					TYPE_HGOLDSWITCHSOLID,
+					TYPE_GOLDSWITCHSOLID,
+
+					// solid things
 					TYPE_BRICKSOLID,
 					TYPE_BRICKSOLID_ICY,
 					TYPE_BRICKSOLID_MOSSY,
@@ -204,42 +239,35 @@ enum TypeEnum {		TYPE_IVY,
 					TYPE_STONESOLID_MOSSY,
 					TYPE_STONESOLID_CONVEYOR_L,
 					TYPE_STONESOLID_CONVEYOR_R,
-					TYPE_DEATHDOWN,
-					TYPE_DEATHLEFT,
-					TYPE_DEATHRIGHT,
-					TYPE_DEATHUP,
-					TYPE_DOOR,
-					TYPE_EGG,
+					TYPE_BOX,
 					TYPE_FASTSOLID,
+
+					// Items
+					TYPE_TIMER,
 					TYPE_FULLFUEL,
-					TYPE_GEM,
+					TYPE_HALFFUEL,
+					TYPE_INVINCIBILITY,
+
+					// Gold
 					TYPE_GOLD1,
 					TYPE_GOLD2,
 					TYPE_GOLD3,
 					TYPE_GOLD4,
-					TYPE_GOLDSWITCH,
-					TYPE_GOLDSWITCHSOLID,
-					TYPE_GREENTELEPORTER,
-					TYPE_HALFFUEL,
-					TYPE_HBLUESWITCHSOLID,
-					TYPE_HERO,
-					TYPE_HGOLDSWITCHSOLID,
-					TYPE_HREDSWITCHSOLID,
-					TYPE_HUNTER,
-					TYPE_INVINCIBILITY,
+
+					// ladders
 					TYPE_LADDER,
 					TYPE_LADDERUP,
 					TYPE_LADDERDOWN,
-					TYPE_MINE,
-					TYPE_MISSILE,
-					TYPE_PINWHEEL,
+
+					// teleporters
+					TYPE_GREENTELEPORTER,
 					TYPE_PURPLETELEPORTER,
-					TYPE_REDSWITCHSOLID,
-					TYPE_ROBOT,
-					TYPE_SPRING,
-					TYPE_TIMER,
 					TYPE_YELLOWTELEPORTER,
-					TYPE_COUNT};
+
+					// misc things
+					TYPE_PILLAR,
+					TYPE_IVY,
+					TYPE_COUNT };
 
 /* Holds the filenames for all the sprites, order is important */
 extern const char *SpriteNames[];

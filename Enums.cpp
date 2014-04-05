@@ -25,6 +25,12 @@
 #include "BrickSolid.h"
 #include "FastSolid.h"
 #include "SwitchSolid.h"
+#include "Deathsicle.h"
+#include "Mine.h"
+#include "Missile.h"
+#include "Teleporter.h"
+#include "Switch.h"
+
 
 int m_rand() {
 	rand();
@@ -141,15 +147,15 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			static_cast<NonSolidThing *>(result)->setInfo(TYPE_PILLAR, SPRITE_PILLAR, "Pillar");
 			break;
 		case TYPE_REDSWITCH:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Switch(x,y,width, height, sprites);
+			static_cast<Switch *>(result)->bindSwitch(SWITCH_RED_H);
 			break;
 		case TYPE_BAT:
 			result = new Bat(x,y,width, height, sprites);
 			break;
 		case TYPE_BLUESWITCH:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Switch(x,y,width, height, sprites);
+			static_cast<Switch *>(result)->bindSwitch(SWITCH_BLUE_H);
 			break;
 		case TYPE_BLUESWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
@@ -157,30 +163,28 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			break;
 		case TYPE_BOX:
 			result = new Box(x,y,width, height, sprites);
-			
 			break;
 		case TYPE_DEATHDOWN:
-			result = new SolidThing(x,y,width, height, sprites);
-			
+			result = new Deathsicle(x,y,width, height, sprites);
+			static_cast<Deathsicle *>(result)->setDir(DOWN);
 			break;
 		case TYPE_DEATHLEFT:
-			result = new SolidThing(x,y,width, height, sprites);
-			
+			result = new Deathsicle(x,y,width, height, sprites);
+			static_cast<Deathsicle *>(result)->setDir(LEFT);
 			break;
 		case TYPE_DEATHRIGHT:
-			result = new SolidThing(x,y,width, height, sprites);
-			
+			result = new Deathsicle(x,y,width, height, sprites);
+			static_cast<Deathsicle *>(result)->setDir(RIGHT);
 			break;
 		case TYPE_DEATHUP:
-			result = new SolidThing(x,y,width, height, sprites);
-			
+			result = new Deathsicle(x,y,width, height, sprites);
+			static_cast<Deathsicle *>(result)->setDir(UP);
 			break;
 		case TYPE_EGG:
 			result = new Egg(x,y,width, height, sprites);
 			break;
 		case TYPE_FASTSOLID:
 			result = new FastSolid(x,y,width, height, sprites);
-			
 			break;
 		case TYPE_FULLFUEL:
 			result = new Item(x,y,width, height, sprites);
@@ -188,7 +192,6 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			break;
 		case TYPE_GEM:
 			result = new Collectable(x,y,width, height, sprites);
-			
 			break;
 		case TYPE_GOLD1:
 			result = new Gold(x,y,width, height, sprites);
@@ -207,17 +210,16 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			static_cast<Gold *>(result)->setValue(1000);
 			break;
 		case TYPE_GOLDSWITCH:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Switch(x,y,width, height, sprites);
+			static_cast<Switch *>(result)->bindSwitch(SWITCH_GOLD_H);
 			break;
 		case TYPE_GOLDSWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
 			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_GOLD_V);
-			
 			break;
 		case TYPE_GREENTELEPORTER:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Teleporter(x,y,width, height, sprites);
+			static_cast<Teleporter *>(result)->bindTeleporter(TELE_GREEN);
 			break;
 		case TYPE_HALFFUEL:
 			result = new Item(x,y,width, height, sprites);
@@ -226,17 +228,14 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 		case TYPE_HBLUESWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
 			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_BLUE_H);
-			
 			break;
 		case TYPE_HGOLDSWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
 			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_GOLD_H);
-			
 			break;
 		case TYPE_HREDSWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
 			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_RED_H);
-			
 			break;
 		case TYPE_HUNTER:
 			result = new Predator(x,y,width, height, sprites);
@@ -247,7 +246,6 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			break;
 		case TYPE_LADDER:
 			result = new Ladder(x,y,width, height, sprites);
-			
 			break;
 		case TYPE_LADDERUP:
 			result = new Ladder(x,y,width, height, sprites);
@@ -258,23 +256,21 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			
 			break;
 		case TYPE_MINE:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Mine(x,y,width, height, sprites);
 			break;
 		case TYPE_MISSILE:
-			result = new Spring(x,y,width, height, sprites);
+			result = new Missile(x,y,width, height, sprites);
 			break;
 		case TYPE_PINWHEEL:
 			result = new Pinwheel(x,y,width, height, sprites);
 			break;
 		case TYPE_PURPLETELEPORTER:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Teleporter(x,y,width, height, sprites);
+			static_cast<Teleporter *>(result)->bindTeleporter(TELE_PURPLE);
 			break;
 		case TYPE_REDSWITCHSOLID:
 			result = new SwitchSolid(x,y,width, height, sprites);
 			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_RED_V);
-			
 			break;
 		case TYPE_ROBOT:
 			result = new Robot(x,y,width, height, sprites);
@@ -287,8 +283,8 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			static_cast<Item *>(result)->setType(TYPE_TIMER);
 			break;
 		case TYPE_YELLOWTELEPORTER:
-			result = new NonSolidThing(x,y,width, height, sprites);
-			
+			result = new Teleporter(x,y,width, height, sprites);
+			static_cast<Teleporter *>(result)->bindTeleporter(TELE_YELLOW);
 			break;
 		case TYPE_DOOR:
 			result = new Door(x,y,width, height, sprites);

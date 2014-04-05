@@ -95,7 +95,7 @@ void Editor::draw()
 					if (item_count >= TYPE_COUNT)
 						break;
 					
-					if (item_count == TYPE_DOOR || item_count == TYPE_HERO)
+					while (item_count == TYPE_DOOR || item_count == TYPE_HERO)
 						item_count++;
 					
 					menu_items[item_count] = getThingFromCode(item_count, menu_ptr.position_x, menu_ptr.position_y,
@@ -293,7 +293,7 @@ void Editor::chooseThing(){
 	int special_case = 0;
 	if (col + row*NUM_COLS >= TYPE_DOOR)
 		special_case++;
-	if (col + row*NUM_COLS >= TYPE_HERO)
+	if (special_case + col + row*NUM_COLS >= TYPE_HERO)
 		special_case++;
 	if (special_case + col + row*NUM_COLS >= TYPE_COUNT){
 		printf("Not a choosable thing!\n");
