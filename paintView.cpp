@@ -129,20 +129,33 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 			case TYPE_PURPLETELEPORTER:
 				nonsolid_things->push_back(reinterpret_cast<NonSolidThing *>(thing));
 				break;
-			case TYPE_MOSSSOLID:
-			case TYPE_NONPSOLID:
+			case TYPE_BRICKSOLID:
+			case TYPE_BRICKSOLID_ICY:
+			case TYPE_BRICKSOLID_MOSSY:
+			case TYPE_BRICKSOLID_CONVEYOR_L:
+			case TYPE_BRICKSOLID_CONVEYOR_R:
+			case TYPE_SHIELDED_BRICK_D:
+			case TYPE_SHIELDED_BRICK_U:
+			case TYPE_SHIELDED_BRICK_L:
+			case TYPE_SHIELDED_BRICK_R:
+			case TYPE_WOODSOLID:
+			case TYPE_WOODSOLID_ICY:
+			case TYPE_WOODSOLID_MOSSY:
+			case TYPE_WOODSOLID_CONVEYOR_L:
+			case TYPE_WOODSOLID_CONVEYOR_R:
+			case TYPE_SHIELDED_WOOD_D:
+			case TYPE_SHIELDED_WOOD_U:
+			case TYPE_SHIELDED_WOOD_L:
+			case TYPE_SHIELDED_WOOD_R:
+			case TYPE_STONESOLID:
+			case TYPE_STONESOLID_ICY:
+			case TYPE_STONESOLID_MOSSY:
+			case TYPE_STONESOLID_CONVEYOR_L:
+			case TYPE_STONESOLID_CONVEYOR_R:
 			case TYPE_GOLDSWITCHSOLID:
-			case TYPE_HARDERSOLID:
-			case TYPE_ICESOLID:
 			case TYPE_FASTSOLID:
 			case TYPE_BLUESWITCHSOLID:
 			case TYPE_BOX:
-			case TYPE_CONVEYORSOLIDLEFT:
-			case TYPE_CONVEYORSOLIDRIGHT:
-			case TYPE_D:
-			case TYPE_U:
-			case TYPE_R:
-			case TYPE_L:
 			case TYPE_DEATHDOWN:
 			case TYPE_DEATHLEFT:
 			case TYPE_DEATHRIGHT:
@@ -151,7 +164,6 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 			case TYPE_HGOLDSWITCHSOLID:
 			case TYPE_HREDSWITCHSOLID:
 			case TYPE_REDSWITCHSOLID:
-			case TYPE_SOLID:
 				solid_things->push_back(reinterpret_cast<SolidThing *>(thing));
 				break;
 			case TYPE_SPRING:

@@ -1,7 +1,6 @@
 #include "Bat.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_BAT1;
 const float SPEED = 0.45f;
 
 Bat::Bat(float x, float y, float w, float h, const Sprites *s){
@@ -28,6 +27,7 @@ void Bat::Init(const Rectangle r, const Sprites *s) {
 	hit_wall_right = false;
 	hit_wall_top = false;
 	hero_x = hero_y = 0.f;
+	def_sprite = SPRITE_BAT1;
 	type = TYPE_BAT;
 }
 
@@ -61,7 +61,7 @@ float Bat::getIntendedX() {
 }
 
 void Bat::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

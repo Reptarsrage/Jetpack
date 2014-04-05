@@ -1,7 +1,6 @@
 #include "Hero.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_FRONT;
 const float HERO_WIDTH_RATIO = .6f;
 const float HERO_HEIGHT_RATIO = .9f;
 
@@ -19,6 +18,7 @@ void Hero::Init(const Rectangle r, const Sprites *s) {
 	on_ground = false;
 	on_ladder = false;
 	type = TYPE_HERO;
+	def_sprite = SPRITE_FRONT;
 }
 
 Hero::Hero(float x, float y, float w, float h, const Sprites *s){
@@ -67,7 +67,7 @@ float Hero::applyGravity(float force_gravity) {
 }
 
 void Hero::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

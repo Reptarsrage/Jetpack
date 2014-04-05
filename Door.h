@@ -39,8 +39,6 @@ public:
 // Attributes
 
 private:
-	/* Which sprite to use to draw this thing */
-	GLuint def_sprite;
 	bool is_open;
 };
 

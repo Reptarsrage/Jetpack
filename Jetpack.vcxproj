@@ -85,13 +85,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bat.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Egg.cpp" />
     <ClCompile Include="Enums.cpp" />
+    <ClCompile Include="FastSolid.cpp" />
     <ClCompile Include="fileio.cpp" />
+    <ClCompile Include="Gold.cpp" />
+    <ClCompile Include="BrickSolid.cpp" />
+    <ClCompile Include="SwitchSolid.cpp" />
+    <ClCompile Include="WoodSolid.cpp" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="FastSolid.h" />
+    <ClInclude Include="BrickSolid.h" />
+    <ClInclude Include="SwitchSolid.h" />
+    <ClInclude Include="WoodSolid.h" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="jetpackUI.cpp" />
     <ClCompile Include="jetpack_main.cpp" />
     <ClCompile Include="Ladder.cpp" />
@@ -114,7 +126,9 @@
     <ClInclude Include="Egg.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="fileio.h" />
+    <ClInclude Include="Gold.h" />
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="jetpackUI.h" />
     <ClInclude Include="jetpack_main.h" />
     <ClInclude Include="Ladder.h" />

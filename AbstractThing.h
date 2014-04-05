@@ -47,6 +47,7 @@ protected:
 	char * name;				// The name of this thing.
 	const Sprites *sprites;		// A pointer to the sprite manager (for drawing this thing).
 	int type;					// What kind of thing?
+	GLuint def_sprite;			// Which sprite to use to draw this thing
 };
 
 #endif // ABSTRACT_THING_H_

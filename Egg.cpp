@@ -1,7 +1,6 @@
 #include "Egg.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_EGG;
 const float SPEED = 1.8f;
 const float EPSILON = 0.1f;
 const float HERO_WIDTH_RATIO = .9f;
@@ -26,6 +25,7 @@ void Egg::Init(const Rectangle r, const Sprites *s) {
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
 	type = TYPE_EGG;
+	def_sprite = SPRITE_EGG;
 }
 
 Egg::~Egg(){
@@ -82,7 +82,7 @@ float Egg::getIntendedX() {
 }
 
 void Egg::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

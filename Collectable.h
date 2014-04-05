@@ -20,15 +20,13 @@ public:
 	Collectable(float x, float y, float w, float h, const Sprites *s);
 	Collectable(const Rectangle r, const Sprites *s);
 	~Collectable();
-	
+	Collectable() {}
+
 	/* Initialization for multiple cnstrs */
 	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
-
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Collects this thing, and returns the points for doing so. */
 	virtual int Collect();
@@ -36,10 +34,11 @@ public:
 	/* Is this thing already collected? */
 	virtual bool Collected();
 
+	/* Draws this thing */
+	virtual void draw();
+
 // Attributes
-private:
-	/* Which sprite to use to draw this thing */
-	GLuint def_sprite;
+protected:
 	
 	/* Is this still up for grabs? */
 	bool collected;

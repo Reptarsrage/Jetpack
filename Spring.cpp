@@ -1,7 +1,6 @@
 #include "Spring.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_SPRING1;
 const float SPEED = 2.f;
 
 Spring::Spring(float x, float y, float w, float h, const Sprites *s){
@@ -22,6 +21,7 @@ void Spring::Init(const Rectangle r, const Sprites *s) {
 	velocity_y = SPEED;
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	type = TYPE_SPRING;
+	def_sprite = SPRITE_SPRING1;
 }
 
 Spring::~Spring(){
@@ -54,7 +54,7 @@ float Spring::getIntendedX() {
 }
 
 void Spring::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

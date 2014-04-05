@@ -18,7 +18,13 @@
 #include "Robot.h"
 #include "Door.h"
 #include "Hero.h"
-
+#include "Gold.h"
+#include "Item.h"
+#include "Box.h"
+#include "WoodSolid.h"
+#include "BrickSolid.h"
+#include "FastSolid.h"
+#include "SwitchSolid.h"
 
 int m_rand() {
 	rand();
@@ -37,157 +43,252 @@ float m_randf() {
 AbstractThing* getThingFromCode(int code, float x, float y, float width, float height, Sprites *sprites){
 	AbstractThing *result = NULL;
 	switch (code) {
+		case TYPE_STONESOLID_CONVEYOR_R:
+			result = new SolidThing(x,y,width, height, sprites);
+			static_cast<SolidThing *>(result)->setAttribute(CONVEYOR_RIGHT);
+			break;
+		case TYPE_STONESOLID_CONVEYOR_L:
+			result = new SolidThing(x,y,width, height, sprites);
+			static_cast<SolidThing *>(result)->setAttribute(CONVEYOR_LEFT);
+			break;
+		case TYPE_BRICKSOLID_CONVEYOR_R:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(CONVEYOR_RIGHT);
+			break;
+		case TYPE_BRICKSOLID_CONVEYOR_L:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(CONVEYOR_LEFT);
+			break;
+		case TYPE_WOODSOLID_CONVEYOR_R:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(CONVEYOR_RIGHT);
+			break;
+		case TYPE_WOODSOLID_CONVEYOR_L:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(CONVEYOR_LEFT);
+			break;
+		case TYPE_BRICKSOLID:
+			result = new BrickSolid(x,y,width, height, sprites);
+			break;
+		case TYPE_BRICKSOLID_ICY:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(ICY);
+			break;
+		case TYPE_BRICKSOLID_MOSSY:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(MOSSY);
+			break;
+		case TYPE_SHIELDED_BRICK_D:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(SHIELDED_DOWN);
+			break;
+		case TYPE_SHIELDED_BRICK_U:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(SHIELDED_UP);
+			break;
+		case TYPE_SHIELDED_BRICK_L:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(SHIELDED_LEFT);
+			break;
+		case TYPE_SHIELDED_BRICK_R:
+			result = new BrickSolid(x,y,width, height, sprites);
+			static_cast<BrickSolid *>(result)->setAttribute(SHIELDED_RIGHT);
+			break;
+		case TYPE_WOODSOLID:
+			result = new WoodSolid(x,y,width, height, sprites);
+			break;
+		case TYPE_WOODSOLID_ICY:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(ICY);
+			break;
+		case TYPE_WOODSOLID_MOSSY:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(MOSSY);
+			break;
+		case TYPE_SHIELDED_WOOD_D:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(SHIELDED_DOWN);
+			break;
+		case TYPE_SHIELDED_WOOD_U:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(SHIELDED_UP);
+			break;
+		case TYPE_SHIELDED_WOOD_L:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(SHIELDED_LEFT);
+			break;
+		case TYPE_SHIELDED_WOOD_R:
+			result = new WoodSolid(x,y,width, height, sprites);
+			static_cast<WoodSolid *>(result)->setAttribute(SHIELDED_RIGHT);
+			break;
+		case TYPE_STONESOLID:
+			result = new SolidThing(x,y,width, height, sprites);
+			break;
+		case TYPE_STONESOLID_ICY:
+			result = new SolidThing(x,y,width, height, sprites);
+			static_cast<SolidThing *>(result)->setAttribute(ICY);
+			break;
+		case TYPE_STONESOLID_MOSSY:
+			result = new SolidThing(x,y,width, height, sprites);
+			static_cast<SolidThing *>(result)->setAttribute(MOSSY);
+			break;
 		case TYPE_IVY:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			static_cast<NonSolidThing *>(result)->setInfo(TYPE_IVY, SPRITE_IVY, "Ivy");
 			break;
 		case TYPE_PILLAR:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			static_cast<NonSolidThing *>(result)->setInfo(TYPE_PILLAR, SPRITE_PILLAR, "Pillar");
 			break;
 		case TYPE_REDSWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_BAT:
 			result = new Bat(x,y,width, height, sprites);
 			break;
 		case TYPE_BLUESWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_BLUESWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_BLUE_V);
 			break;
 		case TYPE_BOX:
-			result = new SolidThing(x,y,width, height, sprites);
-			break;
-		case TYPE_CONVEYORSOLIDLEFT:
-			result = new SolidThing(x,y,width, height, sprites);
-			break;
-		case TYPE_CONVEYORSOLIDRIGHT:
-			result = new SolidThing(x,y,width, height, sprites);
-			break;
-		case TYPE_D:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new Box(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_DEATHDOWN:
 			result = new SolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_DEATHLEFT:
 			result = new SolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_DEATHRIGHT:
 			result = new SolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_DEATHUP:
 			result = new SolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_EGG:
 			result = new Egg(x,y,width, height, sprites);
 			break;
 		case TYPE_FASTSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new FastSolid(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_FULLFUEL:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Item(x,y,width, height, sprites);
+			static_cast<Item *>(result)->setType(TYPE_FULLFUEL);
 			break;
 		case TYPE_GEM:
 			result = new Collectable(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_GOLD1:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Gold(x,y,width, height, sprites);
+			static_cast<Gold *>(result)->setValue(100);
 			break;
 		case TYPE_GOLD2:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Gold(x,y,width, height, sprites);
+			static_cast<Gold *>(result)->setValue(250);
 			break;
 		case TYPE_GOLD3:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Gold(x,y,width, height, sprites);
+			static_cast<Gold *>(result)->setValue(500);
 			break;
 		case TYPE_GOLD4:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Gold(x,y,width, height, sprites);
+			static_cast<Gold *>(result)->setValue(1000);
 			break;
 		case TYPE_GOLDSWITCH:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_GOLDSWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_GOLD_V);
+			
 			break;
 		case TYPE_GREENTELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_HALFFUEL:
-			result = new Collectable(x,y,width, height, sprites);
-			break;
-		case TYPE_HARDERSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new Item(x,y,width, height, sprites);
+			static_cast<Item *>(result)->setType(TYPE_HALFFUEL);
 			break;
 		case TYPE_HBLUESWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_BLUE_H);
+			
 			break;
 		case TYPE_HGOLDSWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_GOLD_H);
+			
 			break;
 		case TYPE_HREDSWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_RED_H);
+			
 			break;
 		case TYPE_HUNTER:
 			result = new Predator(x,y,width, height, sprites);
 			break;
-		case TYPE_ICESOLID:
-			result = new SolidThing(x,y,width, height, sprites);
-			break;
 		case TYPE_INVINCIBILITY:
-			result = new Collectable(x,y,width, height, sprites);
-			break;
-		case TYPE_L:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new Item(x,y,width, height, sprites);
+			static_cast<Item *>(result)->setType(TYPE_INVINCIBILITY);
 			break;
 		case TYPE_LADDER:
 			result = new Ladder(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_LADDERUP:
 			result = new Ladder(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_LADDERDOWN:
 			result = new Ladder(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_MINE:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_MISSILE:
 			result = new Spring(x,y,width, height, sprites);
-			break;
-		case TYPE_MOSSSOLID:
-			break;
-		case TYPE_NONPSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
 			break;
 		case TYPE_PINWHEEL:
 			result = new Pinwheel(x,y,width, height, sprites);
 			break;
 		case TYPE_PURPLETELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
-			break;
-		case TYPE_R:
-			result = new SolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_REDSWITCHSOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new SwitchSolid(x,y,width, height, sprites);
+			static_cast<SwitchSolid *>(result)->bindSwitch(SWITCH_RED_V);
+			
 			break;
 		case TYPE_ROBOT:
 			result = new Robot(x,y,width, height, sprites);
-			break;
-		case TYPE_SOLID:
-			result = new SolidThing(x,y,width, height, sprites);
 			break;
 		case TYPE_SPRING:
 			result = new Spring(x,y,width, height, sprites);
 			break;
 		case TYPE_TIMER:
-			result = new Collectable(x,y,width, height, sprites);
-			break;
-		case TYPE_U:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new Item(x,y,width, height, sprites);
+			static_cast<Item *>(result)->setType(TYPE_TIMER);
 			break;
 		case TYPE_YELLOWTELEPORTER:
 			result = new NonSolidThing(x,y,width, height, sprites);
+			
 			break;
 		case TYPE_DOOR:
 			result = new Door(x,y,width, height, sprites);

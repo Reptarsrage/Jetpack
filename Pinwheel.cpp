@@ -1,7 +1,6 @@
 #include "Pinwheel.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_PINWHEEL1;
 const float SPEED = 2.f;
 const float EPSILON = 0.1f;
 
@@ -26,6 +25,7 @@ void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	on_ladder = on_ground = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
 	type = TYPE_PINWHEEL;
+	def_sprite = SPRITE_PINWHEEL1;
 }
 
 Pinwheel::~Pinwheel(){
@@ -109,7 +109,7 @@ float Pinwheel::getIntendedX() {
 }
 
 void Pinwheel::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

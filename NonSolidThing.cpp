@@ -18,10 +18,8 @@ NonSolidThing::NonSolidThing(const Rectangle r, const Sprites *s){
 void NonSolidThing::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
-	name = "NonSolidThing";
 	sprites = s;
-	type = TYPE_PILLAR;
-	def_sprite = SPRITE_PILLAR;
+	setInfo(TYPE_PILLAR, SPRITE_PILLAR, "NonSolidThing");
 }
 
 NonSolidThing::~NonSolidThing(){
@@ -30,6 +28,16 @@ NonSolidThing::~NonSolidThing(){
 
 const char *NonSolidThing::ToString() const{
 	return name;
+}
+
+void NonSolidThing::setInfo(int code, int sprite, char * n_name){
+	assert(code >= 0);
+	assert(code < TYPE_COUNT);
+	assert(code >= 0);
+	assert(code < SPRITE_COUNT);
+	type = code;
+	def_sprite = sprite;
+	name = n_name;
 }
 
 void NonSolidThing::draw(){

@@ -56,7 +56,7 @@ Editor::Editor(	float			x,
 
 	// curser
 	curser = new Rectangle(left, top, row_w, col_h);
-	menu = new Rectangle(left, bottom, bounds->width, (TYPE_COUNT / NUM_COLS)*col_h);
+	menu = new Rectangle(left, bottom, bounds->width, ((TYPE_COUNT / NUM_COLS) + 1)*col_h);
 	menu_items = NULL;
 	prev_curser = Rectangle(left, top, row_w, col_h);
 	frame = FRAME_SKIP;
@@ -100,6 +100,7 @@ void Editor::draw()
 					
 					menu_items[item_count] = getThingFromCode(item_count, menu_ptr.position_x, menu_ptr.position_y,
 															  row_w, col_h, m_UI->sprites);
+					printf("added menu item %d, %s.\n", item_count, menu_items[item_count]->ToString());
 					item_count++;
 					menu_ptr.position_x += row_w;
 				}
@@ -287,7 +288,7 @@ void Editor::placeThing(){
 void Editor::chooseThing(){
 	assert(choosing);
 	
-	int row = (curser->position_y - menu->position_y + col_h) / col_h;
+	int row = (curser->position_y - (menu->bottom() + col_h)) / col_h;
 	int col = (curser->position_x - menu->position_x) / row_w;
 	int special_case = 0;
 	if (col + row*NUM_COLS >= TYPE_DOOR)

@@ -24,10 +24,6 @@ public:
 public:
 	bool is_solid,
 		 is_collectable;
-
-private:
-	/* Which sprite to use to draw this thing */
-	GLuint def_sprite;
 };
 
 #endif // STATIONARY_THING_H_

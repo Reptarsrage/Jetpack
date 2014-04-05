@@ -37,6 +37,30 @@
     <Filter Include="Source Files\Things\Baddies">
       <UniqueIdentifier>{db0230c8-a35c-4ac1-a247-a28bdb2cfe1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Things\Solid Things">
+      <UniqueIdentifier>{a58b94d6-56b0-438d-902b-ac9170ef06e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Things\Non Solid Things">
+      <UniqueIdentifier>{d9b07b5b-b755-40a8-86b6-a53153022b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Things\Collectables">
+      <UniqueIdentifier>{c1c8b865-4272-4bc4-9b2c-9321fe615e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Things\Special Things">
+      <UniqueIdentifier>{61303758-d4fc-443b-955d-3920e1e6be85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Things\Collectables">
+      <UniqueIdentifier>{08824337-7753-4606-b5f3-5f175de55324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Things\Solid Things">
+      <UniqueIdentifier>{5c78a7fa-0ab3-4eb6-b592-0928d9535dc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Things\Non Solid Things">
+      <UniqueIdentifier>{8ddc3c8f-f646-4ede-80fe-ea27984a8ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Things\Special Things">
+      <UniqueIdentifier>{8b6ad669-fb98-4449-a5ff-4bfb52a61432}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jetpack_main.cpp">
@@ -51,29 +75,11 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Hero.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
     <ClCompile Include="paintView.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="jetpackUI.cpp">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Ladder.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
-    <ClCompile Include="SolidThing.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
-    <ClCompile Include="NonSolidThing.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
-    <ClCompile Include="Collectable.cpp">
-      <Filter>Source Files\Things</Filter>
-    </ClCompile>
-    <ClCompile Include="Door.cpp">
-      <Filter>Source Files\Things</Filter>
     </ClCompile>
     <ClCompile Include="Pinwheel.cpp">
       <Filter>Source Files\Things\Baddies</Filter>
@@ -99,6 +105,45 @@
     <ClCompile Include="fileio.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
+    <ClCompile Include="SolidThing.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files\Things\Special Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Source Files\Things\Special Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder.cpp">
+      <Filter>Source Files\Things\Special Things</Filter>
+    </ClCompile>
+    <ClCompile Include="NonSolidThing.cpp">
+      <Filter>Source Files\Things\Non Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectable.cpp">
+      <Filter>Source Files\Things\Collectables</Filter>
+    </ClCompile>
+    <ClCompile Include="Gold.cpp">
+      <Filter>Source Files\Things\Collectables</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\Things\Collectables</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="FastSolid.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="WoodSolid.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickSolid.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="SwitchSolid.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
@@ -113,19 +158,7 @@
     <ClInclude Include="MovingThing.h">
       <Filter>Header Files\Things</Filter>
     </ClInclude>
-    <ClInclude Include="NonSolidThing.h">
-      <Filter>Header Files\Things</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidThing.h">
-      <Filter>Header Files\Things</Filter>
-    </ClInclude>
     <ClInclude Include="StationaryThing.h">
-      <Filter>Header Files\Things</Filter>
-    </ClInclude>
-    <ClInclude Include="Collectable.h">
-      <Filter>Header Files\Things</Filter>
-    </ClInclude>
-    <ClInclude Include="Ladder.h">
       <Filter>Header Files\Things</Filter>
     </ClInclude>
     <ClInclude Include="jetpackUI.h">
@@ -133,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="paintView.h">
       <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Hero.h">
-      <Filter>Header Files\Things</Filter>
     </ClInclude>
     <ClInclude Include="Sprites.h">
       <Filter>Header Files\Util</Filter>
@@ -148,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="Pinwheel.h">
       <Filter>Header Files\Things\Baddies</Filter>
-    </ClInclude>
-    <ClInclude Include="Door.h">
-      <Filter>Header Files\Things</Filter>
     </ClInclude>
     <ClInclude Include="Robot.h">
       <Filter>Header Files\Things\Baddies</Filter>
@@ -172,6 +199,45 @@
     </ClInclude>
     <ClInclude Include="fileio.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Header Files\Things\Special Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Header Files\Things\Special Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.h">
+      <Filter>Header Files\Things\Special Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Header Files\Things\Collectables</Filter>
+    </ClInclude>
+    <ClInclude Include="NonSolidThing.h">
+      <Filter>Header Files\Things\Non Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidThing.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Gold.h">
+      <Filter>Header Files\Things\Collectables</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\Things\Collectables</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="FastSolid.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodSolid.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickSolid.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="SwitchSolid.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

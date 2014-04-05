@@ -27,11 +27,6 @@ public:
 
 	/* Draws this thing */
 	virtual void draw();
-
-// Attributes
-private:
-	/* Which sprite to use to draw this thing */
-	GLuint def_sprite;
 };
 
 #endif // LADDER_H_

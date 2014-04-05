@@ -1,7 +1,6 @@
 #include "Predator.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_HUNTERV1;
 const float SPEED = 0.175f;
 
 Predator::Predator(float x, float y, float w, float h, const Sprites *s){
@@ -23,6 +22,7 @@ void Predator::Init(const Rectangle r, const Sprites *s) {
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	type = TYPE_HUNTER;
 	hero_x = hero_y = 0.f;
+	def_sprite = SPRITE_HUNTERV1;
 }
 
 Predator::~Predator(){
@@ -55,7 +55,7 @@ float Predator::getIntendedX() {
 }
 
 void Predator::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -30,10 +30,8 @@ public:
 	/* Draws this thing */
 	virtual void draw();
 
-// Attributes
-private:
-	/* Which sprite to use to draw this thing */
-	GLuint def_sprite;
+	/* sets the sprite to draw */
+	virtual void setInfo(int code, int sprite, char * name);
 };
 
 #endif // NONSOLID_THING_H_

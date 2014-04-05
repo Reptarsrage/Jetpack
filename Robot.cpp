@@ -1,7 +1,6 @@
 #include "Robot.h"
 #include "Enums.h"
 
-const int DEFAULT_SPRITE = SPRITE_ROBOLEFT1;
 const float SPEED = 1.8f;
 const float EPSILON = 1.f;
 const float HERO_WIDTH_RATIO = .6f;
@@ -26,6 +25,7 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	on_top_of_ladder = on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	hero_x = hero_y = 0;
 	type = TYPE_ROBOT;
+	def_sprite = SPRITE_ROBOLEFT1;
 }
 
 Robot::~Robot(){
@@ -190,7 +190,7 @@ float Robot::getIntendedX() {
 }
 
 void Robot::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(DEFAULT_SPRITE));
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
