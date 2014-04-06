@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Fast Solid
 */
 
 #ifndef FAST_SOLID_THING_H_
@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * A solid thing which the hero can phase through quickly
  */
 class FastSolid : public SolidThing {
 // Functions
@@ -20,9 +20,10 @@ public:
 	FastSolid(float x, float y, float w, float h, const Sprites *s);
 	FastSolid(const Rectangle r, const Sprites *s);
 	~FastSolid();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
+		
+private:
+	/* initializes this thing */
+	void Init(const Rectangle r, const Sprites *s);
 };
 
 #endif // FAST_SOLID_THING_H_

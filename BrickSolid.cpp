@@ -24,6 +24,8 @@ void BrickSolid::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_BRICKSOLID;
 	def_sprite = SPRITE_SOLID;
 	attribute = -1;
+	is_solid = true;
+	is_collectable = false;
 }
 
 BrickSolid::~BrickSolid(){

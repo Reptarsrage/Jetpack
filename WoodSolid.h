@@ -20,15 +20,16 @@ public:
 	WoodSolid(float x, float y, float w, float h, const Sprites *s);
 	WoodSolid(const Rectangle r, const Sprites *s);
 	~WoodSolid();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Sets an additional property of the block */
 	virtual void setAttribute(int code);
 
 	/* Draws this thing */
 	virtual void draw();
+		
+private:
+	/* initializes this thing */
+	void Init(const Rectangle r, const Sprites *s);
 
 private:
 	int attribute;

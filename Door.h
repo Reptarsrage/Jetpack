@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Door
 */
 
 #ifndef DOOR_H_
@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * Base class for the door, whch acts as a goal in the game.
  */
 class Door : public StationaryThing {
 // Functions
@@ -20,9 +20,6 @@ public:
 	Door(float x, float y, float w, float h, const Sprites *s);
 	Door(const Rectangle r, const Sprites *s);
 	~Door();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -35,9 +32,12 @@ public:
 
 	/* Draws this thing */
 	virtual bool IsOpen() { return is_open; }
+	
+private:
+	/* initializes this door */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
-
 private:
 	bool is_open;
 };

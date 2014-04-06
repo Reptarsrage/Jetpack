@@ -18,14 +18,18 @@ Teleporter::Teleporter(const Rectangle r, const Sprites *s){
 void Teleporter::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
+	draw_bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "Teleporter";
 	sprites = s;
 	type = TYPE_PURPLETELEPORTER;
 	def_sprite = SPRITE_PURPLETELEPORTER;
+	is_solid = true;
+	is_collectable = false;
 }
 
 Teleporter::~Teleporter(){
 	delete bounds;
+	delete draw_bounds;
 }
 
 void Teleporter::bindTeleporter(int code) {
@@ -41,4 +45,19 @@ void Teleporter::bindTeleporter(int code) {
 		type = TYPE_YELLOWTELEPORTER;
 		def_sprite = SPRITE_YELLOWTELEPORTER;
 	}
+}
+
+void Teleporter::draw() {
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+	draw_bounds->draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Teleporter::SetBounds(float x, float y, float width, float height){
+	if (bounds) 
+		delete bounds; 
+	if(draw_bounds)
+		delete draw_bounds;
+	bounds = new Rectangle(x, y , width, height * 0.1f);
+	draw_bounds = new Rectangle(x, y, width, height);
 }

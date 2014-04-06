@@ -22,6 +22,8 @@ void Ladder::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_LADDER;
 	sprites = s;
 	def_sprite = SPRITE_LADDER;
+	is_solid = false;
+	is_collectable = false;
 }
 
 Ladder::~Ladder(){

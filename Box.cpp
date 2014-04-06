@@ -22,6 +22,8 @@ void Box::Init(const Rectangle r, const Sprites *s) {
 	sprites = s;
 	type = TYPE_BOX;
 	def_sprite = SPRITE_BOX;
+	is_solid = true;
+	is_collectable = false;
 }
 
 Box::~Box(){

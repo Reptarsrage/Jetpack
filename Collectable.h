@@ -20,10 +20,7 @@ public:
 	Collectable(float x, float y, float w, float h, const Sprites *s);
 	Collectable(const Rectangle r, const Sprites *s);
 	~Collectable();
-	Collectable() {}
-
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
+	Collectable() {}	// default constructure for inherited items
 
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -36,6 +33,10 @@ public:
 
 	/* Draws this thing */
 	virtual void draw();
+	
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 protected:

@@ -22,6 +22,8 @@ void Switch::Init(const Rectangle r, const Sprites *s) {
 	name = "Switch";
 	def_sprite = SPRITE_REDSWITCH;
 	type = TYPE_REDSWITCH;
+	is_solid = false;
+	is_collectable = false;
 }
 
 Switch::~Switch(){

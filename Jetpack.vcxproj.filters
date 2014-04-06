@@ -150,14 +150,14 @@
     <ClCompile Include="Deathsicle.cpp">
       <Filter>Source Files\Things\Baddies</Filter>
     </ClCompile>
-    <ClCompile Include="Mine.cpp">
-      <Filter>Header Files\Things\Baddies</Filter>
-    </ClCompile>
     <ClCompile Include="Switch.cpp">
       <Filter>Source Files\Things\Special Things</Filter>
     </ClCompile>
     <ClCompile Include="Teleporter.cpp">
       <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Mine.cpp">
+      <Filter>Source Files\Things\Baddies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

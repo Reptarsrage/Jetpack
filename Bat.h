@@ -22,7 +22,6 @@ public:
 	~Bat();
 	Bat(float x, float y, float w, float h, const Sprites *s);
 	Bat(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -45,8 +44,11 @@ private:
 
 	/* changes the direction ever so slightly */
 	void randomize_dir();
+	
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
-	// Attributes
+// Attributes
 private:
 	
 	float velocity_x,	// velocity in the x-dir

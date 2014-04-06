@@ -21,6 +21,8 @@ void Gold::Init(const Rectangle r, const Sprites *s) {
 	sprites = s;
 	collected = false;
 	setValue(0);
+	is_solid = false;
+	is_collectable = true;
 }
 
 Gold::~Gold(){

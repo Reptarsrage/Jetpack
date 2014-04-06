@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Robot Baddie
 */
 
 #ifndef ROBOT_H_
@@ -13,6 +13,8 @@ class Sprites;
 
 /*
  * Position and properties of the non-player controlled Robot baddie. 
+ * The robot is the only baddie capable of climbing ladders.
+ * It hunts the player.
  */
 class Robot : public MovingThing {
 
@@ -22,7 +24,6 @@ public:
 	~Robot();
 	Robot(float x, float y, float w, float h, const Sprites *s);
 	Robot(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Moves this thing by one */
 	virtual void move(float x, float y);
@@ -50,6 +51,10 @@ public:
 
 	/*  Sets the x-velocity to match the direction to hunt the hero */
 	virtual void SetDir();
+
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 private:

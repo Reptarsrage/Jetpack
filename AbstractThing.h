@@ -18,20 +18,20 @@ class AbstractThing {
 // Functions
 public:
 	/* Returns a rectangle representing the bounds of this object. */
-	const Rectangle Bounds() const {return *bounds; }
+	virtual const Rectangle Bounds() const {return *bounds; }
 	
 	/* Returns true if this thing's bounds conflict with the other thing's bounds. */
-	bool Overlaps(const AbstractThing *other) const { return bounds->Overlaps(other->Bounds()); }
+	virtual bool Overlaps(const AbstractThing *other) const { return bounds->Overlaps(other->Bounds()); }
 	
 	/* Returns true if this thing's bounds conflict with the rectangle. */
-	bool Overlaps(const Rectangle other) const { return bounds->Overlaps(other); }
+	virtual bool Overlaps(const Rectangle other) const { return bounds->Overlaps(other); }
 
 	/* Sets the bounds for this thing. */
-	void SetBounds(float x, float y, float width, float height) 
+	virtual void SetBounds(float x, float y, float width, float height) 
 		{ if (bounds) delete bounds; bounds = new Rectangle(x, y, width, height); }
 
 	/* returns a descriptive integer to what this thing is */
-	int getType() { return type; }
+	virtual int getType() const { return type; }
 
 // Pure Virtual Functions
 public:

@@ -24,6 +24,8 @@ void WoodSolid::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_WOODSOLID;
 	def_sprite = SPRITE_HARDERSOLID;
 	attribute = -1;
+	is_solid = true;
+	is_collectable = false;
 }
 
 WoodSolid::~WoodSolid(){

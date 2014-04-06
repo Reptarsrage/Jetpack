@@ -20,6 +20,9 @@
 #include "Spring.h"
 #include "Egg.h"
 #include "Robot.h"
+#include "SwitchSolid.h"
+#include "Teleporter.h"
+
 
 const int NUM_ROWS = 16;
 const int NUM_COLS = 26;
@@ -121,12 +124,9 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 		switch (thing->getType()){
 			case TYPE_IVY:
 			case TYPE_PILLAR:
-			case TYPE_GREENTELEPORTER:
-			case TYPE_YELLOWTELEPORTER:
 			case TYPE_GOLDSWITCH:
 			case TYPE_REDSWITCH:
 			case TYPE_BLUESWITCH:
-			case TYPE_PURPLETELEPORTER:
 				nonsolid_things->push_back(reinterpret_cast<NonSolidThing *>(thing));
 				break;
 			case TYPE_BRICKSOLID:
@@ -156,14 +156,13 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 			case TYPE_FASTSOLID:
 			case TYPE_BLUESWITCHSOLID:
 			case TYPE_BOX:
-			case TYPE_DEATHDOWN:
-			case TYPE_DEATHLEFT:
-			case TYPE_DEATHRIGHT:
-			case TYPE_DEATHUP:
 			case TYPE_HBLUESWITCHSOLID:
 			case TYPE_HGOLDSWITCHSOLID:
 			case TYPE_HREDSWITCHSOLID:
 			case TYPE_REDSWITCHSOLID:
+			case TYPE_GREENTELEPORTER:
+			case TYPE_YELLOWTELEPORTER:
+			case TYPE_PURPLETELEPORTER:
 				solid_things->push_back(reinterpret_cast<SolidThing *>(thing));
 				break;
 			case TYPE_SPRING:
@@ -174,6 +173,10 @@ void PaintView::loadLevel(std::list<AbstractThing *> level) {
 			case TYPE_MISSILE:
 			case TYPE_PINWHEEL:
 			case TYPE_ROBOT:
+			case TYPE_DEATHDOWN:
+			case TYPE_DEATHLEFT:
+			case TYPE_DEATHRIGHT:
+			case TYPE_DEATHUP:
 				dyn_things->push_back(reinterpret_cast<MovingThing *>(thing));
 				break;
 			case TYPE_GEM:
@@ -409,14 +412,14 @@ void PaintView::advanceHeroPosition(float delta_x, float delta_y) const {
 
 
 	for (StationaryThing *s : *solid_things){
-		if (s->Overlaps(new_hero_bounds_x)) {
+		if (s->is_solid && s->Overlaps(new_hero_bounds_x)) {
 			const Rectangle s_bounds = s->Bounds();
 			if (hero_bounds.right() <= s_bounds.left())
 				delta_x = s_bounds.left() - hero_bounds.right();
 			else
 				delta_x = s_bounds.right() - hero_bounds.left();
 		}
-		if (s->Overlaps(new_hero_bounds_y)) {
+		if (s->is_solid && s->Overlaps(new_hero_bounds_y)) {
 			const Rectangle s_bounds = s->Bounds();
 			if (hero_bounds.top() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - hero_bounds.top();
@@ -475,7 +478,7 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 	if (thing->getType() != TYPE_HUNTER) {
 		for (StationaryThing *s : *solid_things){
 			const Rectangle s_bounds = s->Bounds();
-			if (s->Overlaps(new_thing_bounds_x)) {
+			if (s->is_solid && s->Overlaps(new_thing_bounds_x)) {
 				if (thing_bounds.right() <= s_bounds.left()) {
 					delta_x = s_bounds.left() - thing_bounds.right();
 					thing->hit_wall_right = true;
@@ -484,7 +487,7 @@ void PaintView::advancePosition(MovingThing *thing, float delta_x, float delta_y
 					thing->hit_wall_left = true;
 				}
 			}
-			if (s->Overlaps(new_thing_bounds_y)) {
+			if (s->is_solid && s->Overlaps(new_thing_bounds_y)) {
 				if (thing_bounds.top() <= s_bounds.bottom()) {
 					delta_y = s_bounds.bottom() - thing_bounds.top();
 					thing->hit_wall_bottom = true;
@@ -556,6 +559,89 @@ void PaintView::draw()
 	glDisable2D();
 }
 
+void PaintView::handleDownPress() {
+	
+	if (hero->on_ground) {
+		const Rectangle h = hero->Bounds();
+		Rectangle b = Rectangle(h.position_x, h.position_y + max_velocity, h.width, h.height);
+		// teleporter?
+		for (StationaryThing *thing : *solid_things) {
+			if (thing->Overlaps(b)) {
+				int code = thing->getType();
+				if (code == TYPE_GREENTELEPORTER) {
+					printf("green teleporter activated.\n");
+					teleport(reinterpret_cast<Teleporter *>(thing));
+					break;
+				} else if (code == TYPE_YELLOWTELEPORTER) {
+					printf("yellow teleporter activated.\n");
+					teleport(reinterpret_cast<Teleporter *>(thing));
+					break;
+				} else if (code == TYPE_PURPLETELEPORTER) {
+					printf("purple teleporter activated.\n");
+					teleport(reinterpret_cast<Teleporter *>(thing));
+					break;
+				}
+			}
+		}
+	}
+	for (StationaryThing *thing : *nonsolid_things) {
+		if (thing->Overlaps(hero)) {
+			// switch?
+			int code = thing->getType();
+			if (code == TYPE_REDSWITCH) {
+				printf("red switch pressed.\n");
+				switchSolids(code);
+				break;
+			} else if (code == TYPE_BLUESWITCH) {
+				printf("blue switch pressed.\n");
+				switchSolids(code);
+				break;
+			} else if (code == TYPE_GOLDSWITCH) {
+				printf("gold switch pressed.\n");
+				switchSolids(code);
+				break;
+			}
+		}
+	}
+}
+
+void PaintView::teleport(const Teleporter *src) {
+	int ran_tele = m_rand() % solid_things->size();
+	while (true){
+		for (StationaryThing *thing : *solid_things) {
+			if (thing->getType() == src->getType() && thing != src) {
+				if (ran_tele == 0){
+					const Rectangle b = hero->Bounds();
+					const Rectangle tb = thing->Bounds();
+					hero->SetBounds(tb.position_x, tb.position_y - 0.1f*col_h, b.width, b.height);
+					return;
+				}
+				ran_tele--;
+			}
+		}
+	}
+}
+
+void PaintView::switchSolids(int code) {
+	int codeh, codev;
+	if (code == TYPE_REDSWITCH) {
+		codeh = TYPE_HREDSWITCHSOLID;
+		codev = TYPE_REDSWITCHSOLID;
+	} else if (code == TYPE_BLUESWITCH) {
+		codeh = TYPE_HBLUESWITCHSOLID;
+		codev = TYPE_BLUESWITCHSOLID;
+	} else if (code == TYPE_GOLDSWITCH) {
+		codeh = TYPE_HGOLDSWITCHSOLID;
+		codev = TYPE_GOLDSWITCHSOLID;
+	}
+	for (StationaryThing *thing : *solid_things) {
+		int type = thing->getType();
+		if (type == codeh || type == codev) {
+			reinterpret_cast<SwitchSolid *>(thing)->Switch();
+		}
+	}
+}
+
 int PaintView::handle(int event)
 {
 	if (Fl_Gl_Window::handle(event) != 0)
@@ -578,6 +664,7 @@ int PaintView::handle(int event)
 					hold_down = false;
 					break;
 				case FL_Down:
+					handleDownPress();
 					hold_down = true;
 					hold_up = false;
 					break;

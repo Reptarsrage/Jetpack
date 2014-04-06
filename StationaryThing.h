@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Stationary Thing
 */
 
 #ifndef STATIONARY_THING_H_
@@ -17,13 +17,14 @@ class Sprites;
 class StationaryThing : public AbstractThing{
 // Functions
 public:
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s) = 0;
+
+	/* Returns the name of this thing. */
+	virtual const char *ToString() const { return name; }
 
 // Attributes
 public:
-	bool is_solid,
-		 is_collectable;
+	bool is_solid,			// is this thing solid?
+		 is_collectable;	// is this thing collectable by the hero?
 };
 
 #endif // STATIONARY_THING_H_

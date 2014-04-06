@@ -14,7 +14,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things moving in the game, i.e. baddies.
+ * Base (abstract) class for all things moving in the game, i.e. baddies.
  */
 class MovingThing : public AbstractThing{
 
@@ -49,7 +49,7 @@ public:
 		  hit_wall_left,
 		  hit_wall_right;
 	
-	float hero_x,
+	float hero_x,			// hero's position in the game (not relative to this)
 		  hero_y;
 
 protected:

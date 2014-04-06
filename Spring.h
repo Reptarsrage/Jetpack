@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Spring baddie
 */
 
 #ifndef SPRING_H_
@@ -12,7 +12,9 @@ class Rectangle;
 class Sprites;
 
 /*
- * Position and properties of the non-player controlled Spring baddie. 
+ * Position and properties of the non-player controlled Spring baddie.
+ * The spring baddie moves up until it hits the veiling, then moves down 
+ * until it hits the floor, then moves up.. and so on.
  */
 class Spring : public MovingThing {
 
@@ -22,7 +24,6 @@ public:
 	~Spring();
 	Spring(float x, float y, float w, float h, const Sprites *s);
 	Spring(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -38,6 +39,10 @@ public:
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
+
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 private:

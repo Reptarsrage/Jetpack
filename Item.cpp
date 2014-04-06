@@ -23,6 +23,8 @@ void Item::Init(const Rectangle r, const Sprites *s) {
 	collected = false;
 	point_value = 0;
 	setType(TYPE_FULLFUEL);
+	is_solid = false;
+	is_collectable = true;
 }
 
 Item::~Item(){

@@ -26,6 +26,7 @@ class JetpackUI;
 class Collectable;
 class Door;
 class AbstractThing;
+class Teleporter;
 
 /* Controls the animation and drawing */
 class PaintView : public Fl_Gl_Window
@@ -49,6 +50,15 @@ public:
 
 private:
 	
+	/* teleports hero */
+	void teleport(const Teleporter *src);
+
+	/* switches switchblocks on/off */
+	void switchSolids(int code);
+
+	/* Handles what to do whenever the down key is pressed, not held */
+	void handleDownPress();
+
 	/* Helper function to test if hero is touching a ladder */
 	bool heroTouchingLadder();
 
@@ -98,7 +108,8 @@ private:
 	std::vector<StationaryThing *> *nonsolid_things;    // Holds all non-solid, un-interactable things
 	std::vector<StationaryThing *> *special_things;     // Holds all non-solid, interactable things (ladders, teleporters)
 	std::vector<Collectable *> *collectable_things; // Holds all collectable things
-	std::vector<MovingThing *> *dyn_things;				// Holds all moving things
+	std::vector<MovingThing *> *dyn_things;				// Holds all baddies
+
 	
 	int		gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)

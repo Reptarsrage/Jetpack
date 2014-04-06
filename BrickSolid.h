@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * A brick block
 */
 
 #ifndef BRICK_SOLID_THING_H_
@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * Solid brick object.
  */
 class BrickSolid : public SolidThing {
 // Functions
@@ -20,15 +20,16 @@ public:
 	BrickSolid(float x, float y, float w, float h, const Sprites *s);
 	BrickSolid(const Rectangle r, const Sprites *s);
 	~BrickSolid();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Sets an additional property of the block */
 	virtual void setAttribute(int code);
 
 	/* Draws this thing */
 	virtual void draw();
+		
+private:
+	/* initializes this thing */
+	void Init(const Rectangle r, const Sprites *s);
 
 private:
 	int attribute;

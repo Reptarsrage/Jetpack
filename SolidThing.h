@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Solid Thing
 */
 
 #ifndef SOLID_THING_H_
@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * Base class for all solid things which do not move in the game, i.e. blocks.
  */
 class SolidThing : public StationaryThing {
 // Functions
@@ -22,9 +22,6 @@ public:
 	SolidThing();
 	~SolidThing();
 
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
-
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
 
@@ -33,6 +30,10 @@ public:
 
 	/* Draws this thing */
 	virtual void draw();
+		
+private:
+	/* initializes this thing */
+	void Init(const Rectangle r, const Sprites *s);
 
 private:
 	int attribute;

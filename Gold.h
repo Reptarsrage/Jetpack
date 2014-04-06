@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, GOLDs.
+ * Base class for all gol in the game, which have different values and sprites.
  */
 class Gold : public Collectable{
 // Functions
@@ -20,9 +20,6 @@ public:
 	Gold(float x, float y, float w, float h, const Sprites *s);
 	Gold(const Rectangle r, const Sprites *s);
 	~Gold();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -36,6 +33,11 @@ public:
 
 	/* Collects this thing, and returns the points for doing so. */
 	virtual int Collect();
+	
+private:
+	/* initializes this gold */
+	void Init(const Rectangle r, const Sprites *s);
+
 };
 
 #endif // GOLD_H_

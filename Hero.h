@@ -24,7 +24,6 @@ public:
 	~Hero();
 	Hero(float x, float y, float w, float h, const Sprites *s);
 	Hero(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -40,6 +39,10 @@ public:
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float delta_y);
+	
+private:
+	/* initializes this hero */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 public:
@@ -49,8 +52,8 @@ public:
 		  force_y,			// force in y-dir
 		  mass,				// Mass of hero
 		  velocity_jump,	// veloxity of jump
-		  on_ground,
-		  on_ladder;
+		  on_ground,		// hero currently touching the ground?
+		  on_ladder;		// hero currently climbing?
 };
 
 

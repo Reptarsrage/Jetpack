@@ -22,7 +22,6 @@ public:
 	~Egg();
 	Egg(float x, float y, float w, float h, const Sprites *s);
 	Egg(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Moves this thing by one */
 	virtual void move(float x, float y);
@@ -44,6 +43,10 @@ public:
 
 	/*  Sets whether this moving thing is on a solid surface */
 	virtual void Grounded(bool b);
+	
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 private:

@@ -23,6 +23,8 @@ void Collectable::Init(const Rectangle r, const Sprites *s) {
 	collected = false;
 	type = TYPE_GEM;
 	def_sprite = SPRITE_GEM;
+	is_solid = false;
+	is_collectable = true;
 }
 
 Collectable::~Collectable(){

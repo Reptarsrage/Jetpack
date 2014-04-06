@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * A useful Item
 */
 
 #ifndef ITEM_H_
@@ -12,7 +12,7 @@ class Rectangle;
 class Sprites;
 
 /*
- * Base class for all things which do not move in the game, i.e. blocks, Items.
+ * Base class for all things which help the hero, invincibility, fuel, ect.
  */
 class Item : public Collectable{
 // Functions
@@ -20,9 +20,6 @@ public:
 	Item(float x, float y, float w, float h, const Sprites *s);
 	Item(const Rectangle r, const Sprites *s);
 	~Item();
-	
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -32,6 +29,11 @@ public:
 
 	/* Collects this thing, and returns the points for doing so. */
 	virtual int Collect();
+
+private:
+	/* initializes this item */
+	void Init(const Rectangle r, const Sprites *s);
+
 };
 
 #endif // ITEM_H_

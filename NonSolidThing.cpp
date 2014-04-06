@@ -20,6 +20,8 @@ void NonSolidThing::Init(const Rectangle r, const Sprites *s) {
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	sprites = s;
 	setInfo(TYPE_PILLAR, SPRITE_PILLAR, "NonSolidThing");
+	is_solid = false;
+	is_collectable = false;
 }
 
 NonSolidThing::~NonSolidThing(){

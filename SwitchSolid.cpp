@@ -22,6 +22,16 @@ void SwitchSolid::Init(const Rectangle r, const Sprites *s) {
 	sprites = s;
 	type = TYPE_REDSWITCHSOLID;
 	def_sprite = SPRITE_REDSWITCHSOLID;
+	is_solid = true;
+	is_collectable = false;
+}
+
+void SwitchSolid::Switch(){
+	if (is_solid) {
+		is_solid = false;
+	} else {
+		is_solid = true;
+	}
 }
 
 SwitchSolid::~SwitchSolid(){
@@ -29,9 +39,11 @@ SwitchSolid::~SwitchSolid(){
 }
 
 void SwitchSolid::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	if (is_solid) {
+		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+		bounds->draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 void SwitchSolid::bindSwitch(int code) {

@@ -27,6 +27,8 @@ void SolidThing::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_STONESOLID;
 	def_sprite = SPRITE_NONPSOLID;
 	attribute = -1;
+	is_solid = true;
+	is_collectable = false;
 }
 
 SolidThing::~SolidThing(){

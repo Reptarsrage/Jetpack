@@ -20,9 +20,6 @@ public:
 	NonSolidThing(float x, float y, float w, float h, const Sprites *s);
 	NonSolidThing(const Rectangle r, const Sprites *s);
 	~NonSolidThing();
-
-	/* Initialization for multiple cnstrs */
-	virtual void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -32,6 +29,11 @@ public:
 
 	/* sets the sprite to draw */
 	virtual void setInfo(int code, int sprite, char * name);
+	
+private:
+	/* initializes this thing */
+	void Init(const Rectangle r, const Sprites *s);
+
 };
 
 #endif // NONSOLID_THING_H_

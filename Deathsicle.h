@@ -22,7 +22,6 @@ public:
 	~Deathsicle();
 	Deathsicle(float x, float y, float w, float h, const Sprites *s);
 	Deathsicle(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -41,6 +40,11 @@ public:
 
 	/* sets the direction of the deathly Stalactite/Stalacmite */
 	virtual void setDir(int dir);
+	
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
+
 };
 
 

@@ -23,7 +23,6 @@ public:
 	~Missile();
 	Missile(float x, float y, float w, float h, const Sprites *s);
 	Missile(const Rectangle r, const Sprites *s);
-	void Init(const Rectangle r, const Sprites *s);
 	
 	/* Returns the name of this thing */
 	virtual const char *ToString() const;
@@ -39,6 +38,10 @@ public:
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
+
+private:
+	/* initializes this baddie */
+	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
 private:
