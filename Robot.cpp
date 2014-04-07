@@ -147,10 +147,6 @@ float Robot::applyGravity(float force_gravity, float max_velocity_grav) {
 	return velocity_y;
 }
 
-const char *Robot::ToString() const{
-	return name;
-}
-
 float Robot::getIntendedY() {
 	if (hit_wall_top && on_ladder) {
 		// We've reached the top of the ladder, move sideways
@@ -187,10 +183,4 @@ float Robot::getIntendedX() {
 		velocity_x *= -1;
 	}
 	return velocity_x;
-}
-
-void Robot::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

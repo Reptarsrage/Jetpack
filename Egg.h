@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Egg baddie
 */
 
 #ifndef EGG_H_
@@ -8,11 +8,9 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
- * Position and properties of the non-player controlled Egg baddie. 
+ * Position and properties of the non-player controlled Egg baddie.
+ * Moves left and right, gravity effects it, doesn't care where hero is.
  */
 class Egg : public MovingThing {
 
@@ -25,12 +23,6 @@ public:
 	
 	/* Moves this thing by one */
 	virtual void move(float x, float y);
-
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();

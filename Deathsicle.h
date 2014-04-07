@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Deathly spikes
 */
 
 #ifndef DEATHSICLE_H_
@@ -8,11 +8,9 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
- * Position and properties of the non-player controlled Deathsicle baddie. 
+ * Position and properties of Deathsicles, which are basically just spikes.
+ * These do not move.
  */
 class Deathsicle : public MovingThing {
 
@@ -20,14 +18,10 @@ class Deathsicle : public MovingThing {
 public:
 
 	~Deathsicle();
+	/* REMEMBER to call setDir() */
 	Deathsicle(float x, float y, float w, float h, const Sprites *s);
+	/* REMEMBER to call setDir() */
 	Deathsicle(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();
@@ -39,6 +33,7 @@ public:
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
 	/* sets the direction of the deathly Stalactite/Stalacmite */
+	/* this should always be called immediatetly after construction! */
 	virtual void setDir(int dir);
 	
 private:

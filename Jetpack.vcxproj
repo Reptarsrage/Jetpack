@@ -86,7 +86,7 @@
   <ItemGroup>
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Box.cpp" />
-    <ClCompile Include="Collectable.cpp" />
+    <ClCompile Include="Gem.cpp" />
     <ClCompile Include="Deathsicle.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Editor.cpp" />
@@ -98,16 +98,19 @@
     <ClCompile Include="BrickSolid.cpp" />
     <ClCompile Include="Mine.cpp" />
     <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="StoneSolid.cpp" />
     <ClCompile Include="Switch.cpp" />
     <ClCompile Include="SwitchSolid.cpp" />
     <ClCompile Include="Teleporter.cpp" />
     <ClCompile Include="WoodSolid.cpp" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="Deathsicle.h" />
     <ClInclude Include="FastSolid.h" />
     <ClInclude Include="BrickSolid.h" />
     <ClInclude Include="Mine.h" />
     <ClInclude Include="Missile.h" />
+    <ClInclude Include="StoneSolid.h" />
     <ClInclude Include="Switch.h" />
     <ClInclude Include="SwitchSolid.h" />
     <ClInclude Include="Teleporter.h" />
@@ -118,19 +121,18 @@
     <ClCompile Include="jetpack_main.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="NonSolidThing.cpp" />
-    <ClCompile Include="paintView.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Pinwheel.cpp" />
     <ClCompile Include="Predator.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Robot.cpp" />
-    <ClCompile Include="SolidThing.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractThing.h" />
     <ClInclude Include="Bat.h" />
-    <ClInclude Include="Collectable.h" />
+    <ClInclude Include="Gem.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Egg.h" />
@@ -144,7 +146,7 @@
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="MovingThing.h" />
     <ClInclude Include="NonSolidThing.h" />
-    <ClInclude Include="paintView.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Pinwheel.h" />
     <ClInclude Include="Predator.h" />
     <ClInclude Include="Rectangle.h" />

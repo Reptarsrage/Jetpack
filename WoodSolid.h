@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Base class for all things which do not move in the game, i.e. blocks, collectables.
  */
@@ -30,11 +27,6 @@ public:
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
-
-private:
-	int attribute;
-	GLuint attribute_sprite;
-	Rectangle * attribute_bounds;
 };
 
 #endif // WOOD_SOLID_THING_H_

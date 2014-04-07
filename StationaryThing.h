@@ -8,18 +8,18 @@
 
 #include "AbstractThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * Base class ( abstract) for all things which do not move in the game, i.e. blocks, collectables.
  */
 class StationaryThing : public AbstractThing{
 // Functions
 public:
-
-	/* Returns the name of this thing. */
-	virtual const char *ToString() const { return name; }
+	/* draws this thing */
+	virtual void draw() {
+		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+		bounds->draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
 // Attributes
 public:

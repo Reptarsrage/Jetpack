@@ -21,12 +21,6 @@ public:
 	Door(const Rectangle r, const Sprites *s);
 	~Door();
 
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-
-	/* Draws this thing */
-	virtual void draw();
-
 	/* Open the door */
 	virtual void Open();
 

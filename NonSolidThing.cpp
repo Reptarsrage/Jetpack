@@ -28,10 +28,6 @@ NonSolidThing::~NonSolidThing(){
 	delete bounds;
 }
 
-const char *NonSolidThing::ToString() const{
-	return name;
-}
-
 void NonSolidThing::setInfo(int code, int sprite, char * n_name){
 	assert(code >= 0);
 	assert(code < TYPE_COUNT);
@@ -40,10 +36,4 @@ void NonSolidThing::setInfo(int code, int sprite, char * n_name){
 	type = code;
 	def_sprite = sprite;
 	name = n_name;
-}
-
-void NonSolidThing::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -8,10 +8,6 @@
 #define MOVING_THING_H_
 
 #include "AbstractThing.h"
-#include "paintView.h"
-
-class Rectangle;
-class Sprites;
 
 /*
  * Base (abstract) class for all things moving in the game, i.e. baddies.
@@ -21,13 +17,15 @@ class MovingThing : public AbstractThing{
 // Functions
 public:
 	
-	/* Moves this thing by one */
+	/* Moves this thing by x and y */
 	virtual void move(float x, float y) { bounds->position_x += x;  bounds->position_y += y;}
 
 	/* Gets the intended y-dir change */
+	/* Expects updateHeroLocation to be called beforehand */
 	virtual float getIntendedY() = 0;
 
 	/* Gets the intended x-dir change */
+	/* Expects updateHeroLocation to be called beforehand */
 	virtual float getIntendedX() = 0;
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
@@ -41,6 +39,13 @@ public:
 
 	/*  Sets whether this moving thing can climb a ladder */
 	virtual void OnLadder(bool b, float ladder_x, float ladder_y) { on_ladder = b; }
+
+	/* draws this thing */
+	virtual void draw() {
+		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+		bounds->draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
 // Attributes
 public:

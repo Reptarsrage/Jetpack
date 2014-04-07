@@ -28,20 +28,10 @@ float Mine::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Mine::ToString() const{
-	return name;
-}
-
 float Mine::getIntendedY() {
 	return 0;
 }
 
 float Mine::getIntendedX() {
 	return 0;
-}
-
-void Mine::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

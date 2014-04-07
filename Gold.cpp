@@ -56,7 +56,3 @@ int Gold::Collect(){
 	bounds->width = 0;
 	return point_value;
 }
-
-const char *Gold::ToString() const{
-	return name;
-}

@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * A solid thing which the hero can phase through quickly
  */
@@ -20,7 +17,10 @@ public:
 	FastSolid(float x, float y, float w, float h, const Sprites *s);
 	FastSolid(const Rectangle r, const Sprites *s);
 	~FastSolid();
-		
+
+	// fastsolids can not have attributes 
+	virtual void setAttribute(int code) {}
+
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);

@@ -56,10 +56,6 @@ float Egg::applyGravity(float force_gravity, float max_velocity_grav) {
 	return velocity_y;
 }
 
-const char *Egg::ToString() const{
-	return name;
-}
-
 float Egg::getIntendedY() {
 	return velocity_y;
 }
@@ -79,10 +75,4 @@ float Egg::getIntendedX() {
 		velocity_x = -SPEED;
 	}
 	return velocity_x;
-}
-
-void Egg::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

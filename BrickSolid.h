@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Solid brick object.
  */

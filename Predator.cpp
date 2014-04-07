@@ -33,10 +33,6 @@ float Predator::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Predator::ToString() const{
-	return name;
-}
-
 float Predator::getIntendedY() {
 	if (hero_y > bounds->position_y){
 		return SPEED;
@@ -52,10 +48,4 @@ float Predator::getIntendedX() {
 	} else {
 		return -SPEED;
 	}
-}
-
-void Predator::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

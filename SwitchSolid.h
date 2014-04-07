@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * A solid thing which can be turned on and off by switches.
  * Ther are different colors representing which solids are turned on/off

@@ -34,10 +34,6 @@ Hero::~Hero(){
 	delete bounds;
 }
 
-const char *Hero::ToString() const{
-	return name;
-}
-
 void Hero::move(float x, float y){
 	bounds->position_x += x;
 	bounds->position_y += y;

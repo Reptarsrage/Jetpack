@@ -9,11 +9,9 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the non-player controlled Pinwheel baddie. 
+ * Bounces around the level forever, doesn't care where hero is.
  */
 class Pinwheel : public MovingThing {
 
@@ -23,12 +21,6 @@ public:
 	~Pinwheel();
 	Pinwheel(float x, float y, float w, float h, const Sprites *s);
 	Pinwheel(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();
@@ -40,10 +32,10 @@ public:
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
 private:
-	/* Calculates the ricochet */
+	/* Calculates the ricochet off of walls*/
 	void calculate_dir(float norm_x, float norm_y);
 
-	/* changes the direction ever so slightly */
+	/* changes the direction ever so slightly, pretty cool effect */
 	void randomize_dir();
 	
 	/* initializes this baddie */

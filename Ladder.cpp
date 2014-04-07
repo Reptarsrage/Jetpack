@@ -29,13 +29,3 @@ void Ladder::Init(const Rectangle r, const Sprites *s) {
 Ladder::~Ladder(){
 	delete bounds;
 }
-
-const char *Ladder::ToString() const{
-	return name;
-}
-
-void Ladder::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
-}

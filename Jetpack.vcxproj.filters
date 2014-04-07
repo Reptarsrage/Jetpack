@@ -75,9 +75,6 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="paintView.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="jetpackUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -105,9 +102,6 @@
     <ClCompile Include="fileio.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="SolidThing.cpp">
-      <Filter>Source Files\Things\Solid Things</Filter>
-    </ClCompile>
     <ClCompile Include="Door.cpp">
       <Filter>Source Files\Things\Special Things</Filter>
     </ClCompile>
@@ -119,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="NonSolidThing.cpp">
       <Filter>Source Files\Things\Non Solid Things</Filter>
-    </ClCompile>
-    <ClCompile Include="Collectable.cpp">
-      <Filter>Source Files\Things\Collectables</Filter>
     </ClCompile>
     <ClCompile Include="Gold.cpp">
       <Filter>Source Files\Things\Collectables</Filter>
@@ -159,6 +150,15 @@
     <ClCompile Include="Mine.cpp">
       <Filter>Source Files\Things\Baddies</Filter>
     </ClCompile>
+    <ClCompile Include="Gem.cpp">
+      <Filter>Source Files\Things\Collectables</Filter>
+    </ClCompile>
+    <ClCompile Include="StoneSolid.cpp">
+      <Filter>Source Files\Things\Solid Things</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
@@ -177,9 +177,6 @@
       <Filter>Header Files\Things</Filter>
     </ClInclude>
     <ClInclude Include="jetpackUI.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="paintView.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Sprites.h">
@@ -224,9 +221,6 @@
     <ClInclude Include="Ladder.h">
       <Filter>Header Files\Things\Special Things</Filter>
     </ClInclude>
-    <ClInclude Include="Collectable.h">
-      <Filter>Header Files\Things\Collectables</Filter>
-    </ClInclude>
     <ClInclude Include="NonSolidThing.h">
       <Filter>Header Files\Things\Non Solid Things</Filter>
     </ClInclude>
@@ -268,6 +262,18 @@
     </ClInclude>
     <ClInclude Include="Teleporter.h">
       <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Gem.h">
+      <Filter>Header Files\Things\Collectables</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Header Files\Things\Collectables</Filter>
+    </ClInclude>
+    <ClInclude Include="StoneSolid.h">
+      <Filter>Header Files\Things\Solid Things</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

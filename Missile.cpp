@@ -34,10 +34,6 @@ float Missile::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Missile::ToString() const{
-	return name;
-}
-
 float Missile::getIntendedY() {
 	if (hit_wall_top && hit_wall_bottom){
 		hit_wall_top = hit_wall_bottom = false;
@@ -72,10 +68,4 @@ float Missile::getIntendedX() {
 	} 
 	
 	return SPEED * velocity_x;
-}
-
-void Missile::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -21,12 +21,6 @@ public:
 	Ladder(const Rectangle r, const Sprites *s);
 	~Ladder();
 
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-
-	/* Draws this thing */
-	virtual void draw();
-
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);

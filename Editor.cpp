@@ -10,7 +10,7 @@
 #include "StationaryThing.h"
 #include "SolidThing.h"
 #include "NonSolidThing.h"
-#include "Collectable.h"
+#include "Gem.h"
 #include "Ladder.h"
 #include "Hero.h"
 #include "Pinwheel.h"

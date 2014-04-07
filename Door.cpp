@@ -33,13 +33,3 @@ void Door::Open()  {
 	def_sprite = SPRITE_DOOROPEN;
 	is_open = true;
 }
-
-const char *Door::ToString() const{
-	return name;
-}
-
-void Door::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
-}

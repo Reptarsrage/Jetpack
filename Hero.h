@@ -8,7 +8,6 @@
 #define HERO_H_
 
 #include "AbstractThing.h"
-#include "paintView.h"
 
 class Rectangle;
 class Sprites;
@@ -24,9 +23,6 @@ public:
 	~Hero();
 	Hero(float x, float y, float w, float h, const Sprites *s);
 	Hero(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
 	
 	/* Draws this thing */
 	virtual void draw();

@@ -30,10 +30,6 @@ Switch::~Switch(){
 	delete bounds;
 }
 
-const char *Switch::ToString() const{
-	return name;
-}
-
 void Switch::bindSwitch(int code){
 	assert(code >= 0);
 	assert(code < SWITCH_COUNT);
@@ -54,10 +50,4 @@ void Switch::bindSwitch(int code){
 			def_sprite = SPRITE_GOLDSWITCH;
 			break;
 	}
-}
-
-void Switch::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

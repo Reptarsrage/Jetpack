@@ -39,10 +39,6 @@ float Bat::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Bat::ToString() const{
-	return name;
-}
-
 float Bat::getIntendedY() {
 	if (hero_y > bounds->position_y){
 		return SPEED;
@@ -58,10 +54,4 @@ float Bat::getIntendedX() {
 	} else {
 		return -SPEED;
 	}
-}
-
-void Bat::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -9,11 +9,10 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
- * Position and properties of the non-player controlled Missile baddie. 
+ * Position and properties of the non-player controlled Missile baddie.
+ * Always avoids hitting things by making right turns. If nothing is in it's
+ * way it will always continue going straight. Doesn't care where hero is.
  */
 class Missile : public MovingThing {
 
@@ -23,12 +22,6 @@ public:
 	~Missile();
 	Missile(float x, float y, float w, float h, const Sprites *s);
 	Missile(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();

@@ -208,7 +208,7 @@ JetpackUI::JetpackUI() {
 		//Fl_Tabs* tabs = new Fl_Tabs(20, 20, 350, 350);
 		Fl_Group* group_g = new Fl_Group(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 				// install editor view window
-				PaintView *game = new PaintView(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Game");
+				Game *game = new Game(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Game");
 				game->m_UI = this;
 			group_g->end();
 			group_g->hide();

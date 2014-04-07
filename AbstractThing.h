@@ -31,15 +31,17 @@ public:
 		{ if (bounds) delete bounds; bounds = new Rectangle(x, y, width, height); }
 
 	/* returns a descriptive integer to what this thing is */
+	/* See TypeEnum in Enums.h for more info */
 	virtual int getType() const { return type; }
+
+	/* Returns the name of this thing. */
+	virtual const char *ToString() const { return name; }
 
 // Pure Virtual Functions
 public:
-	/* Returns the name of this thing. */
-	virtual const char *ToString() const = 0;
 
 	/* Draws this thing in its bounds */
-	virtual void draw() = 0;
+	virtual void draw()= 0;
 	
 // Atributes
 protected:

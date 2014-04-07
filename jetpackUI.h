@@ -13,7 +13,7 @@
 #include <FL/Fl_Tabs.H>
 
 #include "jetpack_main.h"
-#include "paintView.h"
+#include "Game.h"
 #include "Editor.h"
 #include "Sprites.h"
 
@@ -84,7 +84,7 @@ public:
 	Fl_Group* m_gamePlay_group;				// FLTK Group holding the game
 	Fl_Group* m_editor_group;				// FLTK Group holding the level editor
 	
-	PaintView* m_gamePlay;				// In charge of painting/controlling the game
+	Game* m_gamePlay;				// In charge of painting/controlling the game
 	Editor* m_editor;					// In charge of painting/controlling the level editor
 	
 	Fl_Gl_Window *m_current;			// Current thing being used (animated).

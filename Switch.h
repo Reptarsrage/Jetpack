@@ -21,12 +21,6 @@ public:
 	Switch(float x, float y, float w, float h, const Sprites *s);
 	Switch(const Rectangle r, const Sprites *s);
 	~Switch();
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-
-	/* Draws this thing */
-	virtual void draw();
 
 	/* binds the switch to a switch color group */
 	virtual void bindSwitch(int code);

@@ -8,9 +8,6 @@
 
 #include "Collectable.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Base class for all things which help the hero, invincibility, fuel, ect.
  */
@@ -21,9 +18,6 @@ public:
 	Item(const Rectangle r, const Sprites *s);
 	~Item();
 
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-
 	/* Sets the type and sprite of this thing */
 	virtual void setType(int code);
 
@@ -33,7 +27,6 @@ public:
 private:
 	/* initializes this item */
 	void Init(const Rectangle r, const Sprites *s);
-
 };
 
 #endif // ITEM_H_

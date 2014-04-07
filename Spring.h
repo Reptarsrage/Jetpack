@@ -8,9 +8,6 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the non-player controlled Spring baddie.
  * The spring baddie moves up until it hits the veiling, then moves down 
@@ -24,12 +21,6 @@ public:
 	~Spring();
 	Spring(float x, float y, float w, float h, const Sprites *s);
 	Spring(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();

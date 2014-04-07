@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "SolidThing.h"
 #include "NonSolidThing.h"
-#include "Collectable.h"
+#include "Gem.h"
 #include "Ladder.h"
 #include "Pinwheel.h"
 #include "Bat.h"
@@ -30,6 +30,7 @@
 #include "Missile.h"
 #include "Teleporter.h"
 #include "Switch.h"
+#include "StoneSolid.h"
 
 
 int m_rand() {
@@ -50,12 +51,12 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 	AbstractThing *result = NULL;
 	switch (code) {
 		case TYPE_STONESOLID_CONVEYOR_R:
-			result = new SolidThing(x,y,width, height, sprites);
-			static_cast<SolidThing *>(result)->setAttribute(CONVEYOR_RIGHT);
+			result = new StoneSolid(x,y,width, height, sprites);
+			static_cast<StoneSolid *>(result)->setAttribute(CONVEYOR_RIGHT);
 			break;
 		case TYPE_STONESOLID_CONVEYOR_L:
-			result = new SolidThing(x,y,width, height, sprites);
-			static_cast<SolidThing *>(result)->setAttribute(CONVEYOR_LEFT);
+			result = new StoneSolid(x,y,width, height, sprites);
+			static_cast<StoneSolid *>(result)->setAttribute(CONVEYOR_LEFT);
 			break;
 		case TYPE_BRICKSOLID_CONVEYOR_R:
 			result = new BrickSolid(x,y,width, height, sprites);
@@ -128,15 +129,15 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			static_cast<WoodSolid *>(result)->setAttribute(SHIELDED_RIGHT);
 			break;
 		case TYPE_STONESOLID:
-			result = new SolidThing(x,y,width, height, sprites);
+			result = new StoneSolid(x,y,width, height, sprites);
 			break;
 		case TYPE_STONESOLID_ICY:
-			result = new SolidThing(x,y,width, height, sprites);
-			static_cast<SolidThing *>(result)->setAttribute(ICY);
+			result = new StoneSolid(x,y,width, height, sprites);
+			static_cast<StoneSolid *>(result)->setAttribute(ICY);
 			break;
 		case TYPE_STONESOLID_MOSSY:
-			result = new SolidThing(x,y,width, height, sprites);
-			static_cast<SolidThing *>(result)->setAttribute(MOSSY);
+			result = new StoneSolid(x,y,width, height, sprites);
+			static_cast<StoneSolid *>(result)->setAttribute(MOSSY);
 			break;
 		case TYPE_IVY:
 			result = new NonSolidThing(x,y,width, height, sprites);
@@ -191,7 +192,7 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			static_cast<Item *>(result)->setType(TYPE_FULLFUEL);
 			break;
 		case TYPE_GEM:
-			result = new Collectable(x,y,width, height, sprites);
+			result = new Gem(x,y,width, height, sprites);
 			break;
 		case TYPE_GOLD1:
 			result = new Gold(x,y,width, height, sprites);

@@ -64,7 +64,3 @@ int Item::Collect(){
 	bounds->width = 0;
 	return 0;
 }
-
-const char *Item::ToString() const{
-	return name;
-}

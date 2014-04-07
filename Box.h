@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * A solid box object.
  */
@@ -20,7 +17,10 @@ public:
 	Box(float x, float y, float w, float h, const Sprites *s);
 	Box(const Rectangle r, const Sprites *s);
 	~Box();
-		
+	
+	// boxes can not have attributes 
+	virtual void setAttribute(int code) {}
+
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);

@@ -8,26 +8,17 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the non-player controlled Bat baddie. 
+ * Bats have undefined behavior. As of now, they hunt the hero.
  */
 class Bat : public MovingThing {
 
 // Functions
 public:
-
 	~Bat();
 	Bat(float x, float y, float w, float h, const Sprites *s);
 	Bat(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();
@@ -39,11 +30,6 @@ public:
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
 private:
-	/* Calculates the ricochet */
-	void calculate_dir(float norm_x, float norm_y);
-
-	/* changes the direction ever so slightly */
-	void randomize_dir();
 	
 	/* initializes this baddie */
 	void Init(const Rectangle r, const Sprites *s);

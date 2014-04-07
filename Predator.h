@@ -13,6 +13,8 @@ class Sprites;
 
 /*
  * Position and properties of the non-player controlled Predator baddie. 
+ * The only baddie that ignores solid objects.
+ * Eternally hunts the player, but should move slow enough to be fair.
  */
 class Predator : public MovingThing {
 
@@ -22,12 +24,6 @@ public:
 	~Predator();
 	Predator(float x, float y, float w, float h, const Sprites *s);
 	Predator(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();

@@ -36,10 +36,6 @@ float Pinwheel::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Pinwheel::ToString() const{
-	return name;
-}
-
 void Pinwheel::randomize_dir() {
 	float sign_x = velocity_x / fabs(velocity_x);
 	float sign_y = velocity_y / fabs(velocity_y);
@@ -106,10 +102,4 @@ float Pinwheel::getIntendedX() {
 	} 
 	
 	return SPEED * velocity_x;
-}
-
-void Pinwheel::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

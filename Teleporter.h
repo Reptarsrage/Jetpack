@@ -8,9 +8,6 @@
 
 #include "SolidThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Teleports the hero and certain other baddies to other teleporters around the map.
  */
@@ -21,6 +18,9 @@ public:
 	Teleporter(const Rectangle r, const Sprites *s);
 	~Teleporter();
 
+	// teleporters can not have attributes 
+	virtual void setAttribute(int code) {}
+
 	/* binds this teleporter to a color group */
 	virtual void bindTeleporter(int code);
 
@@ -29,13 +29,13 @@ public:
 
 	/* Sets the bounds for this thing. */
 	void SetBounds(float x, float y, float width, float height);
-		
+
 private:
-	/* initializes this baddie */
+	/* Initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
 
 // Attributes
-protected:
+private:
 	Rectangle *draw_bounds;	// the bounds to draw the sprite in (different from actual bounds)
 };
 

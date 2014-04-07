@@ -32,10 +32,6 @@ float Spring::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Spring::ToString() const{
-	return name;
-}
-
 float Spring::getIntendedY() {
 	if (hit_wall_bottom) {
 		hit_wall_bottom = false;
@@ -51,10 +47,4 @@ float Spring::getIntendedY() {
 
 float Spring::getIntendedX() {
 	return velocity_x;
-}
-
-void Spring::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }

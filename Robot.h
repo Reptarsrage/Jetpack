@@ -8,9 +8,6 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the non-player controlled Robot baddie. 
  * The robot is the only baddie capable of climbing ladders.
@@ -27,12 +24,6 @@ public:
 	
 	/* Moves this thing by one */
 	virtual void move(float x, float y);
-
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();
@@ -58,7 +49,8 @@ private:
 
 // Attributes
 private:
-	bool on_top_of_ladder;
+	bool on_top_of_ladder;	// special flag for when we know where on top of a ladder, 
+							// not technically on ground.
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

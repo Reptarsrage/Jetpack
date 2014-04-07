@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Collectable
 */
 
 #ifndef COLLECTABLE_H_
@@ -8,35 +8,20 @@
 
 #include "StationaryThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
- * Base class for all things which do not move in the game, i.e. blocks, collectables.
+ * Base class (abstract) for all collecable things in the game, i.e. gold, items, gems.
  */
-class Collectable : public StationaryThing{
-// Functions
+class Collectable : public StationaryThing {
 public:
-	Collectable(float x, float y, float w, float h, const Sprites *s);
-	Collectable(const Rectangle r, const Sprites *s);
-	~Collectable();
-	Collectable() {}	// default constructure for inherited items
+	
+	/* Is this thing already collected? */
+	virtual bool Collected() { return collected; }
 
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
+// Pure virtual Functions
+public:
 
 	/* Collects this thing, and returns the points for doing so. */
-	virtual int Collect();
-
-	/* Is this thing already collected? */
-	virtual bool Collected();
-
-	/* Draws this thing */
-	virtual void draw();
-	
-private:
-	/* initializes this baddie */
-	void Init(const Rectangle r, const Sprites *s);
+	virtual int Collect() = 0;
 
 // Attributes
 protected:

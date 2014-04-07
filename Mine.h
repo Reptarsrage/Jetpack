@@ -1,6 +1,6 @@
 /* Justin Robb
  * 3-27-14
- * JetPack
+ * Land Mine
 */
 
 #ifndef MINE_H_
@@ -8,11 +8,10 @@
 
 #include "MovingThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the non-player controlled Mine baddie. 
+ * Blows up when touched by the hero.
+ * Note: This baddie should never move. 
  */
 class Mine : public MovingThing {
 
@@ -22,12 +21,6 @@ public:
 	~Mine();
 	Mine(float x, float y, float w, float h, const Sprites *s);
 	Mine(const Rectangle r, const Sprites *s);
-	
-	/* Returns the name of this thing */
-	virtual const char *ToString() const;
-	
-	/* Draws this thing */
-	virtual void draw();
 
 	/* Gets the intended y-dir change */
 	virtual float getIntendedY();
@@ -41,7 +34,6 @@ public:
 private:
 	/* initializes this baddie */
 	void Init(const Rectangle r, const Sprites *s);
-
 };
 
 

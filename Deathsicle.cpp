@@ -28,22 +28,12 @@ float Deathsicle::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
 }
 
-const char *Deathsicle::ToString() const{
-	return name;
-}
-
 float Deathsicle::getIntendedY() {
 	return 0;
 }
 
 float Deathsicle::getIntendedX() {
 	return 0;
-}
-
-void Deathsicle::draw(){
-	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
-	bounds->draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Deathsicle::setDir(int dir){
