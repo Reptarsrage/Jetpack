@@ -8,9 +8,6 @@
 
 #include "StationaryThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Base class for the door, whch acts as a goal in the game.
  */

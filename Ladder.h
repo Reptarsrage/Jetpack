@@ -8,9 +8,6 @@
 
 #include "StationaryThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Base class for all Ladders.
  */

@@ -9,9 +9,6 @@
 
 #include "AbstractThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Position and properties of the player controlled charcter.
  */

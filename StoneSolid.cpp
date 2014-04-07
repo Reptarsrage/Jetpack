@@ -18,7 +18,6 @@ StoneSolid::StoneSolid(const Rectangle r, const Sprites *s){
 void StoneSolid::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
 	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
-	attribute_bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
 	name = "StoneSolid";
 	sprites = s;
 	type = TYPE_STONESOLID;
@@ -30,24 +29,25 @@ void StoneSolid::Init(const Rectangle r, const Sprites *s) {
 
 StoneSolid::~StoneSolid(){
 	delete bounds;
-	delete attribute_bounds;
 }
 
 void StoneSolid::setAttribute(int code) {
+	assert(code >= 0);
 	attribute = code;
 	if (code == MOSSY) {
 		name = "Mossy Stone";
 		attribute_sprite = SPRITE_MOSSSOLID;
+		type = TYPE_STONESOLID_MOSSY;
 	} else if (code == ICY) {
 		attribute_sprite = SPRITE_ICESOLID;
 		name = "Icy Stone";
+		type = TYPE_STONESOLID_ICY;
 	} else if (code == CONVEYOR_LEFT || code == CONVEYOR_RIGHT) {
 		name = "Conveyor Stone";
 		attribute_sprite = SPRITE_CONVEYORSOLID1;
+		type = TYPE_STONESOLID_CONVEYOR_L;
 	} else {
 		attribute = -1;
-		attribute_bounds->height = 0;
-		attribute_bounds->width = 0;
 		printf("Unrecognized solid attribute, code: %d", code);
 	}
 }
@@ -58,8 +58,10 @@ void StoneSolid::draw(){
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (attribute >= 0) {
+		assert(attribute_sprite >= 0);
+		assert(attribute_sprite < SPRITE_COUNT);
 		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(attribute_sprite));
-		attribute_bounds->draw();
+		bounds->draw();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

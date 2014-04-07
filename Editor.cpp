@@ -58,7 +58,7 @@ Editor::Editor(	float			x,
 	curser = new Rectangle(left, top, row_w, col_h);
 	menu = new Rectangle(left, bottom, bounds->width, ((TYPE_COUNT / NUM_COLS) + 1)*col_h);
 	menu_items = NULL;
-	prev_curser = Rectangle(left, top, row_w, col_h);
+	prev_curser = NULL;
 	frame = FRAME_SKIP;
 	selected = -1;
 	placed_items = new std::list<AbstractThing *>();
@@ -204,15 +204,15 @@ void Editor::loadLevel(std::list<AbstractThing *> level) {
 		thing->SetBounds(left + b.position_x * row_w, top + b.position_y*col_h, b.width, b.height);
 		if (thing->getType() == TYPE_HERO) {
 			hero = reinterpret_cast<Hero *>(thing);
-			printf("loading hero at col %d and row %d\n", col, row);
+			printf("Loading hero at col %d and row %d\n", col, row);
 		}
 		else if (thing->getType() == TYPE_DOOR){
 			door = reinterpret_cast<Door *>(thing);
-			printf("loading door at col %d and row %d\n", col, row);
+			printf("Loading door at col %d and row %d\n", col, row);
 		}
 		else {
 			placed_items->push_back(thing);
-			printf("loading thing at col %d and row %d\n", col, row);
+			printf("Loading %s at col %d and row %d\n", thing->ToString(), col, row);
 		}
 	}
 }
@@ -239,7 +239,7 @@ const std::queue<AbstractThing *>* Editor::getLevel() {
 			}
 			for (AbstractThing *thing : *placed_items) {
 				if (thing->Overlaps(ptr)) {
-					printf("Saving thing at col %d and row %d\n", col, row);
+					printf("Saving %s at col %d and row %d\n", thing->ToString(), col, row);
 					q->push(thing);
 				}
 			}
@@ -257,14 +257,21 @@ void Editor::switchContext() {
 	if (choosing) {
 		// turn off menu, restore curser
 		choosing = false;
-		delete curser;
-		curser = new Rectangle(prev_curser);
+		Rectangle *temp = curser;
+		curser = prev_curser;
+		prev_curser = temp;
 	} else {
 		// turn menu on
 		choosing = true;
-		prev_curser = Rectangle(curser->position_x, curser->position_y, curser->width, curser->height);
-		curser->position_y = menu->bottom() + col_h;
-		curser->position_x = menu->left();
+		if (prev_curser != NULL) {
+			Rectangle *temp = curser;
+			curser = prev_curser;
+			prev_curser = temp;
+		} else {
+			prev_curser = new Rectangle(*curser);
+			curser->position_y = menu->bottom() + col_h;
+			curser->position_x = menu->left();
+		}
 	}
 }
 

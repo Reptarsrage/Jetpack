@@ -109,7 +109,7 @@ private:
 	Hero *hero;					// our hero!
 	Door *door;					// his destination.
 	
-	Rectangle prev_curser;		// saved curser positino when switching contexts
+	Rectangle *prev_curser;		// saved curser positino when switching contexts
 	int selected;				// currently slected menu item
 	std::list<AbstractThing *> *placed_items;	// all placed items
 

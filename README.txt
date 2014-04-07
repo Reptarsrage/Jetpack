@@ -7,3 +7,4 @@ Jetpack
 3-30-14 Taking a break from creating things, starting to add a level editor
 4-3-14 Level editor up and running, returning to adding things.
 4-5-14 Stopping adding things, to fix issues that developed with inheritance.
+4-6-14 Starting to implement ground properties, and moving ladders/conveyors.

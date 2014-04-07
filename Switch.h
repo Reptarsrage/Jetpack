@@ -8,9 +8,6 @@
 
 #include "StationaryThing.h"
 
-class Rectangle;
-class Sprites;
-
 /*
  * Switches in the game can turn certain solid blocks on and off.
  * These blocks are called switchsolids

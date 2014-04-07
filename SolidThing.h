@@ -22,7 +22,6 @@ public:
 protected:
 	int attribute;
 	GLuint attribute_sprite;
-	Rectangle * attribute_bounds;
 };
 
 #endif // SOLID_THING_H_
