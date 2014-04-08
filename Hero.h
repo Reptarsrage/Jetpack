@@ -47,6 +47,7 @@ public:
 		  velocity_jump,	// veloxity of jump
 		  on_ground,		// hero currently touching the ground?
 		  on_ladder;		// hero currently climbing?
+	int ladder_dir;
 	int ground_type;
 };
 

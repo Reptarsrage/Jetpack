@@ -20,6 +20,7 @@ void Hero::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_HERO;
 	def_sprite = SPRITE_FRONT;
 	ground_type = -1;
+	ladder_dir = -1;
 }
 
 Hero::Hero(float x, float y, float w, float h, const Sprites *s){

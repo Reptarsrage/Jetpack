@@ -250,11 +250,11 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			break;
 		case TYPE_LADDERUP:
 			result = new Ladder(x,y,width, height, sprites);
-			
+			static_cast<Ladder *>(result)->setDirection(UP);
 			break;
 		case TYPE_LADDERDOWN:
 			result = new Ladder(x,y,width, height, sprites);
-			
+			static_cast<Ladder *>(result)->setDirection(DOWN);
 			break;
 		case TYPE_MINE:
 			result = new Mine(x,y,width, height, sprites);

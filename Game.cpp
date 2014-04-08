@@ -278,7 +278,8 @@ void Game::moveThings() {
 			float x = 0;
 			float y = 0;
 			for (StationaryThing *s : *special_things) {
-				if (s->getType() == TYPE_LADDER && (s->Overlaps(baddie) || s->Overlaps(bbd))) {
+				if ((s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) && 
+					(s->Overlaps(baddie) || s->Overlaps(bbd))) {
 					// touching a ladder! (or at least on top of one)
 					const Rectangle sb = s->Bounds();
 					x = sb.position_x;
@@ -342,6 +343,12 @@ void Game::moveHero() {
 		hero->velocity_y = 0;
 	else
 		hero->force_y = 0.0;
+
+	if (hero->on_ladder && hero->ladder_dir == UP)
+		hero->velocity_y -= max_velocity / 3.f;
+	else if (hero->on_ladder && hero->ladder_dir == DOWN)
+		hero->velocity_y += max_velocity / 3.f;
+
 
 	hero->force_x = 0;
 	if (hero->on_ground){
@@ -417,7 +424,7 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 	// stop on top of ladders, treat ladder tops as ground
 	if (!hero->on_ladder && delta_y > 0) {
 		for (StationaryThing *s : *special_things){
-			if (s->getType() == TYPE_LADDER) {
+			if (s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) {
 				if (s->Overlaps(new_hero_bounds_y)) {
 					const Rectangle s_bounds = s->Bounds();
 					delta_y = s_bounds.bottom() - hero_bounds.top();
@@ -529,11 +536,15 @@ bool Game::heroTouchingLadder() {
 	const Rectangle b = hero->Bounds();
 	const Rectangle yb = Rectangle(b.left(), b.top() + max_velocity, b.width, b.height);
 	for (StationaryThing *s : *special_things) {
-		if (s->getType() == TYPE_LADDER && s->Overlaps(hero)) {
-			return true;
-		} else if (s->getType() == TYPE_LADDER && s->Overlaps(yb)) {
-			// standing on top of the ladder
-			return true;
+		if (s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) {
+			if ( s->Overlaps(hero)) {
+				hero->ladder_dir = reinterpret_cast<Ladder *>(s)->direction;
+				return true;
+			} else if (s->Overlaps(yb)) {
+				// standing on top of the ladder
+				hero->ladder_dir = reinterpret_cast<Ladder *>(s)->direction;
+				return true;
+			}
 		}
 	}
 	return false;

@@ -18,9 +18,16 @@ public:
 	Ladder(const Rectangle r, const Sprites *s);
 	~Ladder();
 
+	/* Sets the direction for moving ladders */
+	void setDirection(int code);
+
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
+
+// Attributes
+public:
+	int direction;
 
 };
 
