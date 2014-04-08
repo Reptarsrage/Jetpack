@@ -15,6 +15,9 @@ class SolidThing : public StationaryThing {
 // Functions
 public:
 
+	/* gets the grounds attribute */
+	virtual int getAttribute() { return attribute; }
+
 	/* Sets an additional property of the block */
 	/* should be called immediately afer construction, if there is an attribute! */
 	virtual void setAttribute(int code) = 0;

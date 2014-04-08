@@ -8,7 +8,7 @@
 
 BrickSolid::BrickSolid(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
-	Init(r, s);
+	Init(r, s); 
 }
 
 BrickSolid::BrickSolid(const Rectangle r, const Sprites *s) {
@@ -66,10 +66,14 @@ void BrickSolid::setAttribute(int code) {
 			type = TYPE_SHIELDED_BRICK_D;
 			break;
 		case CONVEYOR_LEFT:
-		case CONVEYOR_RIGHT:
-			name = "Conveyor Bricks";
-			attribute_sprite = SPRITE_CONVEYORSOLID1;
+			name = "Conveyor Left Bricks";
+			attribute_sprite = SPRITE_CONVEYORSOLID2;
 			type = TYPE_BRICKSOLID_CONVEYOR_L;
+			break;
+		case CONVEYOR_RIGHT:
+			name = "Conveyor Right Bricks";
+			attribute_sprite = SPRITE_CONVEYORSOLID1;
+			type = TYPE_BRICKSOLID_CONVEYOR_R;
 			break;
 		default:
 			attribute = -1;

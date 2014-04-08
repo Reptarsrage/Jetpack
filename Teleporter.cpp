@@ -25,6 +25,7 @@ void Teleporter::Init(const Rectangle r, const Sprites *s) {
 	def_sprite = SPRITE_PURPLETELEPORTER;
 	is_solid = true;
 	is_collectable = false;
+	attribute = -1;
 }
 
 Teleporter::~Teleporter(){

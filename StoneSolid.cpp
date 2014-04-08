@@ -8,7 +8,7 @@
 
 StoneSolid::StoneSolid(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
-	Init(r, s);
+	Init(r, s); 
 }
 
 StoneSolid::StoneSolid(const Rectangle r, const Sprites *s){
@@ -42,10 +42,14 @@ void StoneSolid::setAttribute(int code) {
 		attribute_sprite = SPRITE_ICESOLID;
 		name = "Icy Stone";
 		type = TYPE_STONESOLID_ICY;
-	} else if (code == CONVEYOR_LEFT || code == CONVEYOR_RIGHT) {
-		name = "Conveyor Stone";
+	} else if (code == CONVEYOR_LEFT) {
+		name = "Conveyor Left Stone";
 		attribute_sprite = SPRITE_CONVEYORSOLID1;
 		type = TYPE_STONESOLID_CONVEYOR_L;
+	} else if (code == CONVEYOR_RIGHT) {
+		name = "Conveyor Right Stone";
+		attribute_sprite = SPRITE_CONVEYORSOLID2;
+		type = TYPE_STONESOLID_CONVEYOR_R;
 	} else {
 		attribute = -1;
 		printf("Unrecognized solid attribute, code: %d", code);

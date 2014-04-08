@@ -27,6 +27,7 @@ class Collectable;
 class Door;
 class AbstractThing;
 class Teleporter;
+class SolidThing;
 
 /* Controls the animation and drawing */
 class Game : public Fl_Gl_Window
@@ -104,13 +105,12 @@ private:
 	Rectangle *bounds;							// Current bounds for the hero
 	Hero *hero;
 	Door *door;
-	std::vector<StationaryThing *> *solid_things;       // Holds all solid things
+	std::vector<SolidThing *> *solid_things;       // Holds all solid things
 	std::vector<StationaryThing *> *nonsolid_things;    // Holds all non-solid, un-interactable things
 	std::vector<StationaryThing *> *special_things;     // Holds all non-solid, interactable things (ladders, teleporters)
 	std::vector<Collectable *> *collectable_things;		// Holds all collectable things
 	std::vector<MovingThing *> *dyn_things;				// Holds all baddies
 
-	
 	int		gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)
 			

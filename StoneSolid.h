@@ -22,6 +22,9 @@ public:
 	/* should be called immediately afer construction, if there is an attribute! */
 	virtual void setAttribute(int code);
 
+	/* returns the attribute value of this thing. */
+	virtual int getAttribute() { return attribute; }
+
 	/* Draws this thing */
 	virtual void draw();
 		

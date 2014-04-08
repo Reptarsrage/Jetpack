@@ -73,7 +73,7 @@ Game::Game(float			x,
 	// hero/env
 	hero = NULL;
 	door = NULL;
-	solid_things = new std::vector<StationaryThing *>();
+	solid_things = new std::vector<SolidThing *>();
 	nonsolid_things = new std::vector<StationaryThing *>();
 	collectable_things = new std::vector<Collectable *>();
 	special_things = new std::vector<StationaryThing *>();
@@ -99,7 +99,7 @@ void Game::Clear() {
 	collectable_things->clear();
 	dyn_things->clear();
 	special_things->clear();
-	solid_things = new std::vector<StationaryThing *>();
+	solid_things = new std::vector<SolidThing *>();
 	nonsolid_things = new std::vector<StationaryThing *>();
 	collectable_things = new std::vector<Collectable *>();
 	special_things = new std::vector<StationaryThing *>();
@@ -310,16 +310,19 @@ void Game::moveHero() {
 		hero->on_ladder = false;
 
 	// move in x-dir
-	if (hold_left && !Fl::event_key(FL_Left)) {
+	if (hold_left && !Fl::event_key(FL_Left))
 		hold_left = false;
-	} else if (hold_left){
-		hero->velocity_x = - max_velocity;
-	} else if (hold_right && !Fl::event_key(FL_Right)) {
+	if (hold_right && !Fl::event_key(FL_Right))
 		hold_right = false;
-	} else if (hold_right) {
-		hero->velocity_x = max_velocity;
-	} else
-		hero->velocity_x = 0;
+		
+	if (hero->ground_type != ICY) {
+		if (hold_left) {
+			hero->velocity_x = - max_velocity;
+		} else if (hold_right) {
+			hero->velocity_x = max_velocity;
+		} else
+			hero->velocity_x = 0;
+	}
 
 	// move in y-dir
 	if (hold_up && !Fl::event_key(FL_Up)) {
@@ -340,6 +343,20 @@ void Game::moveHero() {
 	else
 		hero->force_y = 0.0;
 
+	hero->force_x = 0;
+	if (hero->on_ground){
+		if (hero->ground_type == ICY && hold_left) {
+			hero->force_x = -.06f *max_velocity;
+		} else if (hero->ground_type == ICY && hold_right) {
+			hero->force_x = .06f *max_velocity;
+		} else if (hero->ground_type == MOSSY){
+			hero->velocity_x /= 2.f;
+		} else if (hero->ground_type == CONVEYOR_LEFT) {
+			hero->velocity_x += max_velocity / 3.f;
+		} else if (hero->ground_type == CONVEYOR_RIGHT) {
+			hero->velocity_x -= max_velocity / 3.f;
+		}
+	}
 	// apply forces
 	hero->applyGravity(force_gravity);
 	
@@ -405,13 +422,14 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 					const Rectangle s_bounds = s->Bounds();
 					delta_y = s_bounds.bottom() - hero_bounds.top();
 					hero->on_ground = true;
+					hero->ground_type = -1;
 				}
 			}
 		}
 	}
 
 
-	for (StationaryThing *s : *solid_things){
+	for (SolidThing *s : *solid_things){
 		if (s->is_solid && s->Overlaps(new_hero_bounds_x)) {
 			const Rectangle s_bounds = s->Bounds();
 			if (hero_bounds.right() <= s_bounds.left())
@@ -424,14 +442,17 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 			if (hero_bounds.top() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - hero_bounds.top();
 				hero->on_ground = true;
+				hero->ground_type = s->getAttribute();
 			} else {
 				delta_y =  s_bounds.top() - hero_bounds.bottom();
 			}
 		}
 	}
 
-	if (delta_y != 0)
+	if (delta_y != 0) {
 		hero->on_ground = false;
+		hero->ground_type = -1;
+	}
 	hero->move(delta_x, delta_y);
 }
 
@@ -476,7 +497,7 @@ void Game::advancePosition(MovingThing *thing, float delta_x, float delta_y) con
 
 	// check solid objects in x and y directions (except for predators which don't give no F@$!S)
 	if (thing->getType() != TYPE_HUNTER) {
-		for (StationaryThing *s : *solid_things){
+		for (SolidThing *s : *solid_things){
 			const Rectangle s_bounds = s->Bounds();
 			if (s->is_solid && s->Overlaps(new_thing_bounds_x)) {
 				if (thing_bounds.right() <= s_bounds.left()) {
@@ -565,7 +586,7 @@ void Game::handleDownPress() {
 		const Rectangle h = hero->Bounds();
 		Rectangle b = Rectangle(h.position_x, h.position_y + max_velocity, h.width, h.height);
 		// teleporter?
-		for (StationaryThing *thing : *solid_things) {
+		for (SolidThing *thing : *solid_things) {
 			if (thing->Overlaps(b)) {
 				int code = thing->getType();
 				if (code == TYPE_GREENTELEPORTER) {
@@ -608,7 +629,7 @@ void Game::handleDownPress() {
 void Game::teleport(const Teleporter *src) {
 	int ran_tele = m_rand() % solid_things->size();
 	while (true){
-		for (StationaryThing *thing : *solid_things) {
+		for (SolidThing *thing : *solid_things) {
 			if (thing->getType() == src->getType() && thing != src) {
 				if (ran_tele == 0){
 					const Rectangle b = hero->Bounds();
@@ -634,7 +655,7 @@ void Game::switchSolids(int code) {
 		codeh = TYPE_HGOLDSWITCHSOLID;
 		codev = TYPE_GOLDSWITCHSOLID;
 	}
-	for (StationaryThing *thing : *solid_things) {
+	for (SolidThing *thing : *solid_things) {
 		int type = thing->getType();
 		if (type == codeh || type == codev) {
 			reinterpret_cast<SwitchSolid *>(thing)->Switch();

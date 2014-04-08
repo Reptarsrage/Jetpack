@@ -29,8 +29,6 @@ private:
 	void Init(const Rectangle r, const Sprites *s);
 
 private:
-	int attribute;
-	GLuint attribute_sprite;
 	Rectangle * attribute_bounds;
 
 };

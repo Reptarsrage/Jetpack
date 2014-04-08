@@ -24,6 +24,7 @@ void FastSolid::Init(const Rectangle r, const Sprites *s) {
 	def_sprite = SPRITE_FASTSOLID;
 	is_solid = true;
 	is_collectable = false;
+	attribute = -1;
 }
 
 FastSolid::~FastSolid(){

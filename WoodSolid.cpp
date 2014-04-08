@@ -12,7 +12,7 @@ WoodSolid::WoodSolid(float x, float y, float w, float h, const Sprites *s){
 }
 
 WoodSolid::WoodSolid(const Rectangle r, const Sprites *s){
-	Init(r, s);
+	Init(r, s); 
 }
 
 void WoodSolid::Init(const Rectangle r, const Sprites *s) {
@@ -66,10 +66,14 @@ void WoodSolid::setAttribute(int code) {
 			type = TYPE_SHIELDED_WOOD_D;
 			break;
 		case CONVEYOR_LEFT:
-		case CONVEYOR_RIGHT:
-			name = "Conveyor Wood";
+			name = "Conveyor Left Wood";
 			attribute_sprite = SPRITE_CONVEYORSOLID1;
 			type = TYPE_WOODSOLID_CONVEYOR_L;
+			break;
+		case CONVEYOR_RIGHT:
+			name = "Conveyor Right Wood";
+			attribute_sprite = SPRITE_CONVEYORSOLID2;
+			type = TYPE_WOODSOLID_CONVEYOR_R;
 			break;
 		default:
 			attribute = -1;

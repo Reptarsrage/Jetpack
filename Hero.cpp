@@ -19,6 +19,7 @@ void Hero::Init(const Rectangle r, const Sprites *s) {
 	on_ladder = false;
 	type = TYPE_HERO;
 	def_sprite = SPRITE_FRONT;
+	ground_type = -1;
 }
 
 Hero::Hero(float x, float y, float w, float h, const Sprites *s){
@@ -46,6 +47,7 @@ void Hero::Jump(float restitution) {
 }
 
 float Hero::applyGravity(float force_gravity) {
+	velocity_x += force_x * mass;
 	if (on_ladder) {
 		velocity_jump = 0;
 	}
@@ -56,7 +58,6 @@ float Hero::applyGravity(float force_gravity) {
 	if (!on_ground && !on_ladder) {
 		velocity_jump -=  force_gravity * mass;
 		velocity_y += (force_y + force_gravity) * mass;
-		velocity_x += force_x * mass;
 		return force_gravity;
 	}
 	return 0;
