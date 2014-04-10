@@ -60,9 +60,6 @@ private:
 	/* Handles what to do whenever the down key is pressed, not held */
 	void handleDownPress();
 
-	/* Helper function to test if hero is touching a ladder */
-	bool heroTouchingLadder();
-
 	/* Helper function to test if hero can collect anything*/
 	bool heroGetSwag();
 	
@@ -118,7 +115,10 @@ private:
 			jump_restitution,	// scalable jump power of hero
 			force_gravity,		// scalable force of gravity on moving things
 			max_velocity_grav,  // scalable maximum drop speed due to gravity
-			jetpack_thrust;		// scalable thrust of hero's jetpack 
+			jetpack_thrust,		// scalable thrust of hero's jetpack 
+			ladder_velocity,	// how fast to go on ladders
+			force_ice,			// how slippery ice is
+			conveyor_speed;		// how fast conveyors move
 
 	float left,					// drawing bounds left
 		  top,					// drawing bounds top

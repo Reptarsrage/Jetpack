@@ -30,12 +30,16 @@ const float MAX_VELOCITY = 0.12f;
 const float MAX_VELOCITY_GRAV = 0.2f;
 const float FORCE_GRAVITY = 0.012f;
 const float JETPACK_THRUST = 0.028f;
-const float JUMP_RESTITUTION = 0.45f;
+const float JUMP_RESTITUTION = 0.33f;
 const float MARGIN = 8.f;
 const float MARGIN_TOP = 5.f;
 const float MARGIN_BOTTOM = 40.f;
 const float MARGIN_LEFT = 5.f;
 const float MARGIN_RIGHT = 15.f;
+const float LADDER_V_FACTOR = 1.f / 3.f;
+const float ICE_FORCE_FACTOR = .06f;
+const float CONVEYOR_V_FACTOR = .333f;
+const float MOSS_DELAY = 0.5f;
 
 
 Game::Game(float			x, 
@@ -69,6 +73,9 @@ Game::Game(float			x,
 	jetpack_thrust = col_h * JETPACK_THRUST;
 	max_velocity_grav = col_h * MAX_VELOCITY_GRAV;
 	gem_count = 0;
+	ladder_velocity = max_velocity * LADDER_V_FACTOR;
+	force_ice = ICE_FORCE_FACTOR *max_velocity;
+	conveyor_speed = max_velocity * CONVEYOR_V_FACTOR;
 
 	// hero/env
 	hero = NULL;
@@ -229,6 +236,7 @@ void Game::drawBackGround() {
 	assert(nonsolid_things);
 	assert(collectable_things);
 	assert(special_things);
+	
 	// Draw Backdrop
 	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
 	bounds->draw();
@@ -304,11 +312,6 @@ void Game::moveHero() {
 	}
 	
 	heroGetSwag();
-	bool touchy = heroTouchingLadder();
-	if (touchy && (hold_up || hold_down))
-		hero->on_ladder = true;
-	else if (!touchy)
-		hero->on_ladder = false;
 
 	// move in x-dir
 	if (hold_left && !Fl::event_key(FL_Left))
@@ -344,24 +347,25 @@ void Game::moveHero() {
 	else
 		hero->force_y = 0.0;
 
+	// climbing
 	if (hero->on_ladder && hero->ladder_dir == UP)
-		hero->velocity_y -= max_velocity / 3.f;
+		hero->velocity_y -= ladder_velocity;
 	else if (hero->on_ladder && hero->ladder_dir == DOWN)
-		hero->velocity_y += max_velocity / 3.f;
+		hero->velocity_y += ladder_velocity;
 
-
+	// ground attributes
 	hero->force_x = 0;
 	if (hero->on_ground){
 		if (hero->ground_type == ICY && hold_left) {
-			hero->force_x = -.06f *max_velocity;
+			hero->force_x = -force_ice;
 		} else if (hero->ground_type == ICY && hold_right) {
-			hero->force_x = .06f *max_velocity;
+			hero->force_x = force_ice;
 		} else if (hero->ground_type == MOSSY){
-			hero->velocity_x /= 2.f;
+			hero->velocity_x *= MOSS_DELAY;
 		} else if (hero->ground_type == CONVEYOR_LEFT) {
-			hero->velocity_x += max_velocity / 3.f;
+			hero->velocity_x += conveyor_speed;
 		} else if (hero->ground_type == CONVEYOR_RIGHT) {
-			hero->velocity_x -= max_velocity / 3.f;
+			hero->velocity_x -= conveyor_speed;
 		}
 	}
 	// apply forces
@@ -417,24 +421,42 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 		// hit ceiling
 		delta_y =  top - hero_bounds.top();
 
-	// check solid objects in x and y directions (if we need to)
-	if (delta_x == 0 && delta_y == 0)
-		return;
-
 	// stop on top of ladders, treat ladder tops as ground
-	if (!hero->on_ladder && delta_y > 0) {
-		for (StationaryThing *s : *special_things){
-			if (s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) {
-				if (s->Overlaps(new_hero_bounds_y)) {
-					const Rectangle s_bounds = s->Bounds();
-					delta_y = s_bounds.bottom() - hero_bounds.top();
-					hero->on_ground = true;
-					hero->ground_type = -1;
-				}
+	bool body_ladder, above_ladder;
+	body_ladder = above_ladder = false;
+	int ladder_att = -1;
+	Rectangle s_bounds;
+	for (StationaryThing *s : *special_things){
+		if (s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) {
+			if (s->Overlaps(new_hero_bounds_y)) {
+				s_bounds = s->Bounds();
+				above_ladder = true;
+				ladder_att = reinterpret_cast<Ladder *>(s)->direction;
+			}
+			if (hero->Overlaps(s)){
+				body_ladder = true;
+				ladder_att = reinterpret_cast<Ladder *>(s)->direction;
 			}
 		}
 	}
+	if (!body_ladder && above_ladder && hold_down) {
+		hero->on_ladder = true;
+		hero->ladder_dir = ladder_att;
+	} else if (!body_ladder && above_ladder) {
+		delta_y = s_bounds.bottom() - hero_bounds.top();
+		hero->on_ground = true;
+		hero->ground_type = -1;
+	} else if (body_ladder && (hold_up || hold_down)){
+		hero->on_ladder = true;
+		hero->ladder_dir = ladder_att;
+	}else if (!body_ladder && hero->on_ladder) {
+		hero->velocity_y = 0;
+		hero->on_ladder = false;
+	}
 
+	// check solid objects in x and y directions (if we need to)
+	if (delta_x == 0 && delta_y == 0)
+		return;
 
 	for (SolidThing *s : *solid_things){
 		if (s->is_solid && s->Overlaps(new_hero_bounds_x)) {
@@ -530,24 +552,6 @@ void Game::advancePosition(MovingThing *thing, float delta_x, float delta_y) con
 
 	thing->Grounded(grounded);
 	thing->move(delta_x, delta_y);
-}
-
-bool Game::heroTouchingLadder() {
-	const Rectangle b = hero->Bounds();
-	const Rectangle yb = Rectangle(b.left(), b.top() + max_velocity, b.width, b.height);
-	for (StationaryThing *s : *special_things) {
-		if (s->getType() == TYPE_LADDER || s->getType() == TYPE_LADDERUP || s->getType() == TYPE_LADDERDOWN) {
-			if ( s->Overlaps(hero)) {
-				hero->ladder_dir = reinterpret_cast<Ladder *>(s)->direction;
-				return true;
-			} else if (s->Overlaps(yb)) {
-				// standing on top of the ladder
-				hero->ladder_dir = reinterpret_cast<Ladder *>(s)->direction;
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 void Game::draw()
