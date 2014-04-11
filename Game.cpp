@@ -85,7 +85,8 @@ Game::Game(float			x,
 	collectable_things = new std::vector<Collectable *>();
 	special_things = new std::vector<StationaryThing *>();
 	dyn_things = new std::vector<MovingThing *>();
-	
+	alive = true;
+	win = false;
 }
 
 Game::~Game() {
@@ -223,8 +224,6 @@ bool Game::heroGetSwag() {
 				gem_count--;
 				s->Collect();
 			}
-			if (gem_count == 0)
-				door->Open();
 			return true;
 		}
 	}
@@ -275,6 +274,11 @@ void Game::drawHero() {
 void Game::moveThings() {
 	assert(dyn_things);
 	for (MovingThing *baddie : *dyn_things){
+		if (baddie->Overlaps(hero)) {
+			// HERO DIES
+			alive = false;
+		}
+		
 		const Rectangle r = hero->Bounds();
 		baddie->updateHeroLoc(r.left(), r.top());
 		
@@ -348,8 +352,12 @@ void Game::moveHero() {
 	assert(hero);
 	
 	// do things based on surroundings
+	if (gem_count == 0)
+		door->Open();
+	
 	if (door->IsOpen() && door->Overlaps(hero)){
 		// TODO: WIN
+		win = true;
 	}
 	
 	// Phaser
@@ -683,7 +691,19 @@ void Game::draw()
 	
 	// draw everything else
 	drawHero();
-	drawMovingThings();	
+	drawMovingThings();
+
+	if (win) {
+		glColor4f(1,1,0,.2f);
+		bounds->draw();
+		win = false;
+	}
+
+	if (!alive) {
+		glColor4f(1,0,0,.2f);
+		bounds->draw();
+		alive = true;
+	}
 
 	glDisable2D();
 }

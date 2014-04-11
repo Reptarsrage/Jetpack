@@ -133,6 +133,8 @@ private:
 			hold_down,		// Should our hero move down?
 			hold_jet_pack,	// Should our hero activate his jetpack?
 			hold_phase,		// Should our hero activate his phaser?
+			alive,			// is our hero alive?
+			win,			// won the level?
 			phasing_in_air;	// special flag to handle phasing while jetpacking in air
 							// which is really difficult for the user unless we help
 };
