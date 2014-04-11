@@ -23,6 +23,12 @@ public:
 
 	/* Draws this thing */
 	virtual void draw();
+
+	/* can this be phased from a certain diretion? */
+	virtual bool phaseable(int dir) const;
+
+	/* handles being phased */
+	virtual void phase();
 		
 private:
 	/* initializes this thing */
@@ -30,6 +36,7 @@ private:
 
 private:
 	Rectangle * attribute_bounds;
+	int phased_count;
 
 };
 

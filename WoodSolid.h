@@ -23,10 +23,20 @@ public:
 
 	/* Draws this thing */
 	virtual void draw();
+
+	/* can this be phased from a certain diretion? */
+	virtual bool phaseable(int dir) const;
+
+	/* handles being phased */
+	virtual void phase();
 		
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
+
+// Attributes
+private: 
+	int phased_count;
 };
 
 #endif // WOOD_SOLID_THING_H_

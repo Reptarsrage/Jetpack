@@ -30,3 +30,19 @@ void Box::Init(const Rectangle r, const Sprites *s) {
 Box::~Box(){
 	delete bounds;
 }
+
+void Box::phase() {
+	is_solid = false;
+}
+
+void Box::draw(){
+	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
+	bounds->draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if (!is_solid) {
+		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(SPRITE_SOLIDPHASED));
+		bounds->draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+}

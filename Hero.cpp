@@ -2,7 +2,7 @@
 #include "Enums.h"
 
 const float HERO_WIDTH_RATIO = .6f;
-const float HERO_HEIGHT_RATIO = .9f;
+const float HERO_HEIGHT_RATIO = .85f;
 
 void Hero::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
@@ -36,9 +36,28 @@ Hero::~Hero(){
 	delete bounds;
 }
 
+void Hero::SetBounds(float x, float y, float width, float height) { 
+	if (bounds) 
+		delete bounds;
+	bounds = new Rectangle(x, y, width, height); 
+}
+
 void Hero::move(float x, float y){
 	bounds->position_x += x;
 	bounds->position_y += y;
+}
+
+void Hero::phase(int dir) {
+	if (dir == UP) {
+		def_sprite = SPRITE_PHASINGUP1;
+	} else if (dir == DOWN) {
+		def_sprite = SPRITE_PHASEDOWN1;
+	} else if (dir == LEFT) {
+		def_sprite = SPRITE_PHASINGLEFT1;
+	} else if (dir == RIGHT) {
+		def_sprite = SPRITE_PHASINGRIGHT1;
+	} else 
+		def_sprite = SPRITE_FRONT;
 }
 
 void Hero::Jump(float restitution) {

@@ -21,6 +21,15 @@ public:
 	// boxes can not have attributes 
 	virtual void setAttribute(int code) {}
 
+	/* can this be phased from a certain diretion? */
+	virtual bool phaseable(int dir) const { return true; }
+
+	/* handles being phased */
+	virtual void phase();
+
+	/* Draws this thing */
+	virtual void draw();
+
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);

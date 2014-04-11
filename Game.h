@@ -50,7 +50,9 @@ public:
 	void Clear();
 
 private:
-	
+	/* handles phasing through solid objects */
+	void Game::heroPhase(int dir) ;
+
 	/* teleports hero */
 	void teleport(const Teleporter *src);
 
@@ -129,8 +131,10 @@ private:
 			hold_right,		// Should our hero move right?
 			hold_up,		// Should our hero move up?
 			hold_down,		// Should our hero move down?
-			hold_jet_pack;		 // Should our hero activate his jetpack?
-
+			hold_jet_pack,	// Should our hero activate his jetpack?
+			hold_phase,		// Should our hero activate his phaser?
+			phasing_in_air;	// special flag to handle phasing while jetpacking in air
+							// which is really difficult for the user unless we help
 };
 
 #endif // GAME_H

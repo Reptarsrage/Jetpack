@@ -6,6 +6,9 @@
 #include "WoodSolid.h"
 #include "Enums.h"
 
+const int PHASE_RESISTANCE = 75; // how many ticks does it take to phase through this?
+const int PHASE_RECOVERY = 500;   // how many ticks does it take to recover from being phased?
+
 WoodSolid::WoodSolid(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
 	Init(r, s);
@@ -25,10 +28,31 @@ void WoodSolid::Init(const Rectangle r, const Sprites *s) {
 	attribute = -1;
 	is_solid = true;
 	is_collectable = false;
+	phased_count = PHASE_RESISTANCE;
 }
 
 WoodSolid::~WoodSolid(){
 	delete bounds;
+}
+
+bool WoodSolid::phaseable(int dir) const {
+	if (dir == DOWN && attribute == SHIELDED_DOWN)
+		return false;
+	if (dir == UP && attribute == SHIELDED_UP) // TODO: do we want to phase thu conveyors, ect?
+		return false;
+	if (dir == LEFT && attribute == SHIELDED_LEFT)
+		return false;
+	if (dir == RIGHT && attribute == SHIELDED_RIGHT)
+		return false;
+	return true;
+}
+
+void WoodSolid::phase() {
+	if (phased_count < 0) {
+		is_solid = false;
+		phased_count = PHASE_RECOVERY;
+	} else
+		phased_count -= 2;
 }
 
 void WoodSolid::setAttribute(int code) {
@@ -94,4 +118,15 @@ void WoodSolid::draw(){
 		bounds->draw();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+	
+	if (!is_solid && phased_count > 0) {
+		glBindTexture(GL_TEXTURE_2D, sprites->getSprite(SPRITE_SOLIDPHASED));
+		bounds->draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		phased_count--;
+	} else if (!is_solid) {
+		is_solid = true;
+		phased_count = PHASE_RESISTANCE;
+	} else if (phased_count < PHASE_RESISTANCE)
+		phased_count++;
 }

@@ -21,6 +21,10 @@ public:
 	Hero(float x, float y, float w, float h, const Sprites *s);
 	Hero(const Rectangle r, const Sprites *s);
 	
+	/* Constrols whether or not the hero is using his phaser */
+	/* Assumes not phasing if given a negative dir */
+	void Hero::phase(int dir);
+
 	/* Draws this thing */
 	virtual void draw();
 	
@@ -32,6 +36,9 @@ public:
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float delta_y);
+
+	/* Sets the bounds for this thing. */
+	virtual void SetBounds(float x, float y, float width, float height);
 	
 private:
 	/* initializes this hero */

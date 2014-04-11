@@ -63,7 +63,7 @@ Game::Game(float			x,
 	right = bounds->right();
 
 	// Controls
-	hold_left = hold_right = false;
+	hold_left = hold_right = hold_phase = phasing_in_air = false;
 	hold_up = hold_down = hold_jet_pack = false;
 
 	// consts
@@ -303,6 +303,47 @@ void Game::moveThings() {
 	}
 }
 
+void Game::heroPhase(int dir) {
+	if (dir < 0)
+		return;
+
+	const Rectangle h = hero->Bounds();
+	const Rectangle vertical = Rectangle(h.position_x + h.width / 2.f, h.position_y, h.width / 20.f, h.height);
+	const Rectangle horizontal = Rectangle(h.position_x, h.position_y - h.height / 2.f, h.width, h.height / 20.f);
+	Rectangle r;
+	if (dir == UP) {
+		r = Rectangle(vertical.position_x, vertical.position_y - max_velocity, vertical.width, vertical.height);
+	} else if (dir == DOWN) {
+		r = Rectangle(vertical.position_x, vertical.position_y + max_velocity, vertical.width, vertical.height);
+	} else if (dir == LEFT) {
+		r = Rectangle(horizontal.position_x - max_velocity, horizontal.position_y, horizontal.width, horizontal.height);
+	} else if (dir == RIGHT) {
+		r = Rectangle(horizontal.position_x + max_velocity, horizontal.position_y, horizontal.width, horizontal.height);
+	} else {
+		assert(false, "Unrecognized phase direction!");
+	}
+	for (SolidThing *s : *solid_things) {
+		if (s->is_solid && s->phaseable(dir) && s->Overlaps(r)) {
+			// phase this block
+			const Rectangle sb = s->Bounds();
+			float x,y;
+			x = y= 0;
+			s->phase();
+			if (dir == LEFT || dir == RIGHT){
+				y = ((sb.position_y + (col_h - h.height) / 2.f)  - h.position_y) / 10.f;
+				if (hold_jet_pack && !hero->on_ground)
+					phasing_in_air = true;
+			} else {
+				x = ((sb.position_x + (row_w - h.width) / 2.f) - h.position_x) / 10.f;
+			}
+			hero->SetBounds(h.position_x + x, h.position_y + y, h.width, h.height);
+			break;
+		}
+	}
+
+}
+
+
 void Game::moveHero() {
 	assert(hero);
 	
@@ -311,6 +352,29 @@ void Game::moveHero() {
 		// TODO: WIN
 	}
 	
+	// Phaser
+	phasing_in_air = false;
+	int dir = -1;
+	if (hold_phase) {
+		if (!Fl::event_key('x'))
+			hold_phase = false;
+		else if (hold_left) {
+			dir = LEFT;
+			heroPhase(LEFT);
+		} else if (hold_right) {
+			dir = RIGHT;
+		} else if (hold_up) {
+			dir = UP;
+		} else if (hold_down) {
+			dir = DOWN;
+		} else {
+			dir = UP;
+		}
+		heroPhase(dir);
+	}
+	hero->phase(dir);
+	
+	// collect things
 	heroGetSwag();
 
 	// move in x-dir
@@ -335,9 +399,12 @@ void Game::moveHero() {
 			hero->velocity_y = -max_velocity;
 	} else if (hold_jet_pack && !Fl::event_key('z')) {
 		hold_jet_pack = false;
-	} else if (hold_jet_pack) {
+	} else if (hold_jet_pack && !phasing_in_air) {
 		hero->on_ground = false;
 		hero->force_y = - jetpack_thrust;
+	} else if (hold_jet_pack && phasing_in_air) {
+		hero->velocity_y = 0;
+		hero->force_y = 0;
 	} else if (hold_down && !Fl::event_key(FL_Down)) 
 		hold_down = false;
 	else if (hold_down && hero->on_ladder)
@@ -369,7 +436,8 @@ void Game::moveHero() {
 		}
 	}
 	// apply forces
-	hero->applyGravity(force_gravity);
+	if (!phasing_in_air)
+		hero->applyGravity(force_gravity);
 	
 	// Check limits
 	if (hero->on_ladder) {
@@ -442,6 +510,7 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 	if (!body_ladder && above_ladder && hold_down) {
 		hero->on_ladder = true;
 		hero->ladder_dir = ladder_att;
+		delta_y = max_velocity;
 	} else if (!body_ladder && above_ladder) {
 		delta_y = s_bounds.bottom() - hero_bounds.top();
 		hero->on_ground = true;
@@ -458,6 +527,8 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 	if (delta_x == 0 && delta_y == 0)
 		return;
 
+	bool x_conflict, y_conflict;
+	x_conflict = y_conflict = false;
 	for (SolidThing *s : *solid_things){
 		if (s->is_solid && s->Overlaps(new_hero_bounds_x)) {
 			const Rectangle s_bounds = s->Bounds();
@@ -465,18 +536,23 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 				delta_x = s_bounds.left() - hero_bounds.right();
 			else
 				delta_x = s_bounds.right() - hero_bounds.left();
+			x_conflict = true;
 		}
 		if (s->is_solid && s->Overlaps(new_hero_bounds_y)) {
 			const Rectangle s_bounds = s->Bounds();
-			if (hero_bounds.top() <= s_bounds.bottom()) {
+			if (hero_bounds.bottom() <= s_bounds.bottom()) {
 				delta_y = s_bounds.bottom() - hero_bounds.top();
 				hero->on_ground = true;
 				hero->ground_type = s->getAttribute();
 			} else {
 				delta_y =  s_bounds.top() - hero_bounds.bottom();
 			}
+			y_conflict = true;
 		}
 	}
+
+	if (x_conflict && y_conflict)
+		delta_x = 0;
 
 	if (delta_y != 0) {
 		hero->on_ground = false;
@@ -590,7 +666,7 @@ void Game::draw()
 	
 	// draw everything else
 	drawHero();
-	drawMovingThings();
+	drawMovingThings();	
 
 	glDisable2D();
 }
@@ -713,6 +789,9 @@ int Game::handle(int event)
 				case 'z':
 					hold_jet_pack = true;
 					break;
+				case 'x':
+					hold_phase = true;
+					break;
 				case ' ':
 					hero->Jump(jump_restitution);
 					break;
@@ -742,6 +821,9 @@ int Game::handle(int event)
 					break;
 				case 'z':
 					hold_jet_pack = false;
+					break;
+				case 'x':
+					hold_phase = false;
 					break;
 			}
 			break;
