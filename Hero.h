@@ -56,6 +56,7 @@ public:
 		  on_ladder;		// hero currently climbing?
 	int ladder_dir;
 	int ground_type;
+	float ladder_left;		// position of ladder hero is climbing (to help center him)
 };
 
 
