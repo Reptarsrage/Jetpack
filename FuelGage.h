@@ -33,6 +33,9 @@ public:
 	void draw();
 
 // Attributes
+public:
+	float game_fuel;
+
 private:
 	Rectangle *bounds;							// Current bounds
 };

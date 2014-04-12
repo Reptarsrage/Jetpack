@@ -26,6 +26,7 @@ void Gem::Init(const Rectangle r, const Sprites *s) {
 	def_sprite = SPRITE_GEM;
 	is_solid = false;
 	is_collectable = true;
+	point_value = 20;
 }
 
 Gem::~Gem(){

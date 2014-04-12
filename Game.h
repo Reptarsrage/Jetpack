@@ -91,6 +91,9 @@ private:
 public:
 	float row_w,				// width of one column in our painting grid
 		  col_h;				// height of one row in our painting grid
+	int score;					// current score
+	float fuel_percentage;		// percentage of hero's fuel left [0, 1]
+
 private:
 	Rectangle *bounds;							// Current bounds for the hero
 	Hero *hero;
@@ -112,6 +115,7 @@ private:
 			ladder_velocity,	// how fast to go on ladders
 			force_ice,			// how slippery ice is
 			conveyor_speed;		// how fast conveyors move
+			
 
 	float left,					// drawing bounds left
 		  top,					// drawing bounds top

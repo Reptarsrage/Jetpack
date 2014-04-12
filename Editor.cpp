@@ -117,13 +117,6 @@ void Editor::draw()
 	
 	// Draw Scene
 	glEnable2D();
-
-	// clear screen and initialize things
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
-	glLoadIdentity();
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glColor3f(1,1,1);
 	
 	// Draw Backdrop
 	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));

@@ -40,6 +40,7 @@ const float LADDER_V_FACTOR = 1.f / 3.f;
 const float ICE_FORCE_FACTOR = .06f;
 const float CONVEYOR_V_FACTOR = .333f;
 const float MOSS_DELAY = 0.5f;
+const float FUEL_CONSMPT_RATE = 0.0005f;
 
 
 Game::Game(float			x, 
@@ -87,6 +88,8 @@ Game::Game(float			x,
 	dyn_things = new std::vector<MovingThing *>();
 	alive = true;
 	win = false;
+	score = 0;
+	fuel_percentage = 1;
 }
 
 Game::~Game() {
@@ -113,6 +116,8 @@ void Game::Clear() {
 	special_things = new std::vector<StationaryThing *>();
 	dyn_things = new std::vector<MovingThing *>();
 	gem_count = 0;
+	score = 0;
+	fuel_percentage = 1;
 }
 
 void Game::loadLevel(std::list<AbstractThing *> level) {
@@ -219,11 +224,9 @@ void Game::loadLevel(std::list<AbstractThing *> level) {
 
 bool Game::heroGetSwag() {
 	for (Collectable *s : *collectable_things){
-		if (s->Overlaps(hero)){
-			if (!s->Collected()) {
-				gem_count--;
-				s->Collect();
-			}
+		if (!s->Collected() && s->Overlaps(hero)){
+			gem_count--;
+			score += s->Collect();
 			return true;
 		}
 	}
@@ -410,12 +413,14 @@ void Game::moveHero() {
 			hero->velocity_x = ((hero->ladder_left + (row_w - h.width) / 2.f) - h.position_x) / 10.f;
 	} else if (hold_jet_pack && !Fl::event_key('z')) {
 		hold_jet_pack = false;
-	} else if (hold_jet_pack && !phasing_in_air) {
+	} else if (hold_jet_pack && !phasing_in_air && fuel_percentage > 0) {
 		hero->on_ground = false;
 		hero->force_y = - jetpack_thrust;
-	} else if (hold_jet_pack && phasing_in_air) {
+		fuel_percentage -= FUEL_CONSMPT_RATE;
+	} else if (hold_jet_pack && phasing_in_air && fuel_percentage > 0) {
 		hero->velocity_y = 0;
 		hero->force_y = 0;
+		fuel_percentage -= FUEL_CONSMPT_RATE;
 	} else if (hold_down && !Fl::event_key(FL_Down)) 
 		hold_down = false;
 	else if (hold_down && hero->on_ladder) {
@@ -456,6 +461,9 @@ void Game::moveHero() {
 	if (hero->on_ladder) {
 		hero->velocity_jump = 0;
 	}
+
+	if (fuel_percentage < 0)
+		fuel_percentage = 0;
 
 	if (hero->velocity_jump < 0.0)
 		hero->velocity_jump = 0.0;
@@ -674,12 +682,6 @@ void Game::draw()
 	moveHero();
 	moveThings();
 	glEnable2D();
-	// clear screen and initialize things
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
-	glLoadIdentity();
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glColor3f(1,1,1);
 	
 	// draw background
 	drawBackGround();

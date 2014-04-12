@@ -2,6 +2,8 @@
 #include "jetpackUI.h"
 #include "Rectangle.h"
 #include "Enums.h"
+#include <string>
+#include <sstream> 
 
 const float MENU_HEIGHT = 50.f;
 const float MARGIN_BOTTOM = 0.f;
@@ -26,11 +28,6 @@ Maestro::Maestro(float			x,
 	img = NULL;
 	img = new Fl_BMP_Image("Resources/background.bmp");
 	assert(img);
-	//fl_color(FL_RED);
-	//fl_font(FL_COURIER_BOLD, 26);
-	//img->draw(x + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT), y + height - MARGIN_BOTTOM - MENU_HEIGHT, fuel_gage->w(), fuel_gage->h());
-	//fl_draw("Score", x + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT), y + height - MARGIN_BOTTOM - MENU_HEIGHT, fuel_gage->w() / 5.f, fuel_gage->h() / 2.f, FL_ALIGN_LEFT_TOP);
-	
 }
 
 Maestro::~Maestro() {
@@ -44,10 +41,21 @@ void Maestro::loadLevel(std::list<AbstractThing *> level) {
 }
 
 void Maestro::draw() {
+	std::stringstream ss;
+	ss << "Score: ";
+	ss << game->score;
+	std::string str = ss.str();
+	
+	fuel_gage->game_fuel = game->fuel_percentage;
+	fuel_gage->redraw();
+	game->redraw();
 	fl_color(FL_RED);
 	fl_font(FL_COURIER_BOLD, 26);
 	img->draw(x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT), y() + height - MARGIN_BOTTOM - MENU_HEIGHT, fuel_gage->w(), fuel_gage->h());
-	fl_draw("Score", x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT), y() + height - MARGIN_BOTTOM - MENU_HEIGHT, fuel_gage->w() / 5.f, fuel_gage->h() / 2.f, FL_ALIGN_TEXT_OVER_IMAGE);
-	game->redraw();
-	fuel_gage->draw();
+	fl_draw(	str.c_str(), 
+				x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT) + 40, 
+				y() + height - MARGIN_BOTTOM - MENU_HEIGHT, 
+				fuel_gage->w(), 
+				fuel_gage->h() / 2.f, 
+				FL_ALIGN_LEFT_TOP);
 }

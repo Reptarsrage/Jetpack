@@ -17,21 +17,20 @@ void FuelGage::draw() {
 		valid(1);
 	}
 	glEnable2D();
+
 	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_FUELBACK));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	
+
 	// draw bar
 	glPushMatrix();
-		glColor3f(0,1,0);
-		glTranslatef(bounds->position_x + bounds->width * .086f, bounds->position_y - bounds->height *.533f, 0 );
+		glColor4f(1.f - game_fuel, game_fuel, 0, 1);
+		glTranslatef(bounds->position_x + bounds->width * .09f, bounds->position_y - bounds->height *.51f, 0 );
 		glBegin(GL_QUADS);
 			glVertex2f(0,0);
-			glVertex2f(bounds->width * .86f,0);
-			glVertex2f(bounds->width * .86f, bounds->height * .33f);
-			glVertex2f(0,bounds->height * .33f);
+			glVertex2f((bounds->width * .845f)* game_fuel,0);
+			glVertex2f((bounds->width * .845f)* game_fuel, bounds->height * .31f);
+			glVertex2f(0,bounds->height * .31f);
 		glEnd();
-	glPopMatrix();
-	
 	glDisable2D();
 }
