@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="FuelGage.cpp" />
     <ClCompile Include="Gem.cpp" />
     <ClCompile Include="Deathsicle.cpp" />
     <ClCompile Include="Door.cpp" />
@@ -96,8 +97,10 @@
     <ClCompile Include="fileio.cpp" />
     <ClCompile Include="Gold.cpp" />
     <ClCompile Include="BrickSolid.cpp" />
+    <ClCompile Include="Maestro.cpp" />
     <ClCompile Include="Mine.cpp" />
     <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="OpenGl2DWindow.cpp" />
     <ClCompile Include="StoneSolid.cpp" />
     <ClCompile Include="Switch.cpp" />
     <ClCompile Include="SwitchSolid.cpp" />
@@ -108,8 +111,11 @@
     <ClInclude Include="Deathsicle.h" />
     <ClInclude Include="FastSolid.h" />
     <ClInclude Include="BrickSolid.h" />
+    <ClInclude Include="FuelGage.h" />
+    <ClInclude Include="Maestro.h" />
     <ClInclude Include="Mine.h" />
     <ClInclude Include="Missile.h" />
+    <ClInclude Include="OpenGl2DWindow.h" />
     <ClInclude Include="StoneSolid.h" />
     <ClInclude Include="Switch.h" />
     <ClInclude Include="SwitchSolid.h" />

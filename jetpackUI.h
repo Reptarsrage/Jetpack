@@ -13,13 +13,14 @@
 #include <FL/Fl_Tabs.H>
 
 #include "jetpack_main.h"
-#include "Game.h"
+#include "Maestro.h"
 #include "Editor.h"
 #include "Sprites.h"
 
 const float DEFAULT_WIDTH = 800;		// Default window width
 const float DEFAULT_HEIGHT = 400;		// Default window height
 const float DEFAULT_MARGIN = 25;		// Default menu-bar height
+
 
 /*
  * Handles all forms, windows, menus and UI related things.
@@ -34,7 +35,7 @@ public:
 	/* Draw the main window */
 	void show();
 
-		/* Begins animation counter */
+	/* Begins animation counter */
 	void	startAnimating();
 
 	/* Stops animation counter */
@@ -84,12 +85,12 @@ public:
 	Fl_Group* m_gamePlay_group;				// FLTK Group holding the game
 	Fl_Group* m_editor_group;				// FLTK Group holding the level editor
 	
-	Game* m_gamePlay;				// In charge of painting/controlling the game
+	Maestro* m_gamePlay;				// In charge of painting/controlling the game
 	Editor* m_editor;					// In charge of painting/controlling the level editor
 	
-	Fl_Gl_Window *m_current;			// Current thing being used (animated).
+	Fl_Group *m_current;			// Current thing being used (animated).
 	
-	Fl_Window* m_mainWindow;			// The main form
+	Fl_Double_Window* m_mainWindow;			// The main form
 	Fl_Menu_Bar* m_menubar;				// menubar of main form
 	int				m_nWidth,			// Dimensions of original window.
 					m_nHeight;

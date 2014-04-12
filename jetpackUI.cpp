@@ -8,18 +8,18 @@
 #include "JetpackUI.h"
 #include "fileio.h"
 
-const int FRAME_RATE = 100; // not sure if this is right...
+const int CYCLE_RATE = 100; // times per second
 
 void callback(void* o) {
 		((JetpackUI *)o)->m_current->redraw();
-		Fl::repeat_timeout(1.0 / FRAME_RATE, callback, o);
+		Fl::repeat_timeout(1.0 / CYCLE_RATE, callback, o);
     }
 
 void JetpackUI::startAnimating() {
 	if (!animating) {
 		printf("ANIMATING\n");
 		animating = true;
-		Fl::add_timeout(1.0 / FRAME_RATE, callback, this);
+		Fl::add_timeout(1.0 / CYCLE_RATE, callback, this);
 	}
 }
 
@@ -137,8 +137,8 @@ void JetpackUI::playLoaded() {
 	string *description;
 	string *passcode;
 	std::list<AbstractThing *> *l = new std::list<AbstractThing *>();
-	load(filename, m_gamePlay->row_w, 
-				m_gamePlay->col_h, 
+	load(filename, m_gamePlay->getRowWidth(), 
+				m_gamePlay->getColHeight(), 
 				&num_rows, 
 				&num_cols,
 				&title,
@@ -199,25 +199,23 @@ JetpackUI::JetpackUI() {
 	animating = false;
 	
 	// Create the main window
-	m_mainWindow = new Fl_Window(DEFAULT_WIDTH, DEFAULT_HEIGHT, "Jetpack");
+	
+	m_mainWindow = new Fl_Double_Window(DEFAULT_WIDTH, DEFAULT_HEIGHT, "Jetpack");
 		m_mainWindow->user_data((void*)(this));	// record self to be used by static callback functions
 		// install menu bar
 		m_menubar = new Fl_Menu_Bar(0, 0, DEFAULT_WIDTH, DEFAULT_MARGIN);
 		m_menubar->menu(menuitems);
 		
-		//Fl_Tabs* tabs = new Fl_Tabs(20, 20, 350, 350);
 		Fl_Group* group_g = new Fl_Group(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 				// install editor view window
-				Game *game = new Game(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Game");
-				game->m_UI = this;
+		Maestro *game = new Maestro(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT - DEFAULT_MARGIN, this, "");
 			group_g->end();
-			group_g->hide();
 			Fl_Group* group_e = new Fl_Group(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 				// install gameplay view window
-				Editor *editor = new Editor(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT, "Level Editor");
+				Editor *editor = new Editor(0, DEFAULT_MARGIN, DEFAULT_WIDTH, DEFAULT_HEIGHT - DEFAULT_MARGIN, "");
 				editor->m_UI = this;
 			group_e->end();
-		//tabs->end();
+			group_e->hide();
     m_mainWindow->end();
 
 	// Set dimensions
@@ -227,7 +225,8 @@ JetpackUI::JetpackUI() {
 	m_gamePlay_group = group_g;
 	m_editor = editor;
 	m_gamePlay = game;
-	m_current = editor;
+	m_current = game;
+	m_mainWindow->iconize(); // IMPORTANT
 	startAnimating();
 }
 

@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <list>
+#include "OpenGl2DWindow.h"
 
 #ifdef __APPLE__
 #include "OpenGL/glew.h"
@@ -30,7 +31,7 @@ class Teleporter;
 class SolidThing;
 
 /* Controls the animation and drawing */
-class Game : public Fl_Gl_Window
+class Game : public OpenGl2DWindow
 {
 // Functions
 public:
@@ -43,7 +44,7 @@ public:
 	/* called when a key event happens in fltk */
 	int handle(int event);
 
-	/* called when a key event happens in fltk */
+	/* loads a level from a file */
 	void loadLevel(std::list<AbstractThing *> level);
 
 	/* clear the current map of things */
@@ -85,19 +86,9 @@ private:
 	
 	/* Helper function to advance the position of a moving thing. Does bounds checking! */
 	void advanceHeroPosition(float delta_x, float delta_y) const;
-	
-	/* Helper function to initialize opengl for drawing*/
-	int InitScene();
-	
-	/* Helper function to enable 2d drawing in opengl */
-	void glEnable2D();
-	
-	/* Helper function to disable 2d drawing in opengl */
-	void glDisable2D();
 
 // Attributes
 public:
-	JetpackUI *m_UI;							// Pointer to handler
 	float row_w,				// width of one column in our painting grid
 		  col_h;				// height of one row in our painting grid
 private:

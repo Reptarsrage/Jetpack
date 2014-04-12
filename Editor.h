@@ -13,6 +13,7 @@
 #include "Rectangle.h"
 #include <list>
 #include <queue>
+#include "OpenGl2DWindow.h"
 
 #ifdef __APPLE__
 #include "OpenGL/glew.h"
@@ -33,7 +34,7 @@ class AbstractThing;
 /* Controls the animation and drawing for
  * the level editor.
 */
-class Editor : public Fl_Gl_Window
+class Editor : public OpenGl2DWindow
 {
 // Functions
 public:
@@ -86,18 +87,8 @@ private:
 	/* handles user controls */
 	void moveCurser();
 
-	/* Helper function to initialize opengl for drawing*/
-	int InitScene();
-	
-	/* Helper function to enable 2d drawing in opengl */
-	void glEnable2D();
-	
-	/* Helper function to disable 2d drawing in opengl */
-	void glDisable2D();
-
 // Attributes
 public:
-	JetpackUI *m_UI;		// Pointer to handler
 	float row_w,			// width of one thing
 		  col_h;			// height of one thing
 private:

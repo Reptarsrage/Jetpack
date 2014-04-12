@@ -24,9 +24,9 @@
 const int NUM_ROWS = 16;
 const int NUM_COLS = 26;
 const float MARGIN_TOP = 5.f;
-const float MARGIN_BOTTOM = 40.f;
+const float MARGIN_BOTTOM = 5.f;
 const float MARGIN_LEFT = 5.f;
-const float MARGIN_RIGHT = 15.f;
+const float MARGIN_RIGHT = 5.f;
 const int FRAME_SKIP = 3;
 
 Editor::Editor(	float			x, 
@@ -34,7 +34,7 @@ Editor::Editor(	float			x,
 				float			w, 
 				float			h, 
 				const char*	l)
-				: Fl_Gl_Window(x,y,w,h,l)
+				: OpenGl2DWindow(x,y,w,h,l)
 {	
 	
 	// Dimensions
@@ -78,6 +78,7 @@ void Editor::draw()
 		valid(1);
 		InitScene();
 		printf("INITIALIZED\n");
+		bounds = new Rectangle(MARGIN_LEFT, h() - MARGIN_BOTTOM, bounds->width,  bounds->height);
 
 		if (!menu_items) {
 			// populate menu items
@@ -434,6 +435,7 @@ void Editor::DrawMenu() {
 
 int Editor::handle(int event)
 {
+	
 	if (Fl_Gl_Window::handle(event) != 0)
 		return 1;
 	int key = Fl::event_key();
@@ -523,63 +525,4 @@ int Editor::handle(int event)
 			break;
 		}
 	return 1;
-}
-
-void Editor::glEnable2D()
-{
-
-    GLint iViewport[4];
-
-    // Get a copy of the viewport
-    glGetIntegerv( GL_VIEWPORT, iViewport );
-
-    // Save a copy of the projection matrix so that we can restore it 
-    // when it's time to do 3D rendering again.
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Set up the orthographic projection
-    glOrtho( iViewport[0], iViewport[0]+iViewport[2],
-                        iViewport[1]+iViewport[3], iViewport[1], -1, 1 );
-
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Make sure depth testing and lighting are disabled for 2D rendering until
-    // we are finished rendering in 2D
-    glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_LIGHTING_BIT );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_LIGHTING );
-
-}
-
-void Editor::glDisable2D()
-{
-    glPopAttrib();
-    glMatrixMode( GL_PROJECTION );
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix();
-}
-
-int Editor::InitScene()
-
-{
-        // Disable lighting
-        glDisable( GL_LIGHTING );
-
-        // Disable dithering
-        glDisable( GL_DITHER );
-
-        // Disable blending (for now)
-        glDisable( GL_BLEND );
-
-        // Disable depth testing
-        glDisable( GL_DEPTH_TEST );
-
-		m_UI->sprites->Load("Resources/");
-
-		return 1;
 }

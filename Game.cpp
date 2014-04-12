@@ -33,9 +33,9 @@ const float JETPACK_THRUST = 0.028f;
 const float JUMP_RESTITUTION = 0.33f;
 const float MARGIN = 8.f;
 const float MARGIN_TOP = 5.f;
-const float MARGIN_BOTTOM = 40.f;
+const float MARGIN_BOTTOM = 5.f;
 const float MARGIN_LEFT = 5.f;
-const float MARGIN_RIGHT = 15.f;
+const float MARGIN_RIGHT = 5.f;
 const float LADDER_V_FACTOR = 1.f / 3.f;
 const float ICE_FORCE_FACTOR = .06f;
 const float CONVEYOR_V_FACTOR = .333f;
@@ -47,7 +47,7 @@ Game::Game(float			x,
 					 float			w, 
 					 float			h, 
 					 const char*	l)
-						: Fl_Gl_Window(x,y,w,h,l)
+						: OpenGl2DWindow(x,y,w,h,l)
 {
 	// Dimensions
 	float width = w - (MARGIN_LEFT + MARGIN_RIGHT);
@@ -324,7 +324,7 @@ void Game::heroPhase(int dir) {
 	} else if (dir == RIGHT) {
 		r = Rectangle(horizontal.position_x + max_velocity, horizontal.position_y, horizontal.width, horizontal.height);
 	} else {
-		assert(false, "Unrecognized phase direction!");
+		assert("Unrecognized phase direction!" == "Error");
 	}
 	for (SolidThing *s : *solid_things) {
 		if (s->is_solid && s->phaseable(dir) && s->Overlaps(r)) {
@@ -535,7 +535,7 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 		hero->on_ladder = true;
 		hero->ladder_dir = ladder_att;
 		delta_y = max_velocity;
-	} else if (!body_ladder && above_ladder) {
+	} else if (!body_ladder && above_ladder && delta_y >= 0) {
 		delta_y = s_bounds.bottom() - hero_bounds.top();
 		hero->on_ground = true;
 		hero->ground_type = -1;
@@ -659,10 +659,8 @@ void Game::draw()
 {
 	if(!valid())
 	{
-		// initialize opengl
 		valid(1);
 		InitScene();
-		printf("INITIALIZED\n");
 		// Hero
 		if (!hero)
 			hero = new Hero(bounds->left(), bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
@@ -675,10 +673,7 @@ void Game::draw()
 	// move things
 	moveHero();
 	moveThings();
-	
-	// Draw Scene
 	glEnable2D();
-	
 	// clear screen and initialize things
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clean the screen and the depth buffer
 	glLoadIdentity();
@@ -704,7 +699,6 @@ void Game::draw()
 		bounds->draw();
 		alive = true;
 	}
-
 	glDisable2D();
 }
 
@@ -874,63 +868,4 @@ int Game::handle(int event)
 			break;
 		}
 	return 1;
-}
-
-void Game::glEnable2D()
-{
-
-    GLint iViewport[4];
-
-    // Get a copy of the viewport
-    glGetIntegerv( GL_VIEWPORT, iViewport );
-
-    // Save a copy of the projection matrix so that we can restore it 
-    // when it's time to do 3D rendering again.
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Set up the orthographic projection
-    glOrtho( iViewport[0], iViewport[0]+iViewport[2],
-                        iViewport[1]+iViewport[3], iViewport[1], -1, 1 );
-
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Make sure depth testing and lighting are disabled for 2D rendering until
-    // we are finished rendering in 2D
-    glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_LIGHTING_BIT );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_LIGHTING );
-
-}
-
-void Game::glDisable2D()
-{
-    glPopAttrib();
-    glMatrixMode( GL_PROJECTION );
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix();
-}
-
-int Game::InitScene()
-
-{
-        // Disable lighting
-        glDisable( GL_LIGHTING );
-
-        // Disable dithering
-        glDisable( GL_DITHER );
-
-        // Disable blending (for now)
-        glDisable( GL_BLEND );
-
-        // Disable depth testing
-        glDisable( GL_DEPTH_TEST );
-
-		m_UI->sprites->Load("Resources/");
-
-		return 1;
 }
