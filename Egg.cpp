@@ -26,6 +26,7 @@ void Egg::Init(const Rectangle r, const Sprites *s) {
 	hero_x = hero_y = 0;
 	type = TYPE_EGG;
 	def_sprite = SPRITE_EGG;
+	gen_type = BADDIE;
 }
 
 Egg::~Egg(){

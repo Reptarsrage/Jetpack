@@ -42,8 +42,11 @@ public:
 
 	/* Draws this thing in its bounds */
 	virtual void draw()= 0;
-	
+
 // Atributes
+public:
+	int gen_type;
+
 protected:
 	Rectangle *bounds;			// The bounds of this thing.
 	char * name;				// The name of this thing.

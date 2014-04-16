@@ -25,6 +25,7 @@ void StoneSolid::Init(const Rectangle r, const Sprites *s) {
 	attribute = -1;
 	is_solid = true;
 	is_collectable = false;
+	gen_type = SOLID;
 }
 
 StoneSolid::~StoneSolid(){

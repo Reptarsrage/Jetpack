@@ -22,6 +22,7 @@ void NonSolidThing::Init(const Rectangle r, const Sprites *s) {
 	setInfo(TYPE_PILLAR, SPRITE_PILLAR, "NonSolidThing");
 	is_solid = false;
 	is_collectable = false;
+	gen_type = NONSOLID;
 }
 
 NonSolidThing::~NonSolidThing(){

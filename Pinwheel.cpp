@@ -26,6 +26,7 @@ void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	hero_x = hero_y = 0;
 	type = TYPE_PINWHEEL;
 	def_sprite = SPRITE_PINWHEEL1;
+	gen_type = BADDIE;
 }
 
 Pinwheel::~Pinwheel(){

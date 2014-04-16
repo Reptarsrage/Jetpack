@@ -42,7 +42,7 @@ Editor::Editor(	float			x,
 	float height = h - (MARGIN_BOTTOM + MARGIN_TOP);
 	row_w = width / (NUM_COLS * 1.0f);
 	col_h = height / (NUM_ROWS * 1.0f);
-	bounds = new Rectangle(MARGIN_LEFT, h - MARGIN_BOTTOM, width, height);
+	bounds = new Rectangle(x + MARGIN_LEFT, h - MARGIN_BOTTOM, width, height);
 
 	// better bounds
 	left = bounds->left();
@@ -125,12 +125,27 @@ void Editor::draw()
 
 	// draw placed items
 	for (AbstractThing *thing : *placed_items) {
+		if (thing->gen_type != NONSOLID && thing->gen_type != COLLECTABLE)
 		thing->draw();
 	}
 	if (hero)
 		hero->draw();
 	if (door)
 		door->draw();
+
+	// draw placed collectables
+	for (AbstractThing *thing : *placed_items) {
+		if (thing->gen_type == COLLECTABLE)
+		thing->draw();
+	}
+
+	// draw placed non solids
+	for (AbstractThing *thing : *placed_items) {
+		if (thing->gen_type == NONSOLID)
+		thing->draw();
+	}
+
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// draw menu
@@ -171,7 +186,7 @@ void Editor::placeHero() {
 		return;
 	if (hero)
 		hero = NULL;
-
+	removeThing();
 	hero = new Hero(curser->left(), curser->top(), row_w, col_h, m_UI->sprites);
 
 }
@@ -181,7 +196,7 @@ void Editor::placeDoor() {
 		return;
 	if (door)
 		door = NULL;
-
+	removeThing();
 	door = new Door(curser->left(), curser->top(), row_w, col_h, m_UI->sprites);
 }
 
@@ -276,13 +291,30 @@ void Editor::placeThing(){
 
 	AbstractThing *item = getThingFromCode(selected, curser->position_x, curser->position_y,
 		row_w, col_h, m_UI->sprites);
-	std::list<AbstractThing *>::iterator it;
-	for (it =  placed_items->begin(); it != placed_items->end(); ++it) {
-		if ((*it)->Overlaps(item)) {
-			placed_items->erase(it);
-			break;
-		} 
+
+	int type = item->gen_type;
+	
+	if (type == SOLID)
+		removeThing();
+	
+	if (hero && item->Overlaps(hero))
+		hero = NULL;
+	
+	if (door && item->Overlaps(door))
+		door = NULL;
+
+	std::list<AbstractThing *>::iterator it = placed_items->begin();
+	while (it != placed_items->end()) {
+		if ((type == NONSOLID && (*it)->gen_type == NONSOLID ||
+			type == COLLECTABLE && (*it)->gen_type == COLLECTABLE ||
+			type == BADDIE && (*it)->gen_type == BADDIE) &&
+			(*it)->Overlaps(*curser))
+			
+			placed_items->erase(it++);
+		else
+			++it;
 	}
+
 	placed_items->push_back(item);
 }
 
@@ -307,17 +339,17 @@ void Editor::chooseThing(){
 }
 
 void Editor::advancePosition(bool upf, bool downf, bool leftf, bool rightf) {
-	if ((choosing && upf && curser->top() > menu->bottom() + col_h)
-		|| (!choosing && upf && curser->top() > top)) {
+	if ((choosing && upf && curser->top() > menu->bottom() + col_h * 1.5f)
+		|| (!choosing && upf && curser->top() > top + col_h / 2.f)) {
 		curser->position_y -= col_h;
 	}
-	if (downf && curser->top() < bottom) {
+	if (downf && curser->top() < bottom - col_h / 2.f) {
 		curser->position_y += col_h;
 	}
-	if (leftf && curser->left() > left) {
+	if (leftf && curser->left() > left + row_w / 2.f) {
 		curser->position_x -= row_w;
 	}
-	if (rightf && curser->left() < right) {
+	if (rightf && curser->left() < right - row_w / 2.f) {
 		curser->position_x += row_w;
 	}
 }

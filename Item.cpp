@@ -25,6 +25,7 @@ void Item::Init(const Rectangle r, const Sprites *s) {
 	setType(TYPE_FULLFUEL);
 	is_solid = false;
 	is_collectable = true;
+	gen_type = COLLECTABLE;
 }
 
 Item::~Item(){

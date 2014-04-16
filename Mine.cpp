@@ -18,6 +18,7 @@ void Mine::Init(const Rectangle r, const Sprites *s) {
 	on_ground = on_ladder = hit_wall_bottom = hit_wall_left = hit_wall_right = hit_wall_top = false;
 	type = TYPE_MINE;
 	def_sprite = SPRITE_MINE;
+	gen_type = BADDIE;
 }
 
 Mine::~Mine(){

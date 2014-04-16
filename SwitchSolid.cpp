@@ -24,6 +24,7 @@ void SwitchSolid::Init(const Rectangle r, const Sprites *s) {
 	def_sprite = SPRITE_REDSWITCHSOLID;
 	is_solid = true;
 	is_collectable = false;
+	gen_type = SOLID;
 }
 
 void SwitchSolid::Switch(){

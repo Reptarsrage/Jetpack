@@ -24,6 +24,7 @@ void Missile::Init(const Rectangle r, const Sprites *s) {
 	hero_x = hero_y = 0;
 	type = TYPE_MISSILE;
 	def_sprite = SPRITE_MISSILELEFT1;
+	gen_type = BADDIE;
 }
 
 Missile::~Missile(){

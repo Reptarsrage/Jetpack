@@ -15,6 +15,12 @@ void init_rand();
 float m_randf();
 AbstractThing* getThingFromCode(int code, float x, float y, float width, float height, Sprites *sprites);
 
+enum GeneralTypeEnum { BADDIE,
+					   SOLID,
+					   NONSOLID,
+					   COLLECTABLE,
+					   OTHER };
+
 /* Sprite identifiers, corrosponding to the sprites loaded using the same order as SpriteNames[] */
 enum SpriteEnum {   SPRITE_GAMEOVER_WEB_FINAL,
 					SPRITE_IVY,

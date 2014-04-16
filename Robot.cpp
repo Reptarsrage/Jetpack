@@ -26,6 +26,7 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	hero_x = hero_y = 0;
 	type = TYPE_ROBOT;
 	def_sprite = SPRITE_ROBOLEFT1;
+	gen_type = BADDIE;
 }
 
 Robot::~Robot(){

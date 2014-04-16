@@ -30,6 +30,7 @@ void FastSolid::Init(const Rectangle r, const Sprites *s) {
 	is_collectable = false;
 	attribute = -1;
 	phased_count = PHASE_RESISTANCE;
+	gen_type = SOLID;
 }
 
 FastSolid::~FastSolid(){

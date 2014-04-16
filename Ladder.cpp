@@ -25,6 +25,7 @@ void Ladder::Init(const Rectangle r, const Sprites *s) {
 	is_solid = false;
 	is_collectable = false;
 	direction = -1;
+	gen_type = NONSOLID;
 }
 
 Ladder::~Ladder(){

@@ -248,10 +248,6 @@ void Game::drawBackGround() {
 		s->draw();
 	}
 
-	for (StationaryThing *s : *nonsolid_things) {
-		s->draw();
-	}
-
 	for (StationaryThing *s : *collectable_things) {
 		s->draw();
 	}
@@ -259,7 +255,12 @@ void Game::drawBackGround() {
 	for (StationaryThing *s : *special_things) {
 		s->draw();
 	}
+	drawMovingThings();
 	door->draw();
+	drawHero();
+	for (StationaryThing *s : *nonsolid_things) {
+		s->draw();
+	}
 }
 
 void Game::drawMovingThings() {
@@ -683,12 +684,8 @@ void Game::draw()
 	moveThings();
 	glEnable2D();
 	
-	// draw background
+	// draw everything
 	drawBackGround();
-	
-	// draw everything else
-	drawHero();
-	drawMovingThings();
 
 	if (win) {
 		glColor4f(1,1,0,.2f);

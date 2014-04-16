@@ -23,6 +23,7 @@ void Predator::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_HUNTER;
 	hero_x = hero_y = 0.f;
 	def_sprite = SPRITE_HUNTERV1;
+	gen_type = BADDIE;
 }
 
 Predator::~Predator(){

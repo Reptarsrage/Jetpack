@@ -24,6 +24,7 @@ void Switch::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_REDSWITCH;
 	is_solid = false;
 	is_collectable = false;
+	gen_type = SOLID; // (sort of) we don't want anything on top of a switch in a level
 }
 
 Switch::~Switch(){

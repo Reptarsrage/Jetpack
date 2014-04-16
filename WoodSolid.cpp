@@ -29,6 +29,7 @@ void WoodSolid::Init(const Rectangle r, const Sprites *s) {
 	is_solid = true;
 	is_collectable = false;
 	phased_count = PHASE_RESISTANCE;
+	gen_type = SOLID;
 }
 
 WoodSolid::~WoodSolid(){

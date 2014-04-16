@@ -25,6 +25,7 @@ void Box::Init(const Rectangle r, const Sprites *s) {
 	is_solid = true;
 	is_collectable = false;
 	attribute = -1;
+	gen_type = SOLID;
 }
 
 Box::~Box(){

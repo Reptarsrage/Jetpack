@@ -23,6 +23,7 @@ void Gold::Init(const Rectangle r, const Sprites *s) {
 	setValue(0);
 	is_solid = false;
 	is_collectable = true;
+	gen_type = COLLECTABLE;
 }
 
 Gold::~Gold(){

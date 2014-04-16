@@ -23,6 +23,7 @@ void Door::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_DOOR;
 	def_sprite = SPRITE_DOORCLOSED;
 	is_open = false;
+	gen_type = OTHER;
 }
 
 Door::~Door(){
