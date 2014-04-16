@@ -51,7 +51,7 @@ Editor::Editor(	float			x,
 	right = bounds->right() - row_w;
 
 	// Controls
-	choosing = hold_left = hold_right = false;
+	choosing = hold_left = hold_right = hold_del = false;
 	hold_up = hold_down = hold_place = false;
 
 	// curser
@@ -325,12 +325,17 @@ void Editor::advancePosition(bool upf, bool downf, bool leftf, bool rightf) {
 void Editor::moveCurser() {
 	assert(curser);
 	
-	//place/choose
+	//place/choose/ delete
 	if (hold_place && !Fl::event_key(' ')) {
 		hold_place = false;
 	} else if (hold_place) {
    		handleSpace();
-	}
+	} else if (hold_del && !Fl::event_key(FL_Shift_L) && !Fl::event_key(FL_Shift_R)) {
+		hold_del = false;
+	} else if (hold_del)
+		removeThing();
+
+
 	
 	// skip some frames
 	if (frame < 0)
@@ -366,6 +371,16 @@ void Editor::moveCurser() {
 
 	// set positions
 	advancePosition(up, down, left, right);
+}
+
+void Editor::removeThing() {
+	std::list<AbstractThing *>::iterator it = placed_items->begin();
+	while (it != placed_items->end()) {
+		if ((*it)->Overlaps(*curser))
+			placed_items->erase(it++);
+		else
+			++it;
+	}
 }
 
 void Editor::handleSpace() {
@@ -444,6 +459,7 @@ int Editor::handle(int event)
 					break;
 				case ' ':
 					hold_place = true;
+					hold_del = false;
 					handleSpace();
 					break;
 				case FL_Enter:
@@ -479,12 +495,19 @@ int Editor::handle(int event)
 				case 's':
 					m_UI->stopAnimating();
 					break;
+				case FL_Shift_L:
+				case FL_Shift_R:
+					hold_del = true;
+					hold_place = false;
+					break;
 			}
 			break;
 		case FL_KEYUP:
 			switch(key) {
 				case ' ':
 					hold_place = false;
+					if (Fl::event_key(FL_Shift_L) || Fl::event_key(FL_Shift_R))
+						hold_del = true;
 					break;	
 				case FL_Left:
 					hold_left = false;
@@ -505,6 +528,12 @@ int Editor::handle(int event)
 					hold_down = false;
 					if (Fl::event_key(FL_Up))
 						hold_up = true;
+					break;
+				case FL_Shift_L:
+				case FL_Shift_R:
+					hold_del = false;
+					if (Fl::event_key(' '))
+						hold_place = true;
 					break;
 			}
 			break;

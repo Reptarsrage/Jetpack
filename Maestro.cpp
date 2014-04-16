@@ -28,6 +28,7 @@ Maestro::Maestro(float			x,
 	img = NULL;
 	img = new Fl_BMP_Image("Resources/background.bmp");
 	assert(img);
+	level = 1;
 }
 
 Maestro::~Maestro() {
@@ -44,7 +45,13 @@ void Maestro::draw() {
 	std::stringstream ss;
 	ss << "Score: ";
 	ss << game->score;
-	std::string str = ss.str();
+	std::string score = ss.str();
+
+
+	ss= std::stringstream();
+	ss << "Level: ";
+	ss << level;
+	std::string lev = ss.str();
 	
 	fuel_gage->game_fuel = game->fuel_percentage;
 	fuel_gage->redraw();
@@ -52,9 +59,15 @@ void Maestro::draw() {
 	fl_color(FL_RED);
 	fl_font(FL_COURIER_BOLD, 26);
 	img->draw(x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT), y() + height - MARGIN_BOTTOM - MENU_HEIGHT, fuel_gage->w(), fuel_gage->h());
-	fl_draw(	str.c_str(), 
+	fl_draw(	score.c_str(), 
 				x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT) + 40, 
 				y() + height - MARGIN_BOTTOM - MENU_HEIGHT, 
+				fuel_gage->w(), 
+				fuel_gage->h() / 2.f, 
+				FL_ALIGN_LEFT_TOP);
+	fl_draw(	lev.c_str(), 
+				x() + fuel_gage->w() + (MARGIN_LEFT + MARGIN_RIGHT) + 40, 
+				y() + height + fuel_gage->h() / 2.f - MARGIN_BOTTOM - MENU_HEIGHT, 
 				fuel_gage->w(), 
 				fuel_gage->h() / 2.f, 
 				FL_ALIGN_LEFT_TOP);

@@ -60,6 +60,9 @@ public:
 	bool Playable();
 
 private:
+	/* removes the placed item(s) at the curser */
+	void removeThing();
+
 	/* places the hero */
 	void placeHero();
 
@@ -116,6 +119,7 @@ private:
 			hold_up,		// Should our curser move up?
 			hold_down,		// Should our curser move down?
 			hold_place,		// Is the user trying to place/select a thing?
+			hold_del,		// Should we delete the node at curser pos?
 			choosing;		// Is the menu showing/user picking a thing?
 };
 

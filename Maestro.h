@@ -57,6 +57,7 @@ private:
 
 // Attributes
 private:
+	int level;
 	float height;
 	Game *game;
 	FuelGage *fuel_gage;
