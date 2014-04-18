@@ -36,7 +36,7 @@ private:
 
 // Attributes
 private:
-	
+	int switch_time;	// time in beween sprite switches
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

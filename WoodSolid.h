@@ -36,7 +36,8 @@ private:
 
 // Attributes
 private: 
-	int phased_count;
+	int phased_count;	// how long until phased? recovered?
+	int switch_time;	// update conveyor sprite
 };
 
 #endif // WOOD_SOLID_THING_H_

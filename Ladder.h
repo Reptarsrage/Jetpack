@@ -21,6 +21,9 @@ public:
 	/* Sets the direction for moving ladders */
 	void setDirection(int code);
 
+	/* draws this ladder */
+	void draw();
+
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
@@ -29,6 +32,8 @@ private:
 public:
 	int direction;
 
+private:
+	int switch_time;
 };
 
 #endif // LADDER_H_

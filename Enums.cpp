@@ -297,6 +297,7 @@ AbstractThing* getThingFromCode(int code, float x, float y, float width, float h
 			printf("UNIDENTIFIED THING! CODE:%d\n", code);
 			break;
 	}
+	result->SetActualBounds(x,y, width, height);
 	return result;
 }
 

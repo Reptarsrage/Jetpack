@@ -101,6 +101,7 @@ void Editor::draw()
 					
 					menu_items[item_count] = getThingFromCode(item_count, menu_ptr.position_x, menu_ptr.position_y,
 															  row_w, col_h, m_UI->sprites);
+					menu_items[item_count]->SetBounds(menu_ptr.position_x, menu_ptr.position_y,row_w, col_h);
 					printf("added menu item %d, %s.\n", item_count, menu_items[item_count]->ToString());
 					item_count++;
 					menu_ptr.position_x += row_w;
@@ -210,7 +211,7 @@ void Editor::loadLevel(std::list<AbstractThing *> level) {
 		const Rectangle b = thing->Bounds();
 		row = static_cast<int>(b.position_x);
 		col = static_cast<int>(b.position_y);
-		thing->SetBounds(left + b.position_x * row_w, top + b.position_y*col_h, b.width, b.height);
+		thing->SetBounds(bounds->left() + b.position_x * row_w, top + b.position_y*col_h, row_w, col_h);
 		if (thing->getType() == TYPE_HERO) {
 			hero = reinterpret_cast<Hero *>(thing);
 			printf("Loading hero at col %d and row %d\n", col, row);
@@ -247,7 +248,7 @@ const std::queue<AbstractThing *>* Editor::getLevel() {
 				q->push(door);
 			}
 			for (AbstractThing *thing : *placed_items) {
-				if (thing->Overlaps(ptr)) {
+				if (ptr.Overlaps(thing->Bounds())) {
 					printf("Saving %s at col %d and row %d\n", thing->ToString(), col, row);
 					q->push(thing);
 				}
@@ -284,18 +285,20 @@ void Editor::switchContext() {
 	}
 }
 
-void Editor::placeThing(){
+void Editor::placeThing() {
 	assert(!choosing);
 	if (selected < 0)
 		return;
 
 	AbstractThing *item = getThingFromCode(selected, curser->position_x, curser->position_y,
 		row_w, col_h, m_UI->sprites);
+	item->SetBounds(curser->position_x, curser->position_y, row_w, col_h);
 
 	int type = item->gen_type;
 	
-	if (type == SOLID)
+	if (type == SOLID) {
 		removeThing();
+	}
 	
 	if (hero && item->Overlaps(hero))
 		hero = NULL;
@@ -308,13 +311,14 @@ void Editor::placeThing(){
 		if ((type == NONSOLID && (*it)->gen_type == NONSOLID ||
 			type == COLLECTABLE && (*it)->gen_type == COLLECTABLE ||
 			type == BADDIE && (*it)->gen_type == BADDIE) &&
-			(*it)->Overlaps(*curser))
+			curser->Overlaps((*it)->Bounds())) {
+			printf("Replacing! ");
 			
 			placed_items->erase(it++);
-		else
+		} else
 			++it;
 	}
-
+	printf("Pacing %dth item.\n", placed_items->size() + 1);
 	placed_items->push_back(item);
 }
 
@@ -322,7 +326,7 @@ void Editor::chooseThing(){
 	assert(choosing);
 	
 	int row = (curser->position_y - (menu->bottom() + col_h)) / col_h;
-	int col = (curser->position_x - menu->position_x) / row_w;
+	int col = (curser->position_x - menu->position_x + row_w / 2.f) / row_w;
 	int special_case = 0;
 	if (col + row*NUM_COLS >= TYPE_DOOR)
 		special_case++;
@@ -333,7 +337,7 @@ void Editor::chooseThing(){
 		return;
 	}
 	AbstractThing *t = getThingFromCode(special_case + col + row*NUM_COLS, 0, 0 ,0 ,0, m_UI->sprites);
-	printf("chose %s\n", t->ToString());
+	printf("chose %s at row %d and col %d\n", t->ToString(), row, col);
 	delete t;
 	selected = special_case + col + row*NUM_COLS;
 }
@@ -408,9 +412,10 @@ void Editor::moveCurser() {
 void Editor::removeThing() {
 	std::list<AbstractThing *>::iterator it = placed_items->begin();
 	while (it != placed_items->end()) {
-		if ((*it)->Overlaps(*curser))
+		if ((*it)->Overlaps(*curser)) {
 			placed_items->erase(it++);
-		else
+			printf("Replacing! ");
+		} else
 			++it;
 	}
 }
@@ -492,7 +497,6 @@ int Editor::handle(int event)
 				case ' ':
 					hold_place = true;
 					hold_del = false;
-					handleSpace();
 					break;
 				case FL_Enter:
 					switchContext();

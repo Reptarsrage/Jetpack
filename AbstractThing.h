@@ -37,6 +37,10 @@ public:
 	/* Returns the name of this thing. */
 	virtual const char *ToString() const { return name; }
 
+	/* Sets the bounds for this thing with out adjustments. */
+	void SetActualBounds(float x, float y, float width, float height)
+		{ if (bounds) delete bounds; bounds = new Rectangle(x, y, width, height); }
+
 // Pure Virtual Functions
 public:
 

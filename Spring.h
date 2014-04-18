@@ -37,7 +37,8 @@ private:
 
 // Attributes
 private:
-	
+	int bounce_time,	// time to spend not moving when a wall is hit
+		switch_time;	// time in beween sprite switches
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

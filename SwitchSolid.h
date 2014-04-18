@@ -13,7 +13,7 @@
  * Ther are different colors representing which solids are turned on/off
  * when each switch is pressed. The solid can be either verticle or horizontal.
  */
-class SwitchSolid : public StationaryThing {
+class SwitchSolid : public SolidThing {
 // Functions
 public:
 	SwitchSolid(float x, float y, float w, float h, const Sprites *s);
@@ -28,6 +28,9 @@ public:
 
 	/* turns this switch solid on and off */
 	virtual void Switch();
+
+	/* switches can't have attributes */
+	virtual void setAttribute(int code) {}
 	
 private:
 	/* initializes this thing */

@@ -3,8 +3,11 @@
 
 const float SPEED = 1.8f;
 const float EPSILON = 1.f;
-const float HERO_WIDTH_RATIO = .6f;
-const float HERO_HEIGHT_RATIO = .9f;
+const float WIDTH_RATIO = .6f;
+const float HEIGHT_RATIO = .9f;
+const float D_WIDTH_RATIO = .8f;
+const float D_HEIGHT_RATIO = 1.f;
+const int SWITCH_SPEED = 6;
 
 Robot::Robot(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -17,7 +20,14 @@ Robot::Robot(const Rectangle r, const Sprites *s) {
 
 void Robot::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width * HERO_WIDTH_RATIO, r.height * HERO_HEIGHT_RATIO);
+
+	// set bounds and adjust
+	width_ratio = WIDTH_RATIO;
+	height_ratio = HEIGHT_RATIO;
+	d_width_ratio = D_WIDTH_RATIO;
+	d_height_ratio = D_HEIGHT_RATIO;
+	adjustToBounds(r.position_x, r.position_y, r.width, r.height);
+
 	name = "Robot";
 	sprites = s;
 	velocity_x = SPEED;
@@ -27,6 +37,7 @@ void Robot::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_ROBOT;
 	def_sprite = SPRITE_ROBOLEFT1;
 	gen_type = BADDIE;
+	switch_time = SWITCH_SPEED;
 }
 
 Robot::~Robot(){
@@ -37,16 +48,22 @@ void Robot::SetDir() {
 	if (velocity_x != 0)
 		return;
 	
-	if (hero_x > bounds->position_x)
+	if (hero_x > bounds->position_x) {
 		velocity_x = SPEED;
-	else
+		def_sprite = SPRITE_ROBORIGHT1;
+	} else {
 		velocity_x = -SPEED;
+		def_sprite = SPRITE_ROBOLEFT1;
+	}
 }
 
 void Robot::move(float x, float y) {
-	if (on_ground || on_ladder)
+	if (on_ground || on_ladder) {
 		bounds->position_x += x;
+		draw_bounds->position_x += x;
+	}
 	bounds->position_y += y;
+	draw_bounds->position_y += y;
 }
 
 void Robot::Grounded(bool b) {
@@ -174,14 +191,28 @@ float Robot::getIntendedX() {
 
 	if (hit_wall_left) {
 		// hit a wall to the left, switch directions
+		def_sprite = SPRITE_ROBORIGHT1;
 		hit_wall_left = false;
 		velocity_x *= -1;
-	}
-
-	if (hit_wall_right) {
-		// hit a wall to the left, switch directions
+	}else if (hit_wall_right) {
+		// hit a wall to the right, switch directions
+		def_sprite = SPRITE_ROBOLEFT1;
 		hit_wall_right = false;
 		velocity_x *= -1;
+	} else if (switch_time > 0){
+		switch_time--;
+	} else if (def_sprite == SPRITE_ROBOLEFT1) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_ROBOLEFT2;
+	} else if (def_sprite == SPRITE_ROBOLEFT2) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_ROBOLEFT1;
+	} else if (def_sprite == SPRITE_ROBORIGHT1) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_ROBORIGHT2;
+	} else {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_ROBORIGHT1;
 	}
 	return velocity_x;
 }

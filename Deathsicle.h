@@ -35,6 +35,10 @@ public:
 	/* sets the direction of the deathly Stalactite/Stalacmite */
 	/* this should always be called immediatetly after construction! */
 	virtual void setDir(int dir);
+
+protected:
+	/* adjusts the bounds to match ratios and center thing */
+	virtual void adjustToBounds(float x, float y, float width, float height);
 	
 private:
 	/* initializes this baddie */

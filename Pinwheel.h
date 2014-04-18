@@ -31,6 +31,9 @@ public:
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
 
+	/* Sets the bounds for this thing.  Adjusts for size. Use SetActualBounds in order to dodge this adjustment */
+	virtual void SetBounds(float x, float y, float width, float height);
+
 private:
 	/* Calculates the ricochet off of walls*/
 	void calculate_dir(float norm_x, float norm_y);
@@ -43,7 +46,7 @@ private:
 
 // Attributes
 private:
-	
+	int switch_time;	// time in beween sprite switches
 	float velocity_x,	// velocity in the x-dir
 		  velocity_y;	// velocity in the y-dir
 };

@@ -106,7 +106,7 @@ private:
 
 	int		gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)
-			
+
 	float	max_velocity,		// scalable maximum velocity of things
 			jump_restitution,	// scalable jump power of hero
 			force_gravity,		// scalable force of gravity on moving things

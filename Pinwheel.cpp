@@ -3,6 +3,11 @@
 
 const float SPEED = 2.f;
 const float EPSILON = 0.1f;
+const int SWITCH_SPEED = 5;
+const float WIDTH_RATIO = .3f;
+const float HEIGHT_RATIO = .3f;
+const float D_WIDTH_RATIO = .5f;
+const float D_HEIGHT_RATIO = .5f;
 
 Pinwheel::Pinwheel(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -15,7 +20,12 @@ Pinwheel::Pinwheel(const Rectangle r, const Sprites *s) {
 
 void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
+	width_ratio = WIDTH_RATIO;
+	height_ratio = HEIGHT_RATIO;
+	d_width_ratio = D_WIDTH_RATIO;
+	d_height_ratio = D_HEIGHT_RATIO;
+	adjustToBounds(r.position_x, r.position_y, r.width, r.height);
+
 	name = "Pinwheel";
 	sprites = s;
 	float dir_angle = fmod(m_randf(), 2*PI);
@@ -27,14 +37,25 @@ void Pinwheel::Init(const Rectangle r, const Sprites *s) {
 	type = TYPE_PINWHEEL;
 	def_sprite = SPRITE_PINWHEEL1;
 	gen_type = BADDIE;
+	switch_time = SWITCH_SPEED;
 }
 
 Pinwheel::~Pinwheel(){
 	delete bounds;
+	delete draw_bounds;
 }
 
 float Pinwheel::applyGravity(float force_gravity, float max_velocity_grav) {
 	return 0;
+}
+
+void Pinwheel::SetBounds(float x, float y, float width, float height) { 
+	if (bounds) 
+		delete bounds; 
+	if (draw_bounds)
+		delete draw_bounds;
+
+	adjustToBounds(x, y, width, height);
 }
 
 void Pinwheel::randomize_dir() {
@@ -86,6 +107,22 @@ float Pinwheel::getIntendedY() {
 }
 
 float Pinwheel::getIntendedX() {
+	if (switch_time > 0) {
+		switch_time--;
+	} else if (def_sprite == SPRITE_PINWHEEL1) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_PINWHEEL2;
+	} else if (def_sprite == SPRITE_PINWHEEL2) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_PINWHEEL3;
+	} else if (def_sprite == SPRITE_PINWHEEL3) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_PINWHEEL4;
+	} else {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_PINWHEEL1;
+	}
+	
 	if (hit_wall_left && hit_wall_right) {
 		hit_wall_left = hit_wall_right = false;
 		return 0;

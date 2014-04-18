@@ -31,6 +31,10 @@ public:
 private:
 	/* initializes this thing */
 	void Init(const Rectangle r, const Sprites *s);
+
+// Attributes
+private:
+	int switch_time;	// update conveyor sprite
 };
 
 #endif // STONE_SOLID_H_

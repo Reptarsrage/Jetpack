@@ -5,6 +5,7 @@
 */
 
 #include "rectangle.h"
+const float OVERLAP_EPSILON = 0.0001f;
 
 Rectangle::Rectangle(){
 	position_x = 0;
@@ -25,8 +26,8 @@ Rectangle::Rectangle(float x, float y, float w, float h){
 
 bool Rectangle::Overlaps(const Rectangle other) const{
 	
-	return (left() < other.right() && right() > other.left() &&
-			 bottom() < other.top() && top() > other.bottom());
+	return (left() + OVERLAP_EPSILON < other.right() && right() - OVERLAP_EPSILON > other.left() &&
+			 bottom() + OVERLAP_EPSILON < other.top() && top() - OVERLAP_EPSILON > other.bottom());
 
 }
 

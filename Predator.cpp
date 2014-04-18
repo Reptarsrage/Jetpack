@@ -1,7 +1,13 @@
 #include "Predator.h"
 #include "Enums.h"
 
-const float SPEED = 0.175f;
+const float SPEED = 5.f;
+const int SWITCH_SPEED = 40;
+const int SWITCH_SPEED_S = 10;
+const float WIDTH_RATIO = .7f;
+const float HEIGHT_RATIO = .7f;
+const float D_WIDTH_RATIO = .7f;
+const float D_HEIGHT_RATIO = .7f;
 
 Predator::Predator(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
@@ -14,7 +20,14 @@ Predator::Predator(const Rectangle r, const Sprites *s) {
 
 void Predator::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width, r.height);
+	
+	// set bounds and adjust
+	width_ratio = WIDTH_RATIO;
+	height_ratio = HEIGHT_RATIO;
+	d_width_ratio = D_WIDTH_RATIO;
+	d_height_ratio = D_HEIGHT_RATIO;
+	adjustToBounds(r.position_x, r.position_y, r.width, r.height);
+
 	name = "Predator";
 	sprites = s;
 	velocity_x = 0;
@@ -24,6 +37,8 @@ void Predator::Init(const Rectangle r, const Sprites *s) {
 	hero_x = hero_y = 0.f;
 	def_sprite = SPRITE_HUNTERV1;
 	gen_type = BADDIE;
+	switch_time = SWITCH_SPEED;
+	switch_small = SWITCH_SPEED_S;
 }
 
 Predator::~Predator(){
@@ -36,17 +51,47 @@ float Predator::applyGravity(float force_gravity, float max_velocity_grav) {
 
 float Predator::getIntendedY() {
 	if (hero_y > bounds->position_y){
-		return SPEED;
+		velocity_y = SPEED;
 	} else {
-		return -SPEED;
+		velocity_y = -SPEED;
 	}
 
+	if (switch_time > 0) {
+		switch_time--;
+		velocity_y = 0;
+	} else if (def_sprite == SPRITE_HUNTERH1 || def_sprite == SPRITE_HUNTERH2) {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_HUNTERV1;
+	} else {
+		switch_time = SWITCH_SPEED;
+		def_sprite = SPRITE_HUNTERH1;
+	}
+	return velocity_y;
 }
 
 float Predator::getIntendedX() {
 	if (hero_x > bounds->position_x){
-		return SPEED;
+		velocity_x =  SPEED;
 	} else {
-		return -SPEED;
+		velocity_x =  -SPEED;
 	}
+	if (switch_time > 0)
+		velocity_x = 0;
+
+	if (switch_small > 0)
+		switch_small--;
+	else if (def_sprite == SPRITE_HUNTERH1) {
+		switch_small = SWITCH_SPEED_S;
+		def_sprite = SPRITE_HUNTERH2;
+	} else if (def_sprite == SPRITE_HUNTERH2) {
+		switch_small = SWITCH_SPEED_S;
+		def_sprite = SPRITE_HUNTERH1;
+	} else if (def_sprite == SPRITE_HUNTERV1) {
+		switch_small = SWITCH_SPEED_S;
+		def_sprite = SPRITE_HUNTERV2;
+	} else {
+		switch_small = SWITCH_SPEED_S;
+		def_sprite = SPRITE_HUNTERV1;
+	}
+	return velocity_x;
 }

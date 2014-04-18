@@ -30,7 +30,7 @@ public:
 
 	/* Attempts to apply gravity to the object, returns the value dropped due to gravity */
 	virtual float applyGravity(float force_gravity, float max_velocity_grav);
-	
+
 private:
 	/* initializes this baddie */
 	void Init(const Rectangle r, const Sprites *s);

@@ -18,15 +18,18 @@ public:
 	/* gets the grounds attribute */
 	virtual int getAttribute() { return attribute; }
 
-	/* Sets an additional property of the block */
-	/* should be called immediately afer construction, if there is an attribute! */
-	virtual void setAttribute(int code) = 0;
-
 	/* can this be phased from a certain diretion? */
 	virtual bool phaseable(int dir) const { return false; }
 
 	/* handles being phased */
 	virtual void phase() { is_solid = false; }
+
+// Pure Virtual Functions
+public:
+	
+	/* Sets an additional property of the block */
+	/* should be called immediately afer construction, if there is an attribute! */
+	virtual void setAttribute(int code) = 0;
 
 protected:
 	int attribute;				// a solid thing may have one attribute, i.e. ice, moss.

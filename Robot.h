@@ -49,6 +49,8 @@ private:
 
 // Attributes
 private:
+	int switch_time;	// time in beween sprite switches
+	
 	bool on_top_of_ladder;	// special flag for when we know where on top of a ladder, 
 							// not technically on ground.
 	float velocity_x,	// velocity in the x-dir

@@ -8,6 +8,7 @@
 #define HERO_H_
 
 #include "AbstractThing.h"
+#include "Enums.h"
 
 /*
  * Position and properties of the player controlled charcter.
@@ -39,6 +40,16 @@ public:
 
 	/* Sets the bounds for this thing. */
 	virtual void SetBounds(float x, float y, float width, float height);
+
+	/* sets the sprite */
+	void setSprite(int sprite) {
+		assert(sprite > 0);
+		assert(sprite < SPRITE_COUNT);
+		def_sprite = sprite;
+	}
+
+	/* animates a step */
+	void step(int dir);
 	
 private:
 	/* initializes this hero */
@@ -56,6 +67,7 @@ public:
 		  on_ladder;		// hero currently climbing?
 	int ladder_dir;
 	int ground_type;
+	int walk_time;			// how fast to update walking animation
 	float ladder_left;		// position of ladder hero is climbing (to help center him)
 };
 

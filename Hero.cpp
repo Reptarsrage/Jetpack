@@ -1,12 +1,14 @@
 #include "Hero.h"
-#include "Enums.h"
 
-const float HERO_WIDTH_RATIO = .6f;
-const float HERO_HEIGHT_RATIO = .85f;
+const float WIDTH_RATIO = .6f;
+const float HEIGHT_RATIO = .85f;
+const int WALK_SPEED = 5;
 
 void Hero::Init(const Rectangle r, const Sprites *s) {
 	assert(s);
-	bounds = new Rectangle(r.position_x, r.position_y, r.width * HERO_WIDTH_RATIO, r.height * HERO_HEIGHT_RATIO);
+	float margin_l = (r.width - (WIDTH_RATIO * r.width)) / 2.f;
+	float margin_t = (r.height - (HEIGHT_RATIO * r.height)) / 2.f;
+	bounds = new Rectangle(margin_l + r.position_x, r.position_y - margin_t, WIDTH_RATIO * r.width, HEIGHT_RATIO * r.height);
 	name = "Hero";
 	sprites = s;
 	velocity_x = 0.0;
@@ -23,6 +25,7 @@ void Hero::Init(const Rectangle r, const Sprites *s) {
 	ladder_dir = -1;
 	ladder_left = 0;
 	gen_type = OTHER;
+	walk_time = WALK_SPEED;
 }
 
 Hero::Hero(float x, float y, float w, float h, const Sprites *s){
@@ -41,7 +44,9 @@ Hero::~Hero(){
 void Hero::SetBounds(float x, float y, float width, float height) { 
 	if (bounds) 
 		delete bounds;
-	bounds = new Rectangle(x, y, width, height); 
+	float margin_l = (width - (WIDTH_RATIO * width)) / 2.f;
+	float margin_t = (height - (HEIGHT_RATIO * height)) / 2.f;
+	bounds = new Rectangle(margin_l + x, y - margin_t, WIDTH_RATIO * width, HEIGHT_RATIO * height); 
 }
 
 void Hero::move(float x, float y){
@@ -58,8 +63,34 @@ void Hero::phase(int dir) {
 		def_sprite = SPRITE_PHASINGLEFT1;
 	} else if (dir == RIGHT) {
 		def_sprite = SPRITE_PHASINGRIGHT1;
-	} else 
+	}
+}
+
+void Hero::step(int dir) {
+	if (walk_time > 0) {
+		walk_time--;
+		if (def_sprite != SPRITE_LEFT1 && def_sprite != SPRITE_LEFT2) {
+			if (dir == LEFT)
+				def_sprite = SPRITE_LEFT1;
+			else if (dir == RIGHT)
+				def_sprite = SPRITE_RIGHT1;
+		}
+	} else if (def_sprite == SPRITE_LEFT1) {
+		walk_time = WALK_SPEED;
+		def_sprite = SPRITE_LEFT2;
+	} else if (def_sprite == SPRITE_LEFT2) {
+		walk_time = WALK_SPEED;
+		def_sprite = SPRITE_LEFT1;
+	} else if (def_sprite == SPRITE_RIGHT1) {
+		walk_time = WALK_SPEED;
+		def_sprite = SPRITE_RIGHT2;
+	} else if (def_sprite == SPRITE_RIGHT2) {
+		walk_time = WALK_SPEED;
+		def_sprite = SPRITE_RIGHT1;
+	} else {
+		walk_time = WALK_SPEED;
 		def_sprite = SPRITE_FRONT;
+	}
 }
 
 void Hero::Jump(float restitution) {
@@ -84,6 +115,7 @@ float Hero::applyGravity(float force_gravity) {
 		velocity_y += (force_y + force_gravity) * mass;
 		return force_gravity;
 	}
+	
 	return 0;
 }
 

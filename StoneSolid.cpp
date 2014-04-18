@@ -6,6 +6,8 @@
 #include "StoneSolid.h"
 #include "Enums.h"
 
+const int CONVEYOR_SPEED = 1;
+
 StoneSolid::StoneSolid(float x, float y, float w, float h, const Sprites *s){
 	const Rectangle r = Rectangle(x, y, w, h);
 	Init(r, s); 
@@ -26,6 +28,7 @@ void StoneSolid::Init(const Rectangle r, const Sprites *s) {
 	is_solid = true;
 	is_collectable = false;
 	gen_type = SOLID;
+	switch_time = CONVEYOR_SPEED;
 }
 
 StoneSolid::~StoneSolid(){
@@ -57,7 +60,42 @@ void StoneSolid::setAttribute(int code) {
 	}
 }
 
-void StoneSolid::draw(){
+void StoneSolid::draw(){ 
+	if (switch_time > 0)
+		switch_time--;
+	else if (attribute == CONVEYOR_RIGHT && attribute_sprite == SPRITE_CONVEYORSOLID1) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID5;
+	} else if (attribute == CONVEYOR_RIGHT && attribute_sprite == SPRITE_CONVEYORSOLID2) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID1;
+	} else if (attribute == CONVEYOR_RIGHT && attribute_sprite == SPRITE_CONVEYORSOLID3) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID2;
+	} else if (attribute == CONVEYOR_RIGHT && attribute_sprite == SPRITE_CONVEYORSOLID4) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID3;
+	} else if (attribute == CONVEYOR_RIGHT && attribute_sprite == SPRITE_CONVEYORSOLID5) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID4;
+	} else if (attribute == CONVEYOR_LEFT && attribute_sprite == SPRITE_CONVEYORSOLID1) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID2;
+	} else if (attribute == CONVEYOR_LEFT && attribute_sprite == SPRITE_CONVEYORSOLID2) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID3;
+	} else if (attribute == CONVEYOR_LEFT && attribute_sprite == SPRITE_CONVEYORSOLID3) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID4;
+	} else if (attribute == CONVEYOR_LEFT && attribute_sprite == SPRITE_CONVEYORSOLID4) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID5;
+	} else if (attribute == CONVEYOR_LEFT && attribute_sprite == SPRITE_CONVEYORSOLID5) {
+		switch_time = CONVEYOR_SPEED;
+		attribute_sprite = SPRITE_CONVEYORSOLID1;
+	} else 
+		switch_time = CONVEYOR_SPEED;
+
 	glBindTexture(GL_TEXTURE_2D, sprites->getSprite(def_sprite));
 	bounds->draw();
 	glBindTexture(GL_TEXTURE_2D, 0);

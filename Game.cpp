@@ -42,7 +42,6 @@ const float CONVEYOR_V_FACTOR = .333f;
 const float MOSS_DELAY = 0.5f;
 const float FUEL_CONSMPT_RATE = 0.0005f;
 
-
 Game::Game(float			x, 
 					 float			y, 
 					 float			w, 
@@ -59,7 +58,7 @@ Game::Game(float			x,
 
 	// better bounds
 	left = bounds->left();
-	top = bounds->bottom() + col_h;
+	top = bounds->bottom();
 	bottom = bounds->top();
 	right = bounds->right();
 
@@ -133,7 +132,7 @@ void Game::loadLevel(std::list<AbstractThing *> level) {
 	
 	for (AbstractThing *thing : level) {
 		const Rectangle b = thing->Bounds();
-		thing->SetBounds(bounds->left() + b.position_x * row_w, bounds->bottom() + col_h + b.position_y*col_h, b.width, b.height);
+		thing->SetBounds(bounds->left() + b.position_x * row_w, bounds->bottom() + col_h + b.position_y*col_h, row_w, col_h);
 		switch (thing->getType()){
 			case TYPE_IVY:
 			case TYPE_PILLAR:
@@ -344,7 +343,7 @@ void Game::heroPhase(int dir) {
 			} else {
 				x = ((sb.position_x + (row_w - h.width) / 2.f) - h.position_x) / 10.f;
 			}
-			hero->SetBounds(h.position_x + x, h.position_y + y, h.width, h.height);
+			hero->SetActualBounds(h.position_x + x, h.position_y + y, h.width, h.height);
 			break;
 		}
 	}
@@ -449,15 +448,31 @@ void Game::moveHero() {
 		} else if (hero->ground_type == MOSSY){
 			hero->velocity_x *= MOSS_DELAY;
 		} else if (hero->ground_type == CONVEYOR_LEFT) {
-			hero->velocity_x += conveyor_speed;
-		} else if (hero->ground_type == CONVEYOR_RIGHT) {
 			hero->velocity_x -= conveyor_speed;
+		} else if (hero->ground_type == CONVEYOR_RIGHT) {
+			hero->velocity_x += conveyor_speed;
 		}
 	}
 	// apply forces
 	if (!phasing_in_air)
 		hero->applyGravity(force_gravity);
 	
+	// update hero's sprite
+	if (!hero->on_ladder && !hold_phase) {
+		if (hero->velocity_jump > 0 && !hold_jet_pack)
+			hero->setSprite(SPRITE_JUMPING);
+		else if (hold_left && hold_jet_pack)
+			hero->setSprite(SPRITE_LEFTJET);
+		else if (hold_right && hold_jet_pack)
+			hero->setSprite(SPRITE_RIGHTJET);
+		else if (hold_left)
+			hero->step(LEFT);
+		else if (hold_right)
+			hero->step(RIGHT);
+		else 
+			hero->setSprite(SPRITE_FRONT);
+	}
+
 	// Check limits
 	if (hero->on_ladder) {
 		hero->velocity_jump = 0;
@@ -507,9 +522,9 @@ void Game::advanceHeroPosition(float delta_x, float delta_y) const {
 		delta_y = bottom - hero_bounds.top();
 		hero->on_ground = true;
 	}
-	else if (new_hero_bounds_y.top() < top)
+	else if (new_hero_bounds_y.bottom() < top)
 		// hit ceiling
-		delta_y =  top - hero_bounds.top();
+		delta_y =  top - hero_bounds.bottom();
 
 	// handle ladders
 	// stop on top of ladders, treat ladder tops as ground
@@ -624,9 +639,9 @@ void Game::advancePosition(MovingThing *thing, float delta_x, float delta_y) con
 		thing->hit_wall_bottom = true;
 		grounded = true;
 	}
-	else if (new_thing_bounds_y.top() < top) {
+	else if (new_thing_bounds_y.bottom() < top) {
 		// hit ceiling
-		delta_y =  top - thing_bounds.top();
+		delta_y =  top - thing_bounds.bottom();
 		thing->hit_wall_top = true;
 	}
 
@@ -684,7 +699,7 @@ void Game::draw()
 	moveThings();
 	glEnable2D();
 	
-	// draw everything
+	// draw everythingon 
 	drawBackGround();
 
 	if (win) {
