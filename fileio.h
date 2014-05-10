@@ -14,6 +14,8 @@
 #include <cstdint>
 #include <iostream>
 #include <fstream>
+#include "Level.h"
+
 using namespace std;
 
 /*File specifications:
@@ -39,26 +41,14 @@ using namespace std;
 //	level = all the things on the level with their correct (relative) positions
 //			set to their column number and row number.
 
-extern void load(string& filename,  
-							 float row_w, 
-							 float col_h, 
-							 int *num_rows, 
-							 int *num_cols,
-							 string **title,
-							 string **description,
-							 string **passcode,
-							 list<AbstractThing *> *level,
-							 Sprites *sprites);
+extern list<struct Level*> *load(const string& filename, Sprites *sprites);
 
 // Saves the level to the given filename
 // expects the queue to be in col-wise order,
 // with null values in place of empty tiles.
-extern void save(string& filename, 
-		  string& title, 
-		  string& description, 
-		  string& passcode, 
-		  queue<AbstractThing *> level,
-		  int num_rows, 
-		  int num_cols);
+extern void save(const string& filename, Level& level);
+
+/* removes the level with the given title from the file. */
+extern void remove_level(const string& filename, const string& title);
 
 #endif // FILE_IO_H_

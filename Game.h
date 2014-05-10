@@ -104,7 +104,9 @@ private:
 	std::vector<Collectable *> *collectable_things;		// Holds all collectable things
 	std::vector<MovingThing *> *dyn_things;				// Holds all baddies
 
-	int		gem_count;			// Number of gems left in the level 
+	int		frozen_timer,		// how long baddies are frozen for
+			invincible_timer,	// how long the hero is invincible for
+			gem_count;			// Number of gems left in the level 
 								// (hero must collect all gems to open door and beat level)
 
 	float	max_velocity,		// scalable maximum velocity of things

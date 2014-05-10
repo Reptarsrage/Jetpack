@@ -97,10 +97,12 @@
     <ClCompile Include="fileio.cpp" />
     <ClCompile Include="Gold.cpp" />
     <ClCompile Include="BrickSolid.cpp" />
+    <ClCompile Include="loadMenu.cpp" />
     <ClCompile Include="Maestro.cpp" />
     <ClCompile Include="Mine.cpp" />
     <ClCompile Include="Missile.cpp" />
     <ClCompile Include="OpenGl2DWindow.cpp" />
+    <ClCompile Include="SaveMenu.cpp" />
     <ClCompile Include="StoneSolid.cpp" />
     <ClCompile Include="Switch.cpp" />
     <ClCompile Include="SwitchSolid.cpp" />
@@ -112,10 +114,13 @@
     <ClInclude Include="FastSolid.h" />
     <ClInclude Include="BrickSolid.h" />
     <ClInclude Include="FuelGage.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="loadMenu.h" />
     <ClInclude Include="Maestro.h" />
     <ClInclude Include="Mine.h" />
     <ClInclude Include="Missile.h" />
     <ClInclude Include="OpenGl2DWindow.h" />
+    <ClInclude Include="SaveMenu.h" />
     <ClInclude Include="StoneSolid.h" />
     <ClInclude Include="Switch.h" />
     <ClInclude Include="SwitchSolid.h" />

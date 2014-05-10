@@ -41,6 +41,8 @@ const float ICE_FORCE_FACTOR = .06f;
 const float CONVEYOR_V_FACTOR = .333f;
 const float MOSS_DELAY = 0.5f;
 const float FUEL_CONSMPT_RATE = 0.0005f;
+const int INCINCIBILITY_LENGTH = 500;
+const int FROZEN_LENGTH = 500;
 
 Game::Game(float			x, 
 					 float			y, 
@@ -76,6 +78,8 @@ Game::Game(float			x,
 	ladder_velocity = max_velocity * LADDER_V_FACTOR;
 	force_ice = ICE_FORCE_FACTOR *max_velocity;
 	conveyor_speed = max_velocity * CONVEYOR_V_FACTOR;
+	frozen_timer = 0;
+	invincible_timer = 0;
 
 	// hero/env
 	hero = NULL;
@@ -116,6 +120,8 @@ void Game::Clear() {
 	dyn_things = new std::vector<MovingThing *>();
 	gem_count = 0;
 	score = 0;
+	invincible_timer = 0;
+	frozen_timer = 0;
 	fuel_percentage = 1;
 }
 
@@ -224,7 +230,26 @@ void Game::loadLevel(std::list<AbstractThing *> level) {
 bool Game::heroGetSwag() {
 	for (Collectable *s : *collectable_things){
 		if (!s->Collected() && s->Overlaps(hero)){
-			gem_count--;
+			switch(s->getType()) {
+			case TYPE_GEM:
+				gem_count--;
+				break;
+			case TYPE_TIMER:
+				frozen_timer = FROZEN_LENGTH;
+				break;
+			case TYPE_INVINCIBILITY:
+				invincible_timer = INCINCIBILITY_LENGTH;
+				break;
+			case TYPE_FULLFUEL:
+				fuel_percentage = 1;
+				break;
+			case TYPE_HALFFUEL:
+				fuel_percentage = std::min(fuel_percentage + .5f, 1.f);
+				break;
+			default:
+				printf("Unkown collected item!");
+				break;
+			}
 			score += s->Collect();
 			return true;
 		}
@@ -254,7 +279,9 @@ void Game::drawBackGround() {
 	for (StationaryThing *s : *special_things) {
 		s->draw();
 	}
+	
 	drawMovingThings();
+
 	door->draw();
 	drawHero();
 	for (StationaryThing *s : *nonsolid_things) {
@@ -277,7 +304,7 @@ void Game::drawHero() {
 void Game::moveThings() {
 	assert(dyn_things);
 	for (MovingThing *baddie : *dyn_things){
-		if (baddie->Overlaps(hero)) {
+		if (invincible_timer == 0 && baddie->Overlaps(hero)) {
 			// HERO DIES
 			alive = false;
 		}
@@ -458,7 +485,7 @@ void Game::moveHero() {
 		hero->applyGravity(force_gravity);
 	
 	// update hero's sprite
-	if (!hero->on_ladder && !hold_phase) {
+	if (!hero->on_ladder && !hold_phase && invincible_timer == 0) {
 		if (hero->velocity_jump > 0 && !hold_jet_pack)
 			hero->setSprite(SPRITE_JUMPING);
 		else if (hold_left && hold_jet_pack)
@@ -471,7 +498,8 @@ void Game::moveHero() {
 			hero->step(RIGHT);
 		else 
 			hero->setSprite(SPRITE_FRONT);
-	}
+	} else if (invincible_timer > 0)
+		hero->setSprite(SPRITE_INVINCIBILITY);
 
 	// Check limits
 	if (hero->on_ladder) {
@@ -693,10 +721,20 @@ void Game::draw()
 		if (!door)
 			door = new Door(bounds->left() + 4*row_w, bounds->bottom() + col_h, row_w, col_h, m_UI->sprites);
 	}
-	
+	assert(invincible_timer >= 0);
+	assert(frozen_timer >= 0);
+
+	if (invincible_timer > 0)
+		invincible_timer--;
+
 	// move things
 	moveHero();
-	moveThings();
+	
+	if (frozen_timer == 0)
+		moveThings();
+	else
+		frozen_timer--;
+
 	glEnable2D();
 	
 	// draw everythingon 

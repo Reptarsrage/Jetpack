@@ -48,10 +48,10 @@ public:
 	int handle(int event);
 
 	/* loads the level from a file */
-	void loadLevel(const std::list<AbstractThing *> level);
+	void loadLevel(std::list<AbstractThing *> level);
 
 	/* saves the level to a file */
-	const std::queue<AbstractThing *> *getLevel();
+	std::list<AbstractThing *> *getLevel();
 
 	/* removes all placed items */
 	void Clear();

@@ -231,29 +231,29 @@ bool Editor::Playable() {
 	return hero && door;
 }
 
-const std::queue<AbstractThing *>* Editor::getLevel() {
+std::list<AbstractThing *>* Editor::getLevel() {
 	assert(hero);
 	assert(door);
 	
-	std::queue<AbstractThing *> *q = new std::queue<AbstractThing *>();
+	std::list<AbstractThing *> *q = new std::list<AbstractThing *>();
 	Rectangle ptr = Rectangle(left, top, row_w, col_h);
 	for (int row = 0; row < NUM_ROWS; row++){
 		for (int col = 0; col < NUM_COLS; col++) {
 			if (hero->Overlaps(ptr)) {
 				printf("Saving hero at col %d and row %d\n", col, row);
-				q->push(hero);
+				q->push_back(hero);
 			}
 			if (door->Overlaps(ptr)) {
 				printf("Saving door at col %d and row %d\n", col, row);
-				q->push(door);
+				q->push_back(door);
 			}
 			for (AbstractThing *thing : *placed_items) {
 				if (ptr.Overlaps(thing->Bounds())) {
 					printf("Saving %s at col %d and row %d\n", thing->ToString(), col, row);
-					q->push(thing);
+					q->push_back(thing);
 				}
 			}
-			q->push(NULL);
+			q->push_back(NULL);
 			ptr.position_x += row_w;
 		}
 		ptr.position_x = left;

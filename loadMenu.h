@@ -1,0 +1,55 @@
+/* Justin Robb
+ * 4-37-14
+ * JetPack
+ * The loading a level window
+*/
+
+#ifndef LOADING_MENU_H
+#define LOADING_MENU_H
+
+#include <stdlib.h>
+#include <vector>
+#include <list>
+#include "FL\Fl_Hold_Browser.H"
+#include "FL\Fl_Text_Display.H"
+#include "FL\Fl_Text_Buffer.H"
+#include "FL\Fl_Image.H"
+#include "FL\Fl_Button.H"
+#include "jetpackUI.h"
+
+#ifdef __APPLE__
+#include "OpenGL/glew.h"
+#else
+#include "GL/glew.h"
+#endif
+
+class Rectangle;
+class JetpackUI;
+class Sprites;
+
+class LoadingMenu : public Fl_Group {
+
+// Functions
+public:
+	LoadingMenu(float x, float y, float w, float h, const char* l, JetpackUI *ui);
+	~LoadingMenu();
+	static void	cb_sel(Fl_Widget* o, void* v);
+	static void	cb_confirm(Fl_Widget* o, void* v);
+	void setTexts(const char * title, const char * description,  const char *password);
+	void update(std::string filename);
+	
+	/* This returns the UI, given the browser item.  It provides a
+	 * link from the browser items to the UI 
+	 */
+	static LoadingMenu* whoami(Fl_Widget* o);
+	
+public:
+	Fl_Hold_Browser *browser;
+	Fl_Text_Buffer *tit_buf, *desc_buf, *pass_buf;
+	Fl_Text_Display *title, *description, *pass;
+	Fl_Button *confirm;
+	std::list<struct Level *> *level_cache;
+	JetpackUI *m_UI;
+};
+
+#endif // LOADING_MENU_H

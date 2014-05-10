@@ -168,6 +168,12 @@
     <ClCompile Include="OpenGl2DWindow.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="loadMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jetpack_main.h">
@@ -291,6 +297,15 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="OpenGl2DWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="loadMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveMenu.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

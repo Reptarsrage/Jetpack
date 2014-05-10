@@ -16,11 +16,17 @@
 #include "Maestro.h"
 #include "Editor.h"
 #include "Sprites.h"
+#include "loadMenu.h"
+#include "SaveMenu.h"
+#include "Level.h"
+#include "Enums.h"
 
 const float DEFAULT_WIDTH = 800;		// Default window width
 const float DEFAULT_HEIGHT = 400;		// Default window height
 const float DEFAULT_MARGIN = 25;		// Default menu-bar height
 
+class LoadingMenu;
+class SavingMenu;
 
 /*
  * Handles all forms, windows, menus and UI related things.
@@ -42,10 +48,10 @@ public:
 	void	stopAnimating();
 
 	/* Loads a level into the editor */
-	void	loadLevel();
+	void	loadLevel(std::string title);
 
 	/* Saves the current edited level */
-	void	saveLevel();
+	void	saveLevel(std::string t, std::string d, std::string p);
 
 	/* plays a loaded level */
 	void playLoaded();
@@ -65,12 +71,16 @@ private:
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_switch_to_editor(Fl_Menu_* o, void* v);
 	static void	cb_switch_to_game(Fl_Menu_* o, void* v);
-	static void	cb_load_level(Fl_Menu_* o, void* v);
-	static void	cb_save_level(Fl_Menu_* o, void* v);
+	static void	cb_switch_to_loader(Fl_Menu_* o, void* v);
+	static void	cb_switch_to_saver(Fl_Menu_* o, void* v);
 	static void	cb_play_loaded(Fl_Menu_* o, void* v);
+
 
 // Static Functions
 private:
+
+	/* switches the current displayed group to the specified one */
+	void switch_contexts(Fl_Group *display);
 
 	// Static class members
 	static Fl_Menu_Item	menuitems[];		// menu items for main menu bar
@@ -82,14 +92,18 @@ private:
 
 // Atributes and FLTK Widgets
 public:
-	Fl_Group* m_gamePlay_group;				// FLTK Group holding the game
-	Fl_Group* m_editor_group;				// FLTK Group holding the level editor
+	std::list<struct Level *> *level_cache;
+	Fl_Group* m_gamePlay_group,			// FLTK Group holding the game
+			* m_editor_group,			// FLTK Group holding the level editor
+			* m_load_group,
+			* m_save_group,
+			* m_current;				// Current thing being used (animated).;
 	
 	Maestro* m_gamePlay;				// In charge of painting/controlling the game
 	Editor* m_editor;					// In charge of painting/controlling the level editor
-	
-	Fl_Group *m_current;			// Current thing being used (animated).
-	
+	LoadingMenu *m_loader;
+	SavingMenu *m_saver;
+
 	Fl_Double_Window* m_mainWindow;			// The main form
 	Fl_Menu_Bar* m_menubar;				// menubar of main form
 	int				m_nWidth,			// Dimensions of original window.
