@@ -28,7 +28,7 @@ void SavingMenu::cb_confirm(Fl_Widget* o, void* v) {
 	int index = fbrow->value();            // get index of selected item
 	string t = whoami(o)->title->value();
 	string d = whoami(o)->description->value();
-	string p = whoami(o)->pass->value();
+	string p = string("");//whoami(o)->pass->value();
 	if (whoami(fbrow)->level_cache == NULL) {
 		whoami(o)->m_UI->saveLevel(t, d, p);
 		return;
@@ -55,6 +55,45 @@ void SavingMenu::cb_confirm(Fl_Widget* o, void* v) {
 	}
 }
 
+void SavingMenu::addImage() {
+	if (img)
+		delete img;
+	
+	unsigned char *img_data = m_UI->m_editor->getScreen();
+	int w = m_UI->m_editor->w();
+	int h = m_UI->m_editor->h();
+	img = new Fl_RGB_Image(Resample(img_data, w, h, img_box->w(), img_box->h()), img_box->w(), img_box->h());
+	img_box->image(img);
+}
+
+// Perform a basic 'pixel' enlarging resample.
+unsigned char * SavingMenu::Resample(unsigned char *buf, int width, int height, int newWidth, int newHeight)
+{
+    if(buf == NULL) return false;
+    //
+    // Get a new buuffer to interpolate into
+    unsigned char* newData = new unsigned char [newWidth * newHeight * 3];
+
+    double scaleWidth =  (double)newWidth / (double)width;
+    double scaleHeight = (double)newHeight / (double)height;
+
+    for(int cy = 0; cy < newHeight; cy++)
+    {
+        for(int cx = 0; cx < newWidth; cx++)
+        {
+            int pixel = (cy * (newWidth *3)) + (cx*3);
+            int nearestMatch =  (((int)(cy / scaleHeight) * (width *3)) + ((int)(cx / scaleWidth) *3) );
+                
+            newData[pixel    ] =  buf[nearestMatch    ];
+            newData[pixel + 1] =  buf[nearestMatch + 1];
+            newData[pixel + 2] =  buf[nearestMatch + 2];
+        }
+    }
+
+    delete[] buf;
+    return newData;
+}
+
 void SavingMenu::update(std::string filename) {
 	if (level_cache != NULL) {
 		level_cache->clear();
@@ -73,18 +112,23 @@ void SavingMenu::update(std::string filename) {
 
 SavingMenu::SavingMenu(float x, float y, float w, float h, const char* l, JetpackUI *ui) : Fl_Group(x,y,w,h, l) {
 	user_data((void*)(this));	// record self to be used by static callback functions
-	browser = new Fl_Hold_Browser(x + 50, y + 50, w *.6f, h  - 100);
+	browser = new Fl_Hold_Browser(x + 10, y + 35, w *.4f, h  - 45);
 	m_UI = ui;
 	level_cache = NULL;
-	title = new Fl_Multiline_Input(x + 60 +  w *.6f, y + 50, w*.3f, 25);
-	description = new Fl_Multiline_Input(x + 60 +  w *.6f, y + 85, w*.3f, 50);
-	pass = new Fl_Multiline_Input(x + 60 +  w *.6f, y + 145, w*.3f, 50);
-	confirm = new Fl_Button(x + 60 +  w *.6f, y + 200, w*.3f, 50, "Save");
-	confirm->callback(cb_confirm);
+	title = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 35, w - w *.4f - 30, 25);
+	description = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 60, w - w *.4f - 30, 50);
+	//pass = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 145, w*.5f, 50);
 	update("test.level");
-	browser->show();
     browser->callback(cb_sel);
 	browser->select(0);
+	int wi, he;
+	wi = w - w *.4f - 30;
+	he = h  - 125 - 60;
+
+	confirm = new Fl_Button(x + 20 +  w *.4f, y + 125 + he, w - w *.4f - 30, 50, "Save");
+	confirm->callback(cb_confirm);
+	img_box = new Fl_Box(x + 20 +  w *.4f, y + 120, wi, he);
+	img = NULL;
 }
 
 SavingMenu::~SavingMenu(){
@@ -94,7 +138,7 @@ SavingMenu::~SavingMenu(){
 void SavingMenu::setTexts(const char * t, const char * d, const char *p) {
 	title->value(t);
 	description->value(d);
-	pass->value(p);
+	//pass->value(p);
 }
 
 SavingMenu* SavingMenu::whoami(Fl_Widget* o)	

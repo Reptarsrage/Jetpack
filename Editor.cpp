@@ -118,7 +118,8 @@ void Editor::draw()
 	
 	// Draw Scene
 	glEnable2D();
-	
+	glDrawBuffer(GL_BACK);
+
 	// Draw Backdrop
 	glBindTexture(GL_TEXTURE_2D, m_UI->sprites->getSprite(SPRITE_BACKGROUND));
 	bounds->draw();
@@ -231,10 +232,27 @@ bool Editor::Playable() {
 	return hero && door;
 }
 
+unsigned char * Editor::getScreen() {
+	unsigned char *screenshot = (unsigned char *)malloc(w()*h()*3);
+	unsigned char *flipped = (unsigned char *)malloc(w()*h()*3);
+	glReadBuffer(GL_BACK);
+	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_PACK_ROW_LENGTH, w());
+	glReadPixels( 0, 0, w(), h(), GL_RGB, GL_UNSIGNED_BYTE, screenshot );
+	for (int i = 0; i < h(); i++) {
+		for (int j = 0; j < w()*3; j++) {
+			flipped[i*w()*3 + j] = screenshot[(h() - i - 1)*w()*3 + j];
+		}
+	}
+	delete[] screenshot;
+	return flipped;
+}
+
+
 std::list<AbstractThing *>* Editor::getLevel() {
 	assert(hero);
 	assert(door);
-	
+
 	std::list<AbstractThing *> *q = new std::list<AbstractThing *>();
 	Rectangle ptr = Rectangle(left, top, row_w, col_h);
 	for (int row = 0; row < NUM_ROWS; row++){

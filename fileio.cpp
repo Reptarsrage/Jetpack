@@ -59,6 +59,20 @@ list<struct Level*> *load(const string& filename, Sprites *sprites) {
 			delete[] buf;
 			printf("passcode: %s\n", level->passcode->c_str());
 
+			// len of rbgb data (width, height)
+			fp_in.read((char *)&len, sizeof(uint16_t));
+			int w = static_cast<int>(len);
+			fp_in.read((char *)&len, sizeof(uint16_t));
+			int h = static_cast<int>(len);
+			printf("rgb width: %d height: %d\n", w, h);
+			level->screenshot_w = w;
+			level->screenshot_h = h;
+
+			// rgb data
+			unsigned char *rgb_buf = (unsigned char *)malloc(w*h*3);
+			fp_in.read((char *)rgb_buf, w*h*3);
+			level->screenshot_data = rgb_buf;
+
 			// 16 bit number of columns
 			fp_in.read((char *)&len, sizeof(uint16_t));
 			level->num_cols = static_cast<int>(len);
@@ -171,6 +185,23 @@ void remove_level(const string& filename, const string& title) {
 			}
 			delete[] buf;
 
+			// 16 bit width, height of rgb data
+			fp_in.read((char *)&len, sizeof(uint16_t));
+			int w = static_cast<int>(len);
+			if (!found)
+				fp_out.write((char *)&len, sizeof(uint16_t));
+
+			fp_in.read((char *)&len, sizeof(uint16_t));
+			int h = static_cast<int>(len);
+
+			// rgb data
+			unsigned char *rgb_buf = (unsigned char *)malloc(w*h*3);
+			fp_in.read((char *)rgb_buf, w*h*3);
+			if (!found) {
+				fp_out.write((char *)&len, sizeof(uint16_t));
+				fp_out.write((char *)rgb_buf, w*h*3);
+			}
+
 			// 16 bit number of columns
 			fp_in.read((char *)&len, sizeof(uint16_t));
 			int num_cols = static_cast<int>(len);
@@ -271,6 +302,19 @@ void save(const string& filename, Level& level) {
 
 		// passcode
 		fp_out << level.passcode->c_str();
+
+		// 16 bit width, height of rgb data
+		uint16_t w = static_cast<uint16_t>(level.screenshot_w);
+		uint16_t h = static_cast<uint16_t>(level.screenshot_h);
+		printf("(save) rgb width: %d height: %d\n", w, h);
+
+		// rgb data
+		unsigned char *rgb_buf = (unsigned char *)malloc(w*h*3);
+		memcpy(rgb_buf, level.screenshot_data, h*w*3);
+		fp_out.write((char *)&w, sizeof(uint16_t));
+		fp_out.write((char *)&h, sizeof(uint16_t));
+		fp_out.write((char *)rgb_buf, w*h*3);
+		delete[] rgb_buf;
 
 		// 16 bit number of columns
 		len = static_cast<uint16_t>(level.num_cols);

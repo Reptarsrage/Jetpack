@@ -8,6 +8,7 @@
 #define EDITOR_H
 
 #include <FL/Fl_Gl_Window.H>
+#include "FL\Fl_RGB_Image.H"
 #include <stdlib.h>
 #include <vector>
 #include "Rectangle.h"
@@ -58,6 +59,9 @@ public:
 
 	/* Only can save/play a level with a hero and a door placed*/
 	bool Playable();
+
+	/* returns a screenshot of the level */
+	unsigned char * getScreen();
 
 private:
 	/* removes the placed item(s) at the curser */

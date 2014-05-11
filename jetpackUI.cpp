@@ -55,11 +55,15 @@ void JetpackUI::saveLevel(string t, string d, string p) {
 	level.description = new string(d);
 	level.passcode = new string(p);
 	level.data = m_editor->getLevel();
+	level.screenshot_data = m_editor->getScreen();
+	level.screenshot_w = m_editor->w();
+	level.screenshot_h = m_editor->h();
 	save(filename, level);
 	printf("LEVEL SAVED!\n");
 	delete level.title;
 	delete level.description;
 	delete level.passcode;
+
 	switch_contexts(m_editor_group);
 }
 
@@ -126,6 +130,7 @@ void  JetpackUI::cb_switch_to_saver(Fl_Menu_* o, void* v)
 		printf("You must place both a hero and a door before you save.\n");
 		return;
 	}
+	whoami(o)->m_saver->addImage();
 	whoami(o)->switch_contexts(whoami(o)->m_save_group);
 }
 

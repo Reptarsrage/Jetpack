@@ -26,6 +26,9 @@ using namespace std;
  * description
  * 16 bit length of passcode
  * passcode
+ * 16 bit width of rgb data
+ * 16 bit height of rgb data
+ * rgb data
  * 16 bit number of columns
  * 16 bit number of rows
  * col-wise level map, with token 255(max) seperating 1 byte words.
@@ -38,6 +41,7 @@ using namespace std;
 //	title = title of the level
 //	description = description of level
 //	passcode = jump to this level passcodee (used by dev levels only)
+//  screenshot = rbg data of level (for a quick preview)
 //	level = all the things on the level with their correct (relative) positions
 //			set to their column number and row number.
 
