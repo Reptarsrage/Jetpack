@@ -41,17 +41,19 @@ public:
 	void update(std::string filename);
 	void addImage(const unsigned char *img_data, int width, int height);
 	unsigned char * Resample(unsigned char *buf, int width, int height, int newWidth, int newHeight);
-	
+	void Reset();
+
 	/* This returns the UI, given the browser item.  It provides a
 	 * link from the browser items to the UI 
 	 */
 	static LoadingMenu* whoami(Fl_Widget* o);
+	static void	cb_cancel(Fl_Widget* o, void* v);
 	
 public:
 	Fl_Hold_Browser *browser;
 	Fl_Text_Buffer *tit_buf, *desc_buf;//, *pass_buf;
 	Fl_Text_Display *title, *description;//, *pass;
-	Fl_Button *confirm;
+	Fl_Button *confirm, *cancel;
 	std::list<struct Level *> *level_cache;
 	JetpackUI *m_UI;
 	Fl_Box  *img_box;

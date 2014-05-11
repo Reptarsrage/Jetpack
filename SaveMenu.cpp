@@ -23,6 +23,13 @@ void SavingMenu::cb_sel(Fl_Widget* o, void* v) {
   }
 }
 
+void SavingMenu::cb_cancel(Fl_Widget* o, void* v) {
+	whoami(o)->browser->selected(0);
+	whoami(o)->setTexts("Enter Title.", "Enter Description.", "Enter Password.");
+	whoami(o)->m_UI->switch_contexts(whoami(o)->m_UI->m_editor_group);
+}
+
+
 void SavingMenu::cb_confirm(Fl_Widget* o, void* v) {
 	Fl_Hold_Browser *fbrow = whoami(o)->browser;
 	int index = fbrow->value();            // get index of selected item
@@ -112,22 +119,24 @@ void SavingMenu::update(std::string filename) {
 
 SavingMenu::SavingMenu(float x, float y, float w, float h, const char* l, JetpackUI *ui) : Fl_Group(x,y,w,h, l) {
 	user_data((void*)(this));	// record self to be used by static callback functions
-	browser = new Fl_Hold_Browser(x + 10, y + 35, w *.4f, h  - 45);
+	browser = new Fl_Hold_Browser(x + 10, y + 10, w *.4f, h  - 20);
 	m_UI = ui;
 	level_cache = NULL;
-	title = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 35, w - w *.4f - 30, 25);
-	description = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 60, w - w *.4f - 30, 50);
+	title = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 10, w - w *.4f - 30, 25);
+	description = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 45, w - w *.4f - 30, 50);
 	//pass = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 145, w*.5f, 50);
 	update("test.level");
     browser->callback(cb_sel);
 	browser->select(0);
 	int wi, he;
 	wi = w - w *.4f - 30;
-	he = h  - 125 - 60;
+	he = h  - 125 - 50;
 
-	confirm = new Fl_Button(x + 20 +  w *.4f, y + 125 + he, w - w *.4f - 30, 50, "Save");
+	confirm = new Fl_Button(x + 20 +  w *.4f,  y + 115 + he, -5 + wi / 2.f, 50, "Save");
+	cancel = new Fl_Button(5 + x + 20 +  w *.4f + wi / 2.f, y + 115 + he, -5 + wi / 2.f, 50, "Cancel");
 	confirm->callback(cb_confirm);
-	img_box = new Fl_Box(x + 20 +  w *.4f, y + 120, wi, he);
+	cancel->callback(cb_cancel);
+	img_box = new Fl_Box(x + 20 +  w *.4f, y + 105, wi, he);
 	img = NULL;
 }
 

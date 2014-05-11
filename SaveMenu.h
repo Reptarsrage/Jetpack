@@ -37,6 +37,7 @@ public:
 	~SavingMenu();
 	static void	cb_sel(Fl_Widget* o, void* v);
 	static void	cb_confirm(Fl_Widget* o, void* v);
+	static void	cb_cancel(Fl_Widget* o, void* v);
 	void setTexts(const char * title, const char * description,  const char *password);
 	void update(std::string filename);
 	void addImage();
@@ -50,7 +51,7 @@ public:
 public:
 	Fl_Hold_Browser *browser;
 	Fl_Multiline_Input *title, *description;//, *pass;
-	Fl_Button *confirm;
+	Fl_Button *confirm, *cancel;
 	std::list<struct Level *> *level_cache;
 	JetpackUI *m_UI;
 	Fl_Box  *img_box;

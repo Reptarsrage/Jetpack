@@ -56,6 +56,9 @@ public:
 	/* plays a loaded level */
 	void playLoaded();
 
+	/* switches the current displayed group to the specified one */
+	void switch_contexts(Fl_Group *display);
+
 // All callbacks here.  Callbacks are declared 
 // static
 private:
@@ -68,7 +71,8 @@ private:
 	 * Called by the UI when the about menu item is chosen 
 	*/
 	static void	cb_clear(Fl_Menu_* o, void* v);
-	static void	cb_about(Fl_Menu_* o, void* v);
+	static void	cb_about_editor(Fl_Menu_* o, void* v);
+	static void	cb_about_gameplay(Fl_Menu_* o, void* v);
 	static void	cb_switch_to_editor(Fl_Menu_* o, void* v);
 	static void	cb_switch_to_game(Fl_Menu_* o, void* v);
 	static void	cb_switch_to_loader(Fl_Menu_* o, void* v);
@@ -79,11 +83,9 @@ private:
 // Static Functions
 private:
 
-	/* switches the current displayed group to the specified one */
-	void switch_contexts(Fl_Group *display);
-
 	// Static class members
-	static Fl_Menu_Item	menuitems[];		// menu items for main menu bar
+	static Fl_Menu_Item	menuitems_g[];		// menu items for main menu bar (game)
+	static Fl_Menu_Item	menuitems_e[];		// menu items for main menu bar (editor)
 	
 	/* This returns the UI, given the menu item.  It provides a
 	 * link from the menu items to the UI 
@@ -105,7 +107,8 @@ public:
 	SavingMenu *m_saver;
 
 	Fl_Double_Window* m_mainWindow;			// The main form
-	Fl_Menu_Bar* m_menubar;				// menubar of main form
+	Fl_Menu_Bar * m_menubar_editor,			// menubar of main form
+				* m_menubar_gamePlay;		// menubar of main form
 	int				m_nWidth,			// Dimensions of original window.
 					m_nHeight;
 
