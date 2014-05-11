@@ -1,5 +1,5 @@
 Justin Robb
-4-16-14
+5-10-14
 Jetpack
 
 3-24-14 Just making initial changes/commits playing around with opengl and fltk.
@@ -10,7 +10,8 @@ Jetpack
 4-6-14 Starting to implement ground properties, and moving ladders/conveyors.
 4-9-14 Going to begin work on phasing through solid blocks.
 4-16-14 Begining to adjust bounds, start animating sprites, fixing various bugs
-
+5-10-14 (Always forgetting to update this, sorry) Finished load + save and some other UI stuff, I'm
+		going to start working on getting a campaign mode up and running, as of now you can only edit and play levels.
 
 Bugs (not comprehensive)
 Baddies caught in solids freak out
