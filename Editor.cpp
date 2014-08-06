@@ -249,6 +249,36 @@ unsigned char * Editor::getScreen() {
 }
 
 
+std::list<AbstractThing *>* Editor::getLevelForTest() {
+	assert(hero);
+	assert(door);
+
+	std::list<AbstractThing *> *q = new std::list<AbstractThing *>();
+	Rectangle ptr = Rectangle(left, top, row_w, col_h);
+	for (int row = 0; row < NUM_ROWS; row++){
+		for (int col = 0; col < NUM_COLS; col++) {
+			if (hero->Overlaps(ptr)) {
+				printf("Saving hero at col %d and row %d\n", col, row);
+				q->push_back(getThingFromCode(hero->getType(), col, row, hero->Bounds().width, hero->Bounds().height, m_UI->sprites));
+			}
+			if (door->Overlaps(ptr)) {
+				printf("Saving door at col %d and row %d\n", col, row);
+				q->push_back(getThingFromCode(door->getType(), col, row, door->Bounds().width, door->Bounds().height, m_UI->sprites));
+			}
+			for (AbstractThing *thing : *placed_items) {
+				if (ptr.Overlaps(thing->Bounds())) {
+					printf("Saving %s at col %d and row %d\n", thing->ToString(), col, row);
+					q->push_back(getThingFromCode(thing->getType(), col, row, thing->Bounds().width, thing->Bounds().height, m_UI->sprites));
+				}
+			}
+			ptr.position_x += row_w;
+		}
+		ptr.position_x = left;
+		ptr.position_y += col_h;
+	}
+	return q;
+}
+
 std::list<AbstractThing *>* Editor::getLevel() {
 	assert(hero);
 	assert(door);

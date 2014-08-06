@@ -1,14 +1,14 @@
-﻿Build started 3/25/2014 2:44:44 PM.
-     1>Project "C:\Users\User\Documents\cse457\Modeler\glew\glews.vcxproj" on node 2 (Build target(s)).
+﻿Build started 8/5/2014 1:51:45 PM.
+     1>Project "C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\glew\glews.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Iinclude /I"..\..\..\..\Build\Qt\4.5.0\mkspecs\win32-msvc2008" /nologo /W0 /WX- /O2 /Oy- /GL /D QT_NO_DEBUG /D NDEBUG /D UNICODE /D WIN32 /D QT_LARGEFILE_SUPPORT /D _PLATFORM_AGNOSTIC_ /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D NDEBUG /D _LIB /D WIN32_LEAN_AND_MEAN /D VC_EXTRALEAN /D GLEW_STATIC /D NDEBUG /Gm- /EHsc /MD /GS- /fp:precise /Zc:wchar_t- /Zc:forScope /Fo".\\" /Fd".\\" /Gd /TC /analyze- /errorReport:prompt -Zm200 -Zm200 src\glew.c
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Iinclude /I"..\..\..\..\Build\Qt\4.5.0\mkspecs\win32-msvc2008" /nologo /W0 /WX- /O2 /Oy- /GL /D QT_NO_DEBUG /D NDEBUG /D UNICODE /D WIN32 /D QT_LARGEFILE_SUPPORT /D _PLATFORM_AGNOSTIC_ /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D NDEBUG /D _LIB /D WIN32_LEAN_AND_MEAN /D VC_EXTRALEAN /D GLEW_STATIC /D NDEBUG /Gm- /EHsc /MD /GS- /fp:precise /Zc:wchar_t- /Zc:forScope /Fo".\\" /Fd".\\" /Gd /TC /analyze- /errorReport:prompt -Zm200 -Zm200 src\glew.c
          glew.c
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:".\glews.lib" /NOLOGO .\glew.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:".\glews.lib" /NOLOGO .\glew.obj
          glew.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
-         glews.vcxproj -> C:\Users\User\Documents\cse457\Modeler\glew\.\glews.lib
-     1>Done Building Project "C:\Users\User\Documents\cse457\Modeler\glew\glews.vcxproj" (Build target(s)).
+         glews.vcxproj -> C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\glew\.\glews.lib
+     1>Done Building Project "C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\glew\glews.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.49
+Time Elapsed 00:00:00.82

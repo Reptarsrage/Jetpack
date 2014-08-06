@@ -1,0 +1,113 @@
+﻿Build started 8/6/2014 11:30:35 AM.
+     1>Project "C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Jetpack.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\\SOIL\src" /I"C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\\glew\include" /I"C:\Program Files\fltk-1.1.10\zlib" /I"C:\Program Files\fltk-1.1.10\png" /I"C:\Program Files\fltk-1.1.10\jpeg" /I"C:\Program Files\fltk-1.1.10" /I"C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\\file dialog" /Zi /nologo /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _NDEBUG /D _CONSOLE /D FLTK1 /D GLEW_STATIC /D _MBCS /GF /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Editor.cpp
+         Editor.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug\Jetpack.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:glew\ /LIBPATH:SOIL\projects\VC9\Debug /LIBPATH:"C:\Program Files\fltk-1.1.10\lib" SOIL.lib opengl32.lib glu32.lib wsock32.lib comctl32.lib fltkz.lib fltkpng.lib fltkjpeg.lib fltkgl.lib fltkimages.lib fltk.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:msvcrt /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Debug\Jetpack.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Debug\Jetpack.lib" /MACHINE:X86 Debug\Jetpack.res
+         Debug\Bat.obj
+         Debug\Box.obj
+         Debug\FuelGage.obj
+         Debug\Gem.obj
+         Debug\Deathsicle.obj
+         Debug\Door.obj
+         Debug\Editor.obj
+         Debug\Egg.obj
+         Debug\Enums.obj
+         Debug\FastSolid.obj
+         Debug\fileio.obj
+         Debug\Gold.obj
+         Debug\BrickSolid.obj
+         Debug\loadMenu.obj
+         Debug\Maestro.obj
+         Debug\Mine.obj
+         Debug\Missile.obj
+         Debug\OpenGl2DWindow.obj
+         Debug\SaveMenu.obj
+         Debug\StoneSolid.obj
+         Debug\Switch.obj
+         Debug\SwitchSolid.obj
+         Debug\Teleporter.obj
+         Debug\WoodSolid.obj
+         Debug\Hero.obj
+         Debug\Item.obj
+         Debug\jetpackUI.obj
+         Debug\jetpack_main.obj
+         Debug\Ladder.obj
+         Debug\NonSolidThing.obj
+         Debug\Game.obj
+         Debug\Pinwheel.obj
+         Debug\Predator.obj
+         Debug\Rectangle.obj
+         Debug\Robot.obj
+         Debug\Spring.obj
+         Debug\Sprites.obj
+     1>SOIL.lib(SOIL.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>fltkgl.lib(Fl_Gl_Choice.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltkgl.lib(Fl_Gl_Choice.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltkgl.lib(Fl_Gl_Window.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltkgl.lib(Fl_Gl_Window.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltkgl.lib(gl_draw.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltkgl.lib(gl_draw.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltkimages.lib(Fl_BMP_Image.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltkimages.lib(Fl_BMP_Image.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_abort.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_abort.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_arci.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_arci.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_ask.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_ask.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Bitmap.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Bitmap.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Box.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Box.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_boxtype.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_boxtype.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Browser.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Browser.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Browser_.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Browser_.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Button.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Button.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_color.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_color.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_compose.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_compose.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_cursor.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_cursor.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_dnd.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_dnd.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Double_Window.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Double_Window.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_draw.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_draw.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_draw_image.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_draw_image.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_draw_pixmap.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_draw_pixmap.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_font.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_font.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_get_key.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_get_key.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_get_system_colors.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_get_system_colors.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_grab.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_grab.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Group.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Group.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_gtk.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_gtk.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Image.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Image.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Input.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Input.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Input_.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Input_.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_labeltype.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_labeltype.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_line_style.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_line_style.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_lock.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_lock.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Menu.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Menu.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Menu_.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Menu_.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Menu_Bar.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Menu_Bar.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Menu_Window.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Menu_Window.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Pixmap.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Pixmap.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_plastic.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_plastic.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_rect.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_rect.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Return_Button.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Return_Button.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_round_box.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_round_box.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Scrollbar.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Scrollbar.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_shortcut.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_shortcut.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Single_Window.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Single_Window.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Slider.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Slider.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_symbols.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_symbols.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Text_Buffer.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Text_Buffer.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Text_Display.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Text_Display.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Tiled_Image.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Tiled_Image.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Tooltip.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Tooltip.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Valuator.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Valuator.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(fl_vertex.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(fl_vertex.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_visual.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_visual.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Widget.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Widget.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Window.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Window.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Window_hotspot.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Window_hotspot.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(Fl_Window_iconize.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(Fl_Window_iconize.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(flstring.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(flstring.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(screen_xywh.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(screen_xywh.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+     1>fltk.lib(vsnprintf.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'fltk.lib(vsnprintf.obj)' or at 'C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\vc100.pdb'; linking object as if no debug info
+         Jetpack.vcxproj -> C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Debug\Jetpack.exe
+     1>Done Building Project "C:\Users\JustinR\Documents\Visual Studio 2013\Projects\Jetpack\Jetpack.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.19

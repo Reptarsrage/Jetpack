@@ -187,7 +187,7 @@ void JetpackUI::playLoaded() {
 	assert(m_editor == m_current);
 	
 	if (m_editor->Playable()) {
-		m_gamePlay->loadLevel(*m_editor->getLevel());
+		m_gamePlay->loadLevel(*m_editor->getLevelForTest());
 		switch_contexts(m_gamePlay_group);
 	} else {
 		fl_alert("You must place both a hero and a door before you can play.\n");

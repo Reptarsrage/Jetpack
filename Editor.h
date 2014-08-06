@@ -54,6 +54,9 @@ public:
 	/* saves the level to a file */
 	std::list<AbstractThing *> *getLevel();
 
+	/* saves the level for testing */
+	std::list<AbstractThing *> *getLevelForTest();
+
 	/* removes all placed items */
 	void Clear();
 

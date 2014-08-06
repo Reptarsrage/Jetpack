@@ -119,11 +119,11 @@ void SavingMenu::update(std::string filename) {
 
 SavingMenu::SavingMenu(float x, float y, float w, float h, const char* l, JetpackUI *ui) : Fl_Group(x,y,w,h, l) {
 	user_data((void*)(this));	// record self to be used by static callback functions
-	browser = new Fl_Hold_Browser(x + 10, y + 10, w *.4f, h  - 20);
+	browser = new Fl_Hold_Browser(x + 10, y + 20, w *.4f, h  - 30);
 	m_UI = ui;
 	level_cache = NULL;
-	title = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 10, w - w *.4f - 30, 25);
-	description = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 45, w - w *.4f - 30, 50);
+	title = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 20, w - w *.4f - 30, 25);
+	description = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 55, w - w *.4f - 30, 40);
 	//pass = new Fl_Multiline_Input(x + 20 +  w *.4f, y + 145, w*.5f, 50);
 	update("test.level");
     browser->callback(cb_sel);
@@ -136,7 +136,7 @@ SavingMenu::SavingMenu(float x, float y, float w, float h, const char* l, Jetpac
 	cancel = new Fl_Button(5 + x + 20 +  w *.4f + wi / 2.f, y + 115 + he, -5 + wi / 2.f, 50, "Cancel");
 	confirm->callback(cb_confirm);
 	cancel->callback(cb_cancel);
-	img_box = new Fl_Box(x + 20 +  w *.4f, y + 105, wi, he);
+	img_box = new Fl_Box(x + 20 + w *.4f, y + 110, wi, he);
 	img = NULL;
 }
 
